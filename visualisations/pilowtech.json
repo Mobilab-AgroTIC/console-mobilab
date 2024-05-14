@@ -1,0 +1,153 @@
+{
+    "datasource": {
+      "type": "influxdb",
+      "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
+    },
+    "description": "Les valeurs du Pilowtech donnent une estimation de l'humidité du sol en fonction de la valeur donnée par la sonde capacitive.",
+    "fieldConfig": {
+      "defaults": {
+        "custom": {
+          "drawStyle": "line",
+          "lineInterpolation": "smooth",
+          "barAlignment": 0,
+          "lineWidth": 2,
+          "fillOpacity": 20,
+          "gradientMode": "none",
+          "spanNulls": false,
+          "insertNulls": false,
+          "showPoints": "auto",
+          "pointSize": 7,
+          "stacking": {
+            "mode": "none",
+            "group": "A"
+          },
+          "axisPlacement": "auto",
+          "axisLabel": "",
+          "axisColorMode": "text",
+          "axisBorderShow": false,
+          "scaleDistribution": {
+            "type": "linear"
+          },
+          "axisCenteredZero": false,
+          "hideFrom": {
+            "tooltip": false,
+            "viz": false,
+            "legend": false
+          },
+          "thresholdsStyle": {
+            "mode": "off"
+          },
+          "lineStyle": {
+            "fill": "solid"
+          }
+        },
+        "color": {
+          "mode": "fixed"
+        },
+        "mappings": [],
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            {
+              "color": "green",
+              "value": null
+            },
+            {
+              "color": "red",
+              "value": 80
+            }
+          ]
+        },
+        "decimals": 2
+      },
+      "overrides": [
+        {
+          "matcher": {
+            "id": "byName",
+            "options": "humidity"
+          },
+          "properties": [
+            {
+              "id": "color",
+              "value": {
+                "fixedColor": "blue",
+                "mode": "fixed"
+              }
+            },
+            {
+              "id": "custom.axisSoftMin",
+              "value": 0
+            },
+            {
+              "id": "custom.axisSoftMax",
+              "value": 50
+            }
+          ]
+        }
+      ]
+    },
+    "gridPos": {
+      "h": 8,
+      "w": 12,
+      "x": 0,
+      "y": 0
+    },
+    "id": 1,
+    "options": {
+      "tooltip": {
+        "mode": "multi",
+        "sort": "none"
+      },
+      "legend": {
+        "showLegend": true,
+        "displayMode": "list",
+        "placement": "bottom",
+        "calcs": []
+      }
+    },
+    "targets": [
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
+        },
+        "groupBy": [],
+        "hide": true,
+        "measurement": "devices",
+        "orderByTime": "ASC",
+        "policy": "autogen",
+        "refId": "A",
+        "resultFormat": "time_series",
+        "select": [
+          [
+            {
+              "params": [
+                "value"
+              ],
+              "type": "field"
+            }
+          ]
+        ],
+        "tags": [
+          {
+            "key": "name::field",
+            "operator": "=",
+            "value": "pilowtech-01"
+          }
+        ]
+      },
+      {
+        "datasource": {
+          "name": "Expression",
+          "type": "__expr__",
+          "uid": "__expr__"
+        },
+        "expression": "-(1/0.05)*log(($A-400)/(4095-400))",
+        "hide": false,
+        "refId": "humidity",
+        "type": "math"
+      }
+    ],
+    "title": "Pilowtech",
+    "type": "timeseries"
+  }
