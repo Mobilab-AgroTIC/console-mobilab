@@ -97,7 +97,7 @@
         {
           "key": "name::field",
           "operator": "=",
-          "value": "sonar-01"
+          "value": "nom_du_capteur"
         }
       ]
     }
