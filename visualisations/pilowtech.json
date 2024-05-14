@@ -132,7 +132,7 @@
           {
             "key": "name::field",
             "operator": "=",
-            "value": "pilowtech-01"
+            "value": "nom_du_capteur"
           }
         ]
       },
