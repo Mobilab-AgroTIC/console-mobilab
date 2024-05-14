@@ -1,0 +1,108 @@
+{
+  "datasource": {
+    "type": "influxdb",
+    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
+  },
+  "description": "La valeur de batterie est donnée en Volts. Une batterie pleine est d'environ 4V. Elle se stabilise ensuite à 3.7V, puis dégringole rapidement. Cette dernière baisse de tension annonce la fin de vie imminente de l'objet connecté, il est alors important de recharger la batterie à ce moment.",
+  "fieldConfig": {
+    "defaults": {
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "red",
+            "value": null
+          },
+          {
+            "color": "orange",
+            "value": 2500
+          },
+          {
+            "color": "#EAB839",
+            "value": 3000
+          },
+          {
+            "color": "green",
+            "value": 3500
+          },
+          {
+            "color": "#6ED0E0",
+            "value": 4000
+          }
+        ]
+      },
+      "color": {
+        "fixedColor": "orange",
+        "mode": "thresholds"
+      },
+      "max": 4200,
+      "min": 2000,
+      "unit": "mvolt"
+    },
+    "overrides": []
+  },
+  "gridPos": {
+    "h": 8,
+    "w": 3,
+    "x": 12,
+    "y": 11
+  },
+  "id": 12,
+  "options": {
+    "reduceOptions": {
+      "values": false,
+      "calcs": [
+        "lastNotNull"
+      ],
+      "fields": ""
+    },
+    "orientation": "auto",
+    "showThresholdLabels": false,
+    "showThresholdMarkers": true,
+    "sizing": "auto",
+    "minVizWidth": 75,
+    "minVizHeight": 75
+  },
+  "pluginVersion": "10.4.2",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "power"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [
+              " *50"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "sonar-01"
+        }
+      ]
+    }
+  ],
+  "title": "Batterie LiPo",
+  "transparent": true,
+  "type": "gauge"
+}
