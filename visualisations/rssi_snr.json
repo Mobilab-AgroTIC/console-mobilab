@@ -1,0 +1,143 @@
+{
+  "datasource": {
+    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86",
+    "type": "influxdb"
+  },
+  "description": "La qualité du signal est donnée par ",
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "barAlignment": 0,
+        "lineWidth": 1,
+        "fillOpacity": 0,
+        "gradientMode": "none",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "line"
+        }
+      },
+      "color": {
+        "mode": "continuous-RdYlGr",
+        "fixedColor": "light-red"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "yellow",
+            "value": null
+          }
+        ]
+      }
+    },
+    "overrides": [
+      {
+        "matcher": {
+          "id": "byName",
+          "options": "devices.rssi"
+        },
+        "properties": [
+          {
+            "id": "thresholds",
+            "value": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "dark-red",
+                  "value": null
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "gridPos": {
+    "h": 4,
+    "w": 7,
+    "x": 15,
+    "y": 6
+  },
+  "id": 10,
+  "options": {
+    "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  },
+  "pluginVersion": "10.0.3",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "query": "SELECT \"rssi\" AS \"RSSI\", \"snr\" FROM \"autogen\".\"devices\" WHERE (\"name\"::field = 'lht52-01') AND $timeFilter",
+      "rawQuery": false,
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "rssi"
+            ],
+            "type": "field"
+          }
+        ],
+        [
+          {
+            "params": [
+              "snr"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom_du_capteur"
+        }
+      ]
+    }
+  ],
+  "title": "Qualité du signal",
+  "transparent": true,
+  "type": "timeseries"
+}
