@@ -1,7 +1,7 @@
 {
   "datasource": {
-    "uid": "adlpzeqa7mqrkc",
-    "type": "influxdb"
+    "type": "influxdb",
+    "uid": "cdqq2trx201z4c"
   },
   "description": "Les valeurs du Pilowtech donnent une estimation de l'humidité du sol en fonction de la valeur donnée par la sonde capacitive.",
   "fieldConfig": {
@@ -80,7 +80,30 @@
           },
           {
             "id": "custom.axisSoftMax",
-            "value": 50
+            "value": 30
+          }
+        ]
+      },
+      {
+        "matcher": {
+          "id": "byName",
+          "options": "humidity2"
+        },
+        "properties": [
+          {
+            "id": "color",
+            "value": {
+              "mode": "fixed",
+              "fixedColor": "dark-blue"
+            }
+          },
+          {
+            "id": "custom.axisSoftMin",
+            "value": 0
+          },
+          {
+            "id": "custom.axisSoftMax",
+            "value": 30
           }
         ]
       }
@@ -113,16 +136,16 @@
       },
       "groupBy": [
         {
-          "type": "time",
           "params": [
             "5m"
-          ]
+          ],
+          "type": "time"
         },
         {
-          "type": "fill",
           "params": [
             "none"
-          ]
+          ],
+          "type": "fill"
         }
       ],
       "hide": true,
@@ -134,14 +157,14 @@
       "select": [
         [
           {
-            "type": "field",
             "params": [
               "value"
-            ]
+            ],
+            "type": "field"
           },
           {
-            "type": "mean",
-            "params": []
+            "params": [],
+            "type": "mean"
           }
         ]
       ],
@@ -159,7 +182,7 @@
         "type": "__expr__",
         "uid": "__expr__"
       },
-      "expression": "-(1/0.05)*log(($A-400)/(4095-400))",
+      "expression": "-(1/0.05)*log(($A-34)/(4034-34))",
       "hide": false,
       "refId": "humidity",
       "type": "math"
@@ -171,16 +194,16 @@
       },
       "groupBy": [
         {
-          "type": "time",
           "params": [
             "5m"
-          ]
+          ],
+          "type": "time"
         },
         {
-          "type": "fill",
           "params": [
             "none"
-          ]
+          ],
+          "type": "fill"
         }
       ],
       "hide": true,
@@ -192,14 +215,14 @@
       "select": [
         [
           {
-            "type": "field",
             "params": [
               "value2"
-            ]
+            ],
+            "type": "field"
           },
           {
-            "type": "mean",
-            "params": []
+            "params": [],
+            "type": "mean"
           }
         ]
       ],
@@ -217,12 +240,12 @@
         "type": "__expr__",
         "uid": "__expr__"
       },
-      "expression": "-(1/0.05)*log(($B-400)/(4095-400))",
+      "expression": "-(1/0.05)*log(($B-34)/(4095-34))",
       "hide": false,
       "refId": "humidity2",
       "type": "math"
     }
   ],
-  "title": "Pilowtech",
+  "title": "Pilowtech-1",
   "type": "timeseries"
 }
