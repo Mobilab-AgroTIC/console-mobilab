@@ -182,7 +182,7 @@
         "type": "__expr__",
         "uid": "__expr__"
       },
-      "expression": "-(1/0.05)*log(($A-34)/(4034-34))",
+      "expression": "-(1/0.05)*log(($A-0)/(4095-0))",
       "hide": false,
       "refId": "humidity",
       "type": "math"
@@ -240,7 +240,7 @@
         "type": "__expr__",
         "uid": "__expr__"
       },
-      "expression": "-(1/0.05)*log(($B-34)/(4095-34))",
+      "expression": "-(1/0.05)*log(($B-0)/(4095-0))",
       "hide": false,
       "refId": "humidity2",
       "type": "math"
