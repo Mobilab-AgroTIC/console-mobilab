@@ -1,9 +1,69 @@
 {
-  "datasource": {
-    "uid": "adlpzeqa7mqrkc",
-    "type": "influxdb"
+  "type": "timeseries",
+  "title": "Pilowtech",
+  "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 0
   },
-  "description": "Les valeurs du Pilowtech donnent une estimation de l'humidité du sol en fonction de la valeur donnée par la sonde capacitive.",
+  "datasource": {},
+  "id": 1,
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
+      },
+      "groupBy": [],
+      "hide": true,
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "type": "field",
+            "params": [
+              "value"
+            ]
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom_du_capteur"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "name": "Expression",
+        "type": "__expr__",
+        "uid": "__expr__"
+      },
+      "expression": "-(1/0.05)*log(($A-0)/(4095-0))",
+      "hide": false,
+      "refId": "humidity",
+      "type": "math"
+    }
+  ],
+  "options": {
+    "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  },
   "fieldConfig": {
     "defaults": {
       "custom": {
@@ -86,85 +146,5 @@
       }
     ]
   },
-  "gridPos": {
-    "h": 8,
-    "w": 12,
-    "x": 0,
-    "y": 0
-  },
-  "id": 1,
-  "options": {
-    "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-    },
-    "legend": {
-      "showLegend": true,
-      "displayMode": "list",
-      "placement": "bottom",
-      "calcs": []
-    }
-  },
-  "targets": [
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
-      },
-      "groupBy": [
-        {
-          "type": "time",
-          "params": [
-            "5m"
-          ]
-        },
-        {
-          "type": "fill",
-          "params": [
-            "none"
-          ]
-        }
-      ],
-      "hide": true,
-      "measurement": "devices",
-      "orderByTime": "ASC",
-      "policy": "autogen",
-      "refId": "A",
-      "resultFormat": "time_series",
-      "select": [
-        [
-          {
-            "type": "field",
-            "params": [
-              "value"
-            ]
-          },
-          {
-            "type": "mean",
-            "params": []
-          }
-        ]
-      ],
-      "tags": [
-        {
-          "key": "name::field",
-          "operator": "=",
-          "value": "nom_du_capteur"
-        }
-      ]
-    },
-    {
-      "datasource": {
-        "name": "Expression",
-        "type": "__expr__",
-        "uid": "__expr__"
-      },
-      "expression": "-(1/0.05)*log(($A-0)/(4095-0))",
-      "hide": false,
-      "refId": "humidity",
-      "type": "math"
-    }
-  ],
-  "title": "Pilowtech",
-  "type": "timeseries"
+  "description": "Les valeurs du Pilowtech donnent une estimation de l'humidité du sol en fonction de la valeur donnée par la sonde capacitive."
 }
