@@ -1,9 +1,113 @@
 {
-  "datasource": {
-    "type": "influxdb",
-    "uid": "cdqq2trx201z4c"
+  "type": "timeseries",
+  "title": "Pilowtech - NOM_DU_CAPTEUR_ICI",
+  "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 0
   },
-  "description": "Les valeurs du Pilowtech donnent une estimation de l'humidité du sol en fonction de la valeur donnée par la sonde capacitive.",
+  "datasource": {
+    "uid": "ddlkqy60v124gc",
+    "type": "influxdb"
+  },
+  "id": 1,
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
+      },
+      "groupBy": [],
+      "hide": true,
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom_du_capteur"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "name": "Expression",
+        "type": "__expr__",
+        "uid": "__expr__"
+      },
+      "expression": "-(1/0.05)*log(($A-0)/(4095-0))",
+      "hide": false,
+      "refId": "humidity",
+      "type": "math"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
+      },
+      "groupBy": [],
+      "hide": true,
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value2"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom_du_capteur"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "name": "Expression",
+        "type": "__expr__",
+        "uid": "__expr__"
+      },
+      "expression": "-(1/0.05)*log(($B-0)/(4095-0))",
+      "hide": false,
+      "refId": "humidity2",
+      "type": "math"
+    }
+  ],
+  "options": {
+    "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  },
   "fieldConfig": {
     "defaults": {
       "custom": {
@@ -109,143 +213,5 @@
       }
     ]
   },
-  "gridPos": {
-    "h": 8,
-    "w": 12,
-    "x": 0,
-    "y": 0
-  },
-  "id": 1,
-  "options": {
-    "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-    },
-    "legend": {
-      "showLegend": true,
-      "displayMode": "list",
-      "placement": "bottom",
-      "calcs": []
-    }
-  },
-  "targets": [
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
-      },
-      "groupBy": [
-        {
-          "params": [
-            "5m"
-          ],
-          "type": "time"
-        },
-        {
-          "params": [
-            "none"
-          ],
-          "type": "fill"
-        }
-      ],
-      "hide": true,
-      "measurement": "devices",
-      "orderByTime": "ASC",
-      "policy": "autogen",
-      "refId": "A",
-      "resultFormat": "time_series",
-      "select": [
-        [
-          {
-            "params": [
-              "value"
-            ],
-            "type": "field"
-          },
-          {
-            "params": [],
-            "type": "mean"
-          }
-        ]
-      ],
-      "tags": [
-        {
-          "key": "name::field",
-          "operator": "=",
-          "value": "nom_du_capteur"
-        }
-      ]
-    },
-    {
-      "datasource": {
-        "name": "Expression",
-        "type": "__expr__",
-        "uid": "__expr__"
-      },
-      "expression": "-(1/0.05)*log(($A-0)/(4095-0))",
-      "hide": false,
-      "refId": "humidity",
-      "type": "math"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
-      },
-      "groupBy": [
-        {
-          "params": [
-            "5m"
-          ],
-          "type": "time"
-        },
-        {
-          "params": [
-            "none"
-          ],
-          "type": "fill"
-        }
-      ],
-      "hide": true,
-      "measurement": "devices",
-      "orderByTime": "ASC",
-      "policy": "autogen",
-      "refId": "B",
-      "resultFormat": "time_series",
-      "select": [
-        [
-          {
-            "params": [
-              "value2"
-            ],
-            "type": "field"
-          },
-          {
-            "params": [],
-            "type": "mean"
-          }
-        ]
-      ],
-      "tags": [
-        {
-          "key": "name::field",
-          "operator": "=",
-          "value": "nom_du_capteur"
-        }
-      ]
-    },
-    {
-      "datasource": {
-        "name": "Expression",
-        "type": "__expr__",
-        "uid": "__expr__"
-      },
-      "expression": "-(1/0.05)*log(($B-0)/(4095-0))",
-      "hide": false,
-      "refId": "humidity2",
-      "type": "math"
-    }
-  ],
-  "title": "Pilowtech-1",
-  "type": "timeseries"
+  "description": "Les valeurs du Pilowtech donnent une estimation de l'humidité du sol en fonction de la valeur donnée par la sonde capacitive."
 }
