@@ -1,0 +1,133 @@
+{
+  "datasource": {},
+  "description": "La valeur de batterie est donnée en Volts. Une batterie pleine est d'environ 4V. Elle se stabilise ensuite à 3.7V, puis dégringole rapidement. Cette dernière baisse de tension annonce la fin de vie imminente de l'objet connecté, il est alors important de recharger la batterie à ce moment.",
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "barAlignment": 0,
+        "lineWidth": 1,
+        "fillOpacity": 0,
+        "gradientMode": "none",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "palette-classic"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "red",
+            "value": null
+          },
+          {
+            "color": "orange",
+            "value": 2500
+          },
+          {
+            "color": "#EAB839",
+            "value": 3000
+          },
+          {
+            "color": "green",
+            "value": 3500
+          },
+          {
+            "color": "#6ED0E0",
+            "value": 4000
+          }
+        ]
+      },
+      "max": 4200,
+      "min": 3200,
+      "unit": "mvolt"
+    },
+    "overrides": []
+  },
+  "gridPos": {
+    "h": 4,
+    "w": 8,
+    "x": 16,
+    "y": 0
+  },
+  "id": 13,
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  },
+  "pluginVersion": "10.4.2",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "power"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [
+              " *50"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom_du_capteur"
+        }
+      ]
+    }
+  ],
+  "title": "Batterie LiPo",
+  "transparent": true,
+  "type": "timeseries"
+}
