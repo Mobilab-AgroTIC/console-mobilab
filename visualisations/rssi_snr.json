@@ -1,9 +1,63 @@
 {
+  "type": "timeseries",
+  "title": "Qualité du signal",
+  "gridPos": {
+    "h": 5,
+    "w": 9,
+    "x": 15,
+    "y": 5
+  },
   "datasource": {
-    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86",
+    "uid": "cdqq2trx201z4c",
     "type": "influxdb"
   },
-  "description": "La qualité du signal est donnée par ",
+  "id": 10,
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "query": "SELECT \"rssi\" AS \"RSSI\", \"snr\" FROM \"autogen\".\"devices\" WHERE (\"name\"::field = 'lht52-01') AND $timeFilter",
+      "rawQuery": false,
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "type": "field",
+            "params": [
+              "rssi"
+            ]
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom_du_capteur"
+        }
+      ]
+    }
+  ],
+  "transparent": true,
+  "options": {
+    "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  },
   "fieldConfig": {
     "defaults": {
       "custom": {
@@ -35,11 +89,11 @@
           "legend": false
         },
         "thresholdsStyle": {
-          "mode": "line"
+          "mode": "area"
         }
       },
       "color": {
-        "mode": "continuous-RdYlGr",
+        "mode": "thresholds",
         "fixedColor": "light-red"
       },
       "mappings": [],
@@ -47,97 +101,33 @@
         "mode": "absolute",
         "steps": [
           {
-            "color": "yellow",
+            "color": "dark-red",
             "value": null
-          }
-        ]
-      }
-    },
-    "overrides": [
-      {
-        "matcher": {
-          "id": "byName",
-          "options": "devices.rssi"
-        },
-        "properties": [
+          },
           {
-            "id": "thresholds",
-            "value": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "dark-red",
-                  "value": null
-                }
-              ]
-            }
+            "value": -120,
+            "color": "orange"
+          },
+          {
+            "value": -110,
+            "color": "#EAB839"
+          },
+          {
+            "value": -80,
+            "color": "green"
+          },
+          {
+            "value": -50,
+            "color": "#6ED0E0"
           }
         ]
-      }
-    ]
-  },
-  "gridPos": {
-    "h": 4,
-    "w": 7,
-    "x": 15,
-    "y": 6
-  },
-  "id": 10,
-  "options": {
-    "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-    },
-    "legend": {
-      "showLegend": true,
-      "displayMode": "list",
-      "placement": "bottom",
-      "calcs": []
-    }
-  },
-  "pluginVersion": "10.0.3",
-  "targets": [
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
       },
-      "groupBy": [],
-      "measurement": "devices",
-      "orderByTime": "ASC",
-      "policy": "autogen",
-      "query": "SELECT \"rssi\" AS \"RSSI\", \"snr\" FROM \"autogen\".\"devices\" WHERE (\"name\"::field = 'lht52-01') AND $timeFilter",
-      "rawQuery": false,
-      "refId": "A",
-      "resultFormat": "time_series",
-      "select": [
-        [
-          {
-            "params": [
-              "rssi"
-            ],
-            "type": "field"
-          }
-        ],
-        [
-          {
-            "params": [
-              "snr"
-            ],
-            "type": "field"
-          }
-        ]
-      ],
-      "tags": [
-        {
-          "key": "name::field",
-          "operator": "=",
-          "value": "nom_du_capteur"
-        }
-      ]
-    }
-  ],
-  "title": "Qualité du signal",
-  "transparent": true,
-  "type": "timeseries"
+      "unit": "dB",
+      "min": -40,
+      "max": -130
+    },
+    "overrides": []
+  },
+  "description": "La qualité du signal est donnée par le RSSI, la puissance du signal reçu (en dB).  il varie de -50dB (très bon) à -120dB (mauvais). A partir de -125dB, le capteur est trop loin : il est probable de ne plus recevoir tous les messages !",
+  "pluginVersion": "10.0.3"
 }
