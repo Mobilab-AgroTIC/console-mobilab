@@ -1,6 +1,6 @@
 {
   "datasource": {
-    "uid": "bdrxjmk5phu68f",
+    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86",
     "type": "influxdb"
   },
   "fieldConfig": {
@@ -11,18 +11,18 @@
         "barAlignment": 0,
         "lineWidth": 2,
         "fillOpacity": 20,
-        "gradientMode": "none",
+        "gradientMode": "opacity",
         "spanNulls": false,
         "insertNulls": false,
         "showPoints": "never",
-        "pointSize": 7,
+        "pointSize": 5,
         "stacking": {
           "mode": "none",
           "group": "A"
         },
         "axisPlacement": "auto",
         "axisLabel": "",
-        "axisColorMode": "text",
+        "axisColorMode": "series",
         "axisBorderShow": false,
         "scaleDistribution": {
           "type": "linear"
@@ -36,12 +36,11 @@
         "thresholdsStyle": {
           "mode": "off"
         },
-        "lineStyle": {
-          "fill": "solid"
-        }
+        "axisSoftMax": 30
       },
       "color": {
-        "mode": "fixed"
+        "mode": "fixed",
+        "fixedColor": "#717171"
       },
       "mappings": [],
       "thresholds": {
@@ -50,51 +49,22 @@
           {
             "color": "green",
             "value": null
-          },
-          {
-            "color": "red",
-            "value": 80
-          }
-        ]
-      },
-      "decimals": 2
-    },
-    "overrides": [
-      {
-        "matcher": {
-          "id": "byName",
-          "options": "Value"
-        },
-        "properties": [
-          {
-            "id": "color",
-            "value": {
-              "fixedColor": "yellow",
-              "mode": "fixed"
-            }
-          },
-          {
-            "id": "custom.axisSoftMin",
-            "value": 0
-          },
-          {
-            "id": "custom.axisSoftMax",
-            "value": 50
           }
         ]
       }
-    ]
+    },
+    "overrides": []
   },
   "gridPos": {
     "h": 8,
     "w": 12,
     "x": 0,
-    "y": 0
+    "y": 51
   },
-  "id": 2,
+  "id": 20,
   "options": {
     "tooltip": {
-      "mode": "multi",
+      "mode": "single",
       "sort": "none"
     },
     "legend": {
@@ -108,51 +78,24 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "b8f01c7f-5897-4b9b-8694-74036e1ace21"
+        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
       },
-      "groupBy": [
-        {
-          "type": "time",
-          "params": [
-            "1m"
-          ]
-        },
-        {
-          "type": "fill",
-          "params": [
-            "previous"
-          ]
-        }
-      ],
+      "groupBy": [],
       "hide": false,
       "measurement": "devices",
       "orderByTime": "ASC",
       "policy": "autogen",
+      "query": "SELECT min(\"value\") FROM \"autogen\".\"devices\" WHERE (\"name\"::field = 'sonar-01') AND $timeFilter GROUP BY time(10m) fill(null)",
+      "rawQuery": false,
       "refId": "A",
       "resultFormat": "time_series",
       "select": [
         [
           {
-            "type": "field",
             "params": [
               "value"
-            ]
-          },
-          {
-            "type": "mean",
-            "params": []
-          },
-          {
-            "type": "math",
-            "params": [
-              " / 100"
-            ]
-          },
-          {
-            "type": "alias",
-            "params": [
-              "distance"
-            ]
+            ],
+            "type": "field"
           }
         ]
       ],
@@ -160,12 +103,22 @@
         {
           "key": "name::field",
           "operator": "=",
-          "value": "nom_du_capteur"
+          "value": "NOM_DU_CAPTEUR"
         }
       ]
     }
   ],
-  "title": "sonar-01",
+  "title": "NOM_DU_CAPTEUR",
+  "transformations": [
+    {
+      "id": "filterByValue",
+      "options": {
+        "filters": [],
+        "match": "any",
+        "type": "include"
+      }
+    }
+  ],
   "type": "timeseries",
   "description": ""
 }
