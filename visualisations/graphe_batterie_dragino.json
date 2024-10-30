@@ -1,0 +1,130 @@
+{
+  "type": "timeseries",
+  "title": "Batterie Dragino - NOM_DU_CAPTEUR",
+  "gridPos": {
+    "h": 4,
+    "w": 8,
+    "x": 15,
+    "y": 0
+  },
+  "datasource": {
+    "uid": "ae2ff4ubdzf28f",
+    "type": "influxdb"
+  },
+  "id": 18,
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ae2ff4ubdzf28f"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "power"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "NOM_DU_CAPTEUR"
+        }
+      ]
+    }
+  ],
+  "transparent": true,
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "barAlignment": 0,
+        "lineWidth": 1,
+        "fillOpacity": 0,
+        "gradientMode": "none",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "palette-classic"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "red",
+            "value": null
+          },
+          {
+            "color": "orange",
+            "value": 2.3
+          },
+          {
+            "color": "#EAB839",
+            "value": 2.5
+          },
+          {
+            "color": "green",
+            "value": 2.8
+          },
+          {
+            "color": "#6ED0E0",
+            "value": 3.5
+          }
+        ]
+      },
+      "max": 3.5,
+      "min": 2,
+      "unit": "volt"
+    },
+    "overrides": []
+  },
+  "description": "La valeur de batterie est donnée en Volts. Une batterie pleine est d'environ 3.5V. Elle se stabilise ensuite à 3V, puis dégringole rapidement. Cette dernière baisse de tension annonce la fin de vie imminente de l'objet connecté, il est alors important de recharger la batterie à ce moment.",
+  "pluginVersion": "10.4.2"
+}
