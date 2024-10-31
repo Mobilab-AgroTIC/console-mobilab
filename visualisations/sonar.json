@@ -1,7 +1,62 @@
 {
+  "type": "timeseries",
+  "title": "NOM_DU_CAPTEUR",
+  "gridPos": {
+    "h": 8,
+    "w": 12,
+    "x": 0,
+    "y": 17
+  },
   "datasource": {
-    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86",
+    "uid": "ae2ff4ubdzf28f",
     "type": "influxdb"
+  },
+  "id": 20,
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ae2ff4ubdzf28f"
+      },
+      "groupBy": [],
+      "hide": false,
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "query": "SELECT min(\"value\") FROM \"autogen\".\"devices\" WHERE (\"name\"::field = 'sonar-01') AND $timeFilter GROUP BY time(10m) fill(null)",
+      "rawQuery": false,
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "NOM_DU_CAPTEUR"
+        }
+      ]
+    }
+  ],
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
   },
   "fieldConfig": {
     "defaults": {
@@ -40,7 +95,7 @@
       },
       "color": {
         "mode": "fixed",
-        "fixedColor": "#717171"
+        "fixedColor": "yellow"
       },
       "mappings": [],
       "thresholds": {
@@ -55,70 +110,5 @@
     },
     "overrides": []
   },
-  "gridPos": {
-    "h": 8,
-    "w": 12,
-    "x": 0,
-    "y": 51
-  },
-  "id": 20,
-  "options": {
-    "tooltip": {
-      "mode": "single",
-      "sort": "none"
-    },
-    "legend": {
-      "showLegend": true,
-      "displayMode": "list",
-      "placement": "bottom",
-      "calcs": []
-    }
-  },
-  "targets": [
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
-      },
-      "groupBy": [],
-      "hide": false,
-      "measurement": "devices",
-      "orderByTime": "ASC",
-      "policy": "autogen",
-      "query": "SELECT min(\"value\") FROM \"autogen\".\"devices\" WHERE (\"name\"::field = 'sonar-01') AND $timeFilter GROUP BY time(10m) fill(null)",
-      "rawQuery": false,
-      "refId": "A",
-      "resultFormat": "time_series",
-      "select": [
-        [
-          {
-            "params": [
-              "value"
-            ],
-            "type": "field"
-          }
-        ]
-      ],
-      "tags": [
-        {
-          "key": "name::field",
-          "operator": "=",
-          "value": "NOM_DU_CAPTEUR"
-        }
-      ]
-    }
-  ],
-  "title": "NOM_DU_CAPTEUR",
-  "transformations": [
-    {
-      "id": "filterByValue",
-      "options": {
-        "filters": [],
-        "match": "any",
-        "type": "include"
-      }
-    }
-  ],
-  "type": "timeseries",
   "description": ""
 }
