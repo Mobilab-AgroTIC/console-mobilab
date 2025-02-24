@@ -1,0 +1,183 @@
+{
+  "id": 24,
+  "type": "timeseries",
+  "title": "TITRE_DE_VOTRE_VISUALISATION_ICI",
+  "gridPos": {
+    "x": 12,
+    "y": 25,
+    "h": 8,
+    "w": 12
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "smooth",
+        "barAlignment": 0,
+        "barWidthFactor": 0.6,
+        "lineWidth": 2,
+        "fillOpacity": 20,
+        "gradientMode": "opacity",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "series",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "fixed",
+        "fixedColor": "green"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "green",
+            "value": null
+          },
+          {
+            "color": "red",
+            "value": 80
+          }
+        ]
+      }
+    },
+    "overrides": [
+      {
+        "matcher": {
+          "id": "byName",
+          "options": "devices.humidity"
+        },
+        "properties": [
+          {
+            "id": "color",
+            "value": {
+              "fixedColor": "blue",
+              "mode": "fixed"
+            }
+          },
+          {
+            "id": "custom.axisPlacement",
+            "value": "left"
+          },
+          {
+            "id": "custom.axisSoftMin",
+            "value": 50
+          },
+          {
+            "id": "custom.axisSoftMax",
+            "value": 100
+          }
+        ]
+      },
+      {
+        "matcher": {
+          "id": "byName",
+          "options": "devices.temperature"
+        },
+        "properties": [
+          {
+            "id": "custom.axisPlacement",
+            "value": "right"
+          },
+          {
+            "id": "custom.axisSoftMin",
+            "value": -5
+          },
+          {
+            "id": "custom.axisSoftMax",
+            "value": 30
+          }
+        ]
+      }
+    ]
+  },
+  "pluginVersion": "11.4.0",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "type": "field",
+            "params": [
+              "temperature"
+            ]
+          },
+          {
+            "type": "alias",
+            "params": [
+              "temperature"
+            ]
+          }
+        ],
+        [
+          {
+            "type": "field",
+            "params": [
+              "humidity"
+            ]
+          },
+          {
+            "type": "alias",
+            "params": [
+              "humidity"
+            ]
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "VOTRE_NOM_DE_CAPTEUR_ICI"
+        }
+      ]
+    }
+  ],
+  "datasource": {
+    "type": "influxdb",
+    "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
+  },
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  }
+}
