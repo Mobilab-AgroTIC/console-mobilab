@@ -81,7 +81,7 @@
         [
           {
             "params": [
-              "power"
+              "battery"
             ],
             "type": "field"
           },
