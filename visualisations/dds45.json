@@ -1,0 +1,116 @@
+{
+  "id": 35,
+  "type": "timeseries",
+  "title": "NOM_DU_CAPTEUR",
+  "description": "",
+  "gridPos": {
+    "x": 0,
+    "y": 43,
+    "h": 8,
+    "w": 12
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "smooth",
+        "barAlignment": 0,
+        "barWidthFactor": 0.6,
+        "lineWidth": 2,
+        "fillOpacity": 20,
+        "gradientMode": "opacity",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "never",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "series",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        },
+        "axisSoftMax": 30
+      },
+      "color": {
+        "mode": "fixed",
+        "fixedColor": "#717171"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "green",
+            "value": null
+          }
+        ]
+      }
+    },
+    "overrides": []
+  },
+  "pluginVersion": "11.4.0",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
+      },
+      "groupBy": [],
+      "hide": false,
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "query": "SELECT min(\"value\") FROM \"autogen\".\"devices\" WHERE (\"name\"::field = 'sonar-01') AND $timeFilter GROUP BY time(10m) fill(null)",
+      "rawQuery": false,
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "NOM_DU_CAPTEUR"
+        }
+      ]
+    }
+  ],
+  "datasource": {
+    "type": "influxdb",
+    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86"
+  },
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  }
+}
