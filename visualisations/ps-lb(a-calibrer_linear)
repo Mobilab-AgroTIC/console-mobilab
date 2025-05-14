@@ -1,10 +1,10 @@
 {
   "id": 23,
   "type": "timeseries",
-  "title": "ps-lb",
+  "title": "ps-lb - nom de votre capteur",
   "gridPos": {
     "x": 0,
-    "y": 41,
+    "y": 35,
     "h": 8,
     "w": 12
   },
@@ -72,10 +72,11 @@
         "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
       },
       "groupBy": [],
+      "hide": false,
       "measurement": "devices",
       "orderByTime": "ASC",
       "policy": "autogen",
-      "refId": "A",
+      "refId": "valeur_brute",
       "resultFormat": "table",
       "select": [
         [
@@ -91,26 +92,25 @@
         {
           "key": "name::field",
           "operator": "=",
-          "value": "pslb-01"
+          "value": "nom-du-capteur"
         }
-      ],
-      "hide": true
+      ]
     },
     {
-      "refId": "B",
       "datasource": {
+        "name": "Expression",
         "type": "__expr__",
-        "uid": "__expr__",
-        "name": "Expression"
+        "uid": "__expr__"
       },
-      "type": "math",
-      "hide": false,
-      "expression": "($A-2000)/500"
+      "expression": "($valeur_brute-2000)/500",
+      "hide": true,
+      "refId": "B",
+      "type": "math"
     }
   ],
   "datasource": {
-    "type": "influxdb",
-    "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
+    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86",
+    "type": "influxdb"
   },
   "options": {
     "tooltip": {
