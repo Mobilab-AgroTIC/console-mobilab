@@ -1,10 +1,10 @@
 {
-  "id": 23,
+  "id": 27,
   "type": "timeseries",
-  "title": "ps-lb - nom de votre capteur",
+  "title": "ps-lb",
   "gridPos": {
     "x": 0,
-    "y": 35,
+    "y": 17,
     "h": 8,
     "w": 12
   },
@@ -92,7 +92,7 @@
         {
           "key": "name::field",
           "operator": "=",
-          "value": "nom-du-capteur"
+          "value": "nom_de_votre_capteur"
         }
       ]
     },
@@ -102,15 +102,15 @@
         "type": "__expr__",
         "uid": "__expr__"
       },
-      "expression": "($valeur_brute-2000)/500",
+      "expression": "1 * $valeur_brute + 0",
       "hide": true,
       "refId": "B",
       "type": "math"
     }
   ],
   "datasource": {
-    "uid": "ba52ccd7-23ae-4699-ac7f-e4af0e81af86",
-    "type": "influxdb"
+    "type": "influxdb",
+    "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
   },
   "options": {
     "tooltip": {
