@@ -92,7 +92,7 @@
         {
           "key": "name::field",
           "operator": "=",
-          "value": "nom_de_votre_capteur"
+          "value": "nom_du_capteur"
         }
       ]
     },
