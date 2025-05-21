@@ -4,7 +4,7 @@
   "title": "ps-lb",
   "gridPos": {
     "x": 0,
-    "y": 17,
+    "y": 9,
     "h": 8,
     "w": 12
   },
@@ -12,11 +12,11 @@
     "defaults": {
       "custom": {
         "drawStyle": "line",
-        "lineInterpolation": "stepAfter",
+        "lineInterpolation": "smooth",
         "barAlignment": 0,
         "barWidthFactor": 0.6,
-        "lineWidth": 1,
-        "fillOpacity": 0,
+        "lineWidth": 2,
+        "fillOpacity": 20,
         "gradientMode": "none",
         "spanNulls": false,
         "insertNulls": false,
@@ -45,7 +45,7 @@
       },
       "color": {
         "mode": "fixed",
-        "fixedColor": "blue"
+        "fixedColor": "green"
       },
       "mappings": [],
       "thresholds": {
@@ -103,7 +103,7 @@
         "uid": "__expr__"
       },
       "expression": "1 * $valeur_brute + 0",
-      "hide": true,
+      "hide": false,
       "refId": "B",
       "type": "math"
     }
