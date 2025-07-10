@@ -8,10 +8,10 @@ services:
     ports:
       - "1880:1880"
     networks:
-      - node-red-net
+      - console-mobilab-network
     volumes:
       - node-red-data:/data
-      - ./settings.js:/data/settings.js
+      - ./node-red/settings.js:/data/settings.js
 
   grafana:
     image: grafana/grafana-oss:latest
@@ -24,8 +24,9 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - /usr/share/grafana/public/img/:grafana/img/
     networks:
-      - node-red-net
+      - console-mobilab-network
     restart: unless-stopped
 
   influxdb:
@@ -35,7 +36,7 @@ services:
     volumes:
       - influxdb-data:/var/lib/influxdb
     networks:
-      - node-red-net
+      - console-mobilab-network
     restart: unless-stopped
     environment:
       - INFLUXDB_ADMIN_ENABLED=true
@@ -49,4 +50,4 @@ volumes:
   influxdb-data:
 
 networks:
-  node-red-net:
+  console-mobilab-network:
