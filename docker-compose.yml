@@ -25,6 +25,7 @@ services:
       - grafana-data:/var/lib/grafana
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
       - /usr/share/grafana/public/img/:grafana/img/
+      - /usr/share/grafana/public/views/index.html:grafana/index.html
     networks:
       - console-mobilab-network
     restart: unless-stopped
