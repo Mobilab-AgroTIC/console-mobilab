@@ -28,9 +28,25 @@ services:
       - node-red-net
     restart: unless-stopped
 
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    networks:
+      - node-red-net
+    restart: unless-stopped
+    environment:
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+
 volumes:
   node-red-data:
   grafana-data:
+  influxdb-data:
 
 networks:
   node-red-net:
