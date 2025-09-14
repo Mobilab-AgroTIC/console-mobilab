@@ -1,0 +1,127 @@
+{
+  "id": 23,
+  "type": "timeseries",
+  "title": "ps-lb",
+  "gridPos": {
+    "x": 0,
+    "y": 41,
+    "h": 8,
+    "w": 12
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "stepAfter",
+        "barAlignment": 0,
+        "barWidthFactor": 0.6,
+        "lineWidth": 1,
+        "fillOpacity": 0,
+        "gradientMode": "none",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "fixed",
+        "fixedColor": "blue"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "green",
+            "value": null
+          },
+          {
+            "color": "red",
+            "value": 80
+          }
+        ]
+      }
+    },
+    "overrides": []
+  },
+  "pluginVersion": "11.4.0",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "table",
+      "select": [
+        [
+          {
+            "params": [
+              "value2"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "pslb-01"
+        }
+      ],
+      "hide": true
+    },
+    {
+      "refId": "B",
+      "datasource": {
+        "type": "__expr__",
+        "uid": "__expr__",
+        "name": "Expression"
+      },
+      "type": "math",
+      "hide": false,
+      "expression": "-(1/0.05)*log(($A-EAU)/(AIR-EAU))"
+    }
+  ],
+  "datasource": {
+    "type": "influxdb",
+    "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
+  },
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  }
+}

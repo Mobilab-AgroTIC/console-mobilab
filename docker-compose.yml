@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Europe/Amsterdam
+    ports:
+      - "1880:1880"
+    networks:
+      - console-mobilab-network
+    volumes:
+      - node-red-data:/data
+      - ./node-red/settings.js:/data/settings.js
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - TZ=Europe/Amsterdam
+    ports:
+      - "3002:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - /usr/share/grafana/public/img/:grafana/img/
+      - /usr/share/grafana/public/views/index.html:grafana/index.html
+    networks:
+      - console-mobilab-network
+    restart: unless-stopped
+
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    networks:
+      - console-mobilab-network
+    restart: unless-stopped
+    environment:
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+
+volumes:
+  node-red-data:
+  grafana-data:
+  influxdb-data:
+
+networks:
+  console-mobilab-network:

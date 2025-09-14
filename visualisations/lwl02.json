@@ -1,0 +1,116 @@
+{
+  "id": 1,
+  "type": "timeseries",
+  "title": "Porte arrière du mobilab",
+  "gridPos": {
+    "x": 0,
+    "y": 9,
+    "h": 8,
+    "w": 12
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "stepAfter",
+        "barAlignment": 0,
+        "barWidthFactor": 0.6,
+        "lineWidth": 1,
+        "fillOpacity": 0,
+        "gradientMode": "none",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "fixed",
+        "fixedColor": "blue"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "green",
+            "value": null
+          },
+          {
+            "color": "red",
+            "value": 80
+          }
+        ]
+      },
+      "unit": "bool_on_off"
+    },
+    "overrides": []
+  },
+  "pluginVersion": "11.4.0",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom-du-capteur"
+        }
+      ]
+    }
+  ],
+  "datasource": {
+    "type": "influxdb",
+    "uid": "b03f86b3-561b-4036-a316-f40a68ebc73d"
+  },
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  }
+}
