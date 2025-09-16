@@ -1,0 +1,21 @@
+# Node-RED data
+node-red-data/
+
+# Grafana data
+grafana-data/
+
+# Postgres data
+postgres-data/
+timescaledb-data/
+
+
+# Logs
+*.log
+
+# VS Code settings (optional)
+.vscode/
+
+
+# OS files
+.DS_Store
+Thumbs.db
