@@ -8,6 +8,11 @@ grafana-data/
 postgres-data/
 timescaledb-data/
 
+# Env files
+.env
+.env.local
+.env.*.local
+
 
 # Logs
 *.log
