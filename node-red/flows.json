@@ -1,0 +1,3343 @@
+[
+    {
+        "id": "fa0d81b075c058ed",
+        "type": "tab",
+        "label": "Manage Console mobilab",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "eb74a94ca0642070",
+        "type": "tab",
+        "label": "mobilab-truck",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "179a94c74f682310",
+        "type": "tab",
+        "label": "Flux 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bd7fdadec2d6549d",
+        "type": "subflow",
+        "name": "console mobilab",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 20,
+                "y": 420,
+                "wires": [
+                    {
+                        "id": "d86793857733f664"
+                    },
+                    {
+                        "id": "ab69ac2d5c597e24"
+                    },
+                    {
+                        "id": "3fd947473024feec"
+                    },
+                    {
+                        "id": "8d50ae7fda2a3a3c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 100,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "e27efcb5fecdc72c",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1940,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "2ee8e04601530170",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#3FADB5"
+    },
+    {
+        "id": "74264c139abde2da",
+        "type": "junction",
+        "z": "179a94c74f682310",
+        "x": 560,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "283a670c.e20a28",
+        "type": "tls-config",
+        "name": "Default",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true
+    },
+    {
+        "id": "ef1b568734c2ffb5",
+        "type": "influxdb",
+        "hostname": "simonmoinard.ddns.net",
+        "port": "82",
+        "protocol": "http",
+        "database": "hubis",
+        "name": "",
+        "usetls": false,
+        "tls": "283a670c.e20a28",
+        "influxdbVersion": "1.8-flux",
+        "url": "http://influxdb:8086",
+        "timeout": "",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "9b586b4f8ca3767d",
+        "type": "mqtt-broker",
+        "z": "eb74a94ca0642070",
+        "name": "mobilab-truck app",
+        "broker": "eu1.cloud.thethings.network",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "09010d32b18e20c7",
+        "type": "postgreSQLConfig",
+        "name": "postgres",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "iot_data",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "admin",
+        "userFieldType": "str",
+        "password": "admin",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "b1b3382c8feafb97",
+        "type": "postgreSQLConfig",
+        "name": "postgres",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "iot_data",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "admin",
+        "userFieldType": "str",
+        "password": "admin",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "eb1637893eb715cd",
+        "type": "telegram bot",
+        "d": true,
+        "botname": "mobilab_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "addressfamily": "",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": true
+    },
+    {
+        "id": "d86793857733f664",
+        "type": "switch",
+        "z": "bd7fdadec2d6549d",
+        "name": "Autoconstruction",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "pilowtech",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "debit",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "irritrace",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "sel",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "senpow",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "watermark",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "sonar",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "waterlow",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "porte",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lancelot",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "bme680",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "furgo",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "temperature",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "davele",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 14,
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "baa53bbf13aeeb13"
+            ],
+            [
+                "baa53bbf13aeeb13"
+            ],
+            [
+                "baa53bbf13aeeb13"
+            ],
+            [
+                "baa53bbf13aeeb13"
+            ],
+            [
+                "baa53bbf13aeeb13"
+            ],
+            [
+                "baa53bbf13aeeb13"
+            ],
+            [
+                "baa53bbf13aeeb13"
+            ],
+            [
+                "c7e8abbb3fe38f0b"
+            ],
+            [
+                "c15299ef6a8aa811"
+            ],
+            [
+                "e4d451fb2d115299"
+            ],
+            [
+                "375abb38d2950b09"
+            ],
+            [
+                "abd2a74a209347b5"
+            ],
+            [
+                "70bc8f3e6d3dcfbb"
+            ],
+            [
+                "391656f407ad734e"
+            ]
+        ]
+    },
+    {
+        "id": "c7e8abbb3fe38f0b",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "waterlow",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n        \"value\": msg.payload.uplink_message.decoded_payload[\"WATER_LEAK_STATUS\"]\n    };\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 140,
+        "wires": [
+            [
+                "e594f38c2089448b",
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "baa53bbf13aeeb13",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "2 bytes/valeur : Irritrace, pilowtech, Watermark, sonar, debit",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload.bytes[0],\n    \"value\": ((msg.payload.uplink_message.decoded_payload.bytes[1] * 256) + msg.payload.uplink_message.decoded_payload.bytes[2])\n};\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[3] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value2 = ((msg.payload.uplink_message.decoded_payload.bytes[3] * 256) + msg.payload.uplink_message.decoded_payload.bytes[4]);\n}\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[5] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value3 = ((msg.payload.uplink_message.decoded_payload.bytes[5] * 256) + msg.payload.uplink_message.decoded_payload.bytes[6]);\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 100,
+        "wires": [
+            [
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "e4d451fb2d115299",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lancelot",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n    \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n    \"battery\": msg.payload.uplink_message.decoded_payload.bytes[0],\n};\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 220,
+        "wires": [
+            [
+                "d35518380c2038d5",
+                "0a5586cdb658de53"
+            ]
+        ]
+    },
+    {
+        "id": "d262c36a161c3093",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "1 byte/valeur : ",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n    \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n    \"power\": msg.payload.uplink_message.decoded_payload.bytes[0],\n    \"value\": msg.payload.uplink_message.decoded_payload.bytes[1]\n};\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[2] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[2] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value2 = msg.payload.uplink_message.decoded_payload.bytes[2];\n}\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 60,
+        "wires": [
+            [
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "e594f38c2089448b",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Alerte Waterlow",
+        "func": "var devicesData = flow.get(\"$parent.waterlow\");\nvar msg2 = msg.payload;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.waterlow\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 140,
+        "wires": [
+            [
+                "97f3a34543148b88"
+            ]
+        ]
+    },
+    {
+        "id": "378d1b52bef108b9",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Alerte Porte",
+        "func": "var devicesData = flow.get(\"$parent.porte\");\nvar msg2 = msg.payload;\nvar oldValue;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n  oldValue = devicesData[capteurIndex].state;\n  // Le \"capteur\" existe dans l'array, mettez à jour son état\n  devicesData[capteurIndex].state = msg2.value;\n\n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value,\n    \"power\": msg2.power\n  }\n    ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.porte\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram = {};\n\nif (oldValue != msg.payload.value) {\n  oldValue = msg.payload.value;\n  msg.telegram.payload = {}\n  msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n  msg.telegram.payload.content = \"la \" + msg2.name + \" passe en \" + msg2.value;\n  msg.telegram.payload.type = \"message\";\n  return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 180,
+        "wires": [
+            [
+                "97f3a34543148b88"
+            ]
+        ]
+    },
+    {
+        "id": "4e09185f9dae5f10",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "msg",
+        "func": "var message_connu = {\n    \"chatId\": msg.payload.chatId,\n    \"content\": \"Bonjour !\\n\\nVoici ce que vous pouvez m'envoyer comme commande :\\n\\n- /waterlow : pour connaître l'état de vos waterlow\\n- /porte : pour vérifier l'état de vos portes\\n- /lancelot : pour actionner vos Lancelot\\n\\nN'hésitez pas à me demander ou bien à appuyer directement sur les mots en bleu! \\n\\n Pour info, votre id :  \" + msg.payload.chatId,\n    \"type\": \"message\"\n}\n\nif (msg.payload.chatId == flow.get(\"$parent.chatId\")) \n{\n    msg.payload = message_connu\n    return msg\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 40,
+        "wires": [
+            [
+                "d44931fe0ec84601",
+                "73ef40b751c41f01"
+            ]
+        ]
+    },
+    {
+        "id": "607a2d97902e1510",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "msg",
+        "func": "if (msg.payload.chatId== flow.get(\"$parent.chatId\")){\n    \n    //msg.payload={}\n    msg.payload.chatId = msg.payload.chatId;\n\n    // Récupérer l'array \"devicesData\" depuis la variable de contexte\n    var devicesData = flow.get(\"$parent.waterlow\");\n    \n    if (Array.isArray(devicesData)) {\n      // Générer le message avec l'état des capteurs\n      var message = \"État des Waterlows :\\n\";\n    \n      devicesData.forEach(function (device) {\n        message += device.name + \" : \" + device.state + \"\\n\";\n      });\n    \n      msg.payload.content = message;\n      return msg;\n    } \n    \n    else {\n      msg.payload.content = \"Aucun Waterlow trouvé !\";\n    }\n    \n    msg.payload.type = \"message\";\n    return msg\n}\nelse {}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 80,
+        "wires": [
+            [
+                "d44931fe0ec84601"
+            ]
+        ]
+    },
+    {
+        "id": "31c88bf4584eb6aa",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "save msgId",
+        "func": "// We store the messageId to be able to edit this reply in the callback query. \ncontext.global.keyboard.messageId = msg.payload.sentMessageId;\n\nreturn [ msg ];\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8e9f98201941b052",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "msg",
+        "func": "if (msg.payload.chatId == flow.get(\"$parent.chatId\")) {\n\n  context.global.keyboard = { messageId: msg.payload.messageId };\n\n\n  var inputArray = flow.get(\"$parent.lancelot\");\n  // Vérifier si l'array existe déjà dans le contexte\n  if (!inputArray) {\n    // Si l'array n'existe pas, initialisez-le avec un array vide\n  }\n  // Initialiser un nouvel array pour stocker les boutons transformés du clavier\n  var keyboardButtons = [];\n\n  // Utiliser forEach pour itérer sur chaque élément du tableau\n  inputArray.forEach(function (item) {\n    // Extraire le nom du bouton (si \"name\" est défini, sinon utiliser une valeur par défaut)\n    var buttonText = item.name || \"no_name\";\n    // Extraire le callback_data du bouton (si \"name\" est défini, sinon utiliser une valeur par défaut)\n    var callbackData = item.name || \"no_name\";\n\n    var button = {\n      text: buttonText,\n      callback_data: callbackData\n    };\n\n    keyboardButtons.push(button);\n  });\n\n  var transformedArray = keyboardButtons.map(function (item) {\n    return [item];\n  });\n\n\n  var transformedObject = {\n    \"inline_keyboard\": transformedArray\n  };\n  var opts = {\n    reply_to_message_id: msg.payload.messageId,\n    reply_markup: JSON.stringify(transformedObject)\n  };\n\n  msg.payload.content = 'Bien reçu ! Quelle martelière dois-je fermer ?';\n  msg.payload.options = opts;\n\n  return [msg];\n}\nelse { };",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 200,
+        "wires": [
+            [
+                "f95598d381025cd5"
+            ]
+        ]
+    },
+    {
+        "id": "2ee8e04601530170",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Prepare downlink",
+        "func": "return {\n  \"payload\": {\n    \"downlinks\": [{\n      \"f_port\": 15,\n      \"frm_payload\": \"AQ==\", //\"frm_payload\": Buffer.from(bytes).toString('base64'),\n      \"priority\": \"NORMAL\"\n    }]\n  },\n  \"topic\" : \"v3/\"+flow.get(\"$parent.appId\")+\"@ttn/devices/\"+msg.payload.device+\"/down/push\" //\"<ApplicationID>>/devices/\" + dev_id + \"/down\";\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1790,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f7881f2007e15921",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "envoi",
+        "func": "var messageId = context.global.keyboard.Id;\n\nmsg.payload.type = 'message';\nmsg.payload.content = \"C'est parti pour \" + messageId +\"! L'activation peut prendre jusqu'à 5 minutes.\";\nmsg.payload.device = messageId;\n// You could also send a editMessageReplyMarkup with an empty reply_markup here\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1570,
+        "y": 240,
+        "wires": [
+            [
+                "2ee8e04601530170",
+                "e0d61a319828c158",
+                "5a4e0a89eeaa98cd"
+            ]
+        ]
+    },
+    {
+        "id": "ee818379b18317d1",
+        "type": "switch",
+        "z": "bd7fdadec2d6549d",
+        "name": "check callback data",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "istype",
+                "v": "string",
+                "vt": "string"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 1390,
+        "y": 280,
+        "wires": [
+            [
+                "f7881f2007e15921"
+            ],
+            [
+                "6cc7c96871c91a10"
+            ],
+            [
+                "e20a496257c44748"
+            ]
+        ]
+    },
+    {
+        "id": "5a4e0a89eeaa98cd",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Remove message",
+        "func": "// Hide the keyboard and forget the messageId\nmsg.payload.type = 'deleteMessage';\nmsg.payload.content = context.global.keyboard.messageId\ncontext.global.keyboard.messageId = null;\n\n// You could also send a editMessageReplyMarkup with an empty reply_markup here\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1790,
+        "y": 260,
+        "wires": [
+            [
+                "e0d61a319828c158"
+            ]
+        ]
+    },
+    {
+        "id": "e48bd9e45ab3fe21",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "filtre",
+        "func": "if (msg.payload.chatId== flow.get(\"$parent.chatId\")){\n    return msg;\n}\n\nelse ;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 280,
+        "wires": [
+            [
+                "ee818379b18317d1"
+            ]
+        ]
+    },
+    {
+        "id": "6cc7c96871c91a10",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "annulation",
+        "func": "// Hide the keyboard and forget the messageId\nmsg.payload.type = 'message';\nmsg.payload.content = \"Annulation.\"\n\n// You could also send a editMessageReplyMarkup with an empty reply_markup here\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 280,
+        "wires": [
+            [
+                "e0d61a319828c158",
+                "5a4e0a89eeaa98cd"
+            ]
+        ]
+    },
+    {
+        "id": "e20a496257c44748",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "confirmation",
+        "func": "// This is the message id of the initial keyboard that is simply exchanged by a new one.\nvar messageId = context.global.keyboard.messageId;\ncontext.global.keyboard.Id = msg.payload.content;\n\n// This is a sample of how to send a second inline keyboard with modified buttons\nvar reply_markup = JSON.stringify({\n    \"inline_keyboard\": [[\n                {\n                    \"text\": msg.payload.content + \", sûr ?\",\n                    \"callback_data\": \"1\"        \n                }, \n                {\n                    \"text\": \"Fausse manip !\",\n                    \"callback_data\": \"0\"           \n                }]\n            ]\n  });\n\n\nvar options = {\n    chat_id : msg.payload.chatId,\n    reply_markup : reply_markup,\n    message_id : messageId\n};\n\nmsg.payload.type = 'editMessageReplyMarkup';\nmsg.payload.content = reply_markup;\nmsg.payload.options = options;\n\nreturn [ msg ];\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 320,
+        "wires": [
+            [
+                "e0d61a319828c158"
+            ]
+        ]
+    },
+    {
+        "id": "375abb38d2950b09",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "bme680",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"HR\": msg.payload.uplink_message.decoded_payload[\"HR\"],\n  \"T\": msg.payload.uplink_message.decoded_payload[\"T\"],\n  \"P\": msg.payload.uplink_message.decoded_payload[\"P\"],\n  \"IAQ\": msg.payload.uplink_message.decoded_payload[\"IAQ\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 260,
+        "wires": [
+            [
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "241eee23f252cc9d",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "pslb",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {};\n\nif (msg.payload.uplink_message.f_port == 2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": (msg.payload.uplink_message.decoded_payload.bytes[0]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[1],\n        \"model\": (msg.payload.uplink_message.decoded_payload.bytes[2]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[3],\n        \"value\": (msg.payload.uplink_message.decoded_payload.bytes[4]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[5],\n        \"value2\": (msg.payload.uplink_message.decoded_payload.bytes[6]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[7],\n        \"value3\": (msg.payload.uplink_message.decoded_payload.bytes[8])\n    };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": (msg.payload.uplink_message.decoded_payload.bytes[5]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[6]\n    };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 420,
+        "wires": [
+            [
+                "4cd9e02a7c54fa5d"
+            ]
+        ]
+    },
+    {
+        "id": "ab69ac2d5c597e24",
+        "type": "switch",
+        "z": "bd7fdadec2d6549d",
+        "name": "Dragino Interface",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "pslb",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ps-lb",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "sn50",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 190,
+        "y": 440,
+        "wires": [
+            [
+                "241eee23f252cc9d"
+            ],
+            [
+                "241eee23f252cc9d"
+            ],
+            [
+                "0a3241dc5c89f34d"
+            ]
+        ]
+    },
+    {
+        "id": "3fd947473024feec",
+        "type": "switch",
+        "z": "bd7fdadec2d6549d",
+        "name": "Dragino sensor",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "tracker",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lwl02",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lds02",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lht52",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lht65",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "dds45",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "dds75",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lds12",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "llds12",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "aiso1",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ais01",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lms01",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "s31",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "cpl03",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "aqs01",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "dds20",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 16,
+        "x": 180,
+        "y": 680,
+        "wires": [
+            [
+                "07c1b146dfa53a80"
+            ],
+            [
+                "d5636560cbaea6cc"
+            ],
+            [
+                "2abf26790d7e0a30"
+            ],
+            [
+                "c3603c66ba5590c4"
+            ],
+            [
+                "37e30a9394b81303"
+            ],
+            [
+                "bc10e290ac26a78e"
+            ],
+            [
+                "13b23bd224c7c975"
+            ],
+            [
+                "781d80975f9cea67"
+            ],
+            [
+                "781d80975f9cea67"
+            ],
+            [],
+            [
+                "224b1438f282def3",
+                "94c3a36b2516e09f"
+            ],
+            [
+                "56355e487a7e130b"
+            ],
+            [
+                "9490d1aeb5443d73"
+            ],
+            [
+                "66f7776a7cf4f55a"
+            ],
+            [
+                "d89d0457592144ba"
+            ],
+            [
+                "bc10e290ac26a78e"
+            ]
+        ]
+    },
+    {
+        "id": "07c1b146dfa53a80",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "trackerD",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"Tem\"],\n        \"latitude\": msg.payload.uplink_message.decoded_payload[\"Latitude\"],\n        \"longitude\": msg.payload.uplink_message.decoded_payload[\"Longitude\"]\n     };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n    };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 600,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "2abf26790d7e0a30",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lds02",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n  \"value\": msg.payload.uplink_message.decoded_payload[\"DOOR_OPEN_STATUS\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 680,
+        "wires": [
+            [
+                "b0b0208ec402979f",
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "c3603c66ba5590c4",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lht52",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n        \"temperature_sonde\": msg.payload.uplink_message.decoded_payload[\"TempC_DS\"]\n     };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat_mV\"],\n   };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 720,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "37e30a9394b81303",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lht65",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n        \"temperature_sonde\": msg.payload.uplink_message.decoded_payload[\"TempC_DS\"]\n     };\n}\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 760,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "bc10e290ac26a78e",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "dds45 (ultrason)",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar distanceStr = msg.payload.uplink_message.decoded_payload[\"Distance\"];\nvar distance = parseInt(distanceStr, 10); // Convertit \"1200mm\" en 1200\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"value\": distance,\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat\"],\n  \"tempC\": msg.payload.uplink_message.decoded_payload[\"TempC_DS18B20\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 800,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "13b23bd224c7c975",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "dds75 (ultrason)",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar distanceStr = msg.payload.uplink_message.decoded_payload[\"Distance\"];\nvar distance = parseInt(distanceStr, 10); // Convertit \"1200cm\" en 1200\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"value\": msg.payload.uplink_message.decoded_payload[\"value\"],\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 840,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "781d80975f9cea67",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lds (lidar)",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"value\": msg.payload.uplink_message.decoded_payload[\"Lidar_distance\"],\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat\"],\n  \"temp\": msg.payload.uplink_message.decoded_payload[\"Lidar_temp\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 880,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "224b1438f282def3",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "ais01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n    \"value\": (\n        ((msg.payload.uplink_message.decoded_payload.bytes[6] << 24) |\n            (msg.payload.uplink_message.decoded_payload.bytes[7] << 16) |\n            (msg.payload.uplink_message.decoded_payload.bytes[8] << 8) |\n            msg.payload.uplink_message.decoded_payload.bytes[9]) +\n        ((msg.payload.uplink_message.decoded_payload.bytes[10] << 24) |\n            (msg.payload.uplink_message.decoded_payload.bytes[11] << 16) |\n            (msg.payload.uplink_message.decoded_payload.bytes[12] << 8) |\n            msg.payload.uplink_message.decoded_payload.bytes[13]) / Math.pow(10, 8)\n    )\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 920,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "d5636560cbaea6cc",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lwl02",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n        \"value\": msg.payload.uplink_message.decoded_payload[\"WATER_LEAK_STATUS\"]\n    };\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 640,
+        "wires": [
+            [
+                "7c59f22ab7f8b22d",
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "c15299ef6a8aa811",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Porte",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n  \"value\": msg.payload.uplink_message.decoded_payload[\"DOOR_OPEN_STATUS\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "378d1b52bef108b9",
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "7c59f22ab7f8b22d",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Alerte lwl02",
+        "func": "var devicesData = flow.get(\"$parent.waterlow\");\nvar msg2 = msg.payload;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.waterlow\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 640,
+        "wires": [
+            [
+                "268bd8bf3a8d4924"
+            ]
+        ]
+    },
+    {
+        "id": "b0b0208ec402979f",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Alerte lds02",
+        "func": "var devicesData = flow.get(\"$parent.porte\");\nvar msg2 = msg.payload;\nvar oldValue;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n  oldValue = devicesData[capteurIndex].state;\n  // Le \"capteur\" existe dans l'array, mettez à jour son état\n  devicesData[capteurIndex].state = msg2.value;\n\n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value,\n    \"power\": msg2.power\n  }\n    ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.porte\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram = {};\n\nif (oldValue != msg.payload.value) {\n  oldValue = msg.payload.value;\n  msg.telegram.payload = {}\n  msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n  msg.telegram.payload.content = \"la \" + msg2.name + \" passe en \" + msg2.value;\n  msg.telegram.payload.type = \"message\";\n  return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 680,
+        "wires": [
+            [
+                "268bd8bf3a8d4924"
+            ]
+        ]
+    },
+    {
+        "id": "e27efcb5fecdc72c",
+        "type": "link in",
+        "z": "bd7fdadec2d6549d",
+        "name": "link in 1",
+        "links": [
+            "bc2d357bdba3f210",
+            "d35518380c2038d5",
+            "4cd9e02a7c54fa5d",
+            "7bd3694006f92436"
+        ],
+        "x": 45,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bc2d357bdba3f210",
+        "type": "link out",
+        "z": "bd7fdadec2d6549d",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "e27efcb5fecdc72c"
+        ],
+        "x": 685,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "d35518380c2038d5",
+        "type": "link out",
+        "z": "bd7fdadec2d6549d",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "e27efcb5fecdc72c"
+        ],
+        "x": 885,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "296ef8a47fb4047a",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "msg",
+        "func": "if (msg.payload.chatId== flow.get(\"$parent.chatId\")){\n    \n    //msg.payload={}\n    msg.payload.chatId = msg.payload.chatId;\n\n    // Récupérer l'array \"devicesData\" depuis la variable de contexte\n    var devicesData = flow.get(\"$parent.porte\");\n    \n    if (Array.isArray(devicesData)) {\n      // Générer le message avec l'état des capteurs\n      var message = \"État des portes :\\n\";\n    \n      devicesData.forEach(function (device) {\n        message += device.name + \" : \" + device.state + \"\\n\";\n      });\n    \n      msg.payload.content = message;\n      return msg;\n    } \n    \n    else {\n      msg.payload.content = \"Aucune porte trouvé !\";\n    }\n    \n    msg.payload.type = \"message\";\n    return msg\n}\nelse {}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 120,
+        "wires": [
+            [
+                "d44931fe0ec84601"
+            ]
+        ]
+    },
+    {
+        "id": "4cd9e02a7c54fa5d",
+        "type": "link out",
+        "z": "bd7fdadec2d6549d",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "e27efcb5fecdc72c"
+        ],
+        "x": 695,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "0a5586cdb658de53",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "gestion_lancelot",
+        "func": "var devicesData = flow.get(\"$parent.lancelot\");\nvar msg2 = msg.payload;\nmsg2.value=0;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.lancelot\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 220,
+        "wires": [
+            [
+                "97f3a34543148b88"
+            ]
+        ]
+    },
+    {
+        "id": "56355e487a7e130b",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lms01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n    \"value\": ((msg.payload.uplink_message.decoded_payload.bytes[2] << 8) | msg.payload.uplink_message.decoded_payload.bytes[3]),\n    \"value2\": ((msg.payload.uplink_message.decoded_payload.bytes[4] << 8) | msg.payload.uplink_message.decoded_payload.bytes[5]),\n    \"value3\": ((msg.payload.uplink_message.decoded_payload.bytes[6] << 8) | msg.payload.uplink_message.decoded_payload.bytes[7]),\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 960,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "0a3241dc5c89f34d",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "sn50v3",
+        "func": "// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": 1,\n    \"snr\": 1,\n    \"battery\": (msg.payload.uplink_message.decoded_payload.bytes[11]),\n    \"value\": (msg.payload.uplink_message.decoded_payload.bytes[0]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[1],\n    \"value2\": (msg.payload.uplink_message.decoded_payload.bytes[2]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[3],\n    \"value3\": (msg.payload.uplink_message.decoded_payload.bytes[4]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[5],\n};\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 460,
+        "wires": [
+            [
+                "4cd9e02a7c54fa5d"
+            ]
+        ]
+    },
+    {
+        "id": "abd2a74a209347b5",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "furgo",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n    \"value\": (msg.payload.uplink_message.decoded_payload[\"ADC1_V\"])\n};\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 300,
+        "wires": [
+            [
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "70bc8f3e6d3dcfbb",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "lht52",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n        \"temperature_sonde\": msg.payload.uplink_message.decoded_payload[\"TempC_DS\"]\n     };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat_mV\"],\n   };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 340,
+        "wires": [
+            [
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "9490d1aeb5443d73",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "s31",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n    \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n    \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"]\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1000,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "73ef40b751c41f01",
+        "type": "debug",
+        "z": "bd7fdadec2d6549d",
+        "name": "debug 110",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1330,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "28ca1e761dde49fb",
+        "type": "debug",
+        "z": "bd7fdadec2d6549d",
+        "name": "debug 113",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1470,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "66f7776a7cf4f55a",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "cpl03",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": 0,\n    \"value\": (msg.payload.uplink_message.decoded_payload.bytes[0])\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1040,
+        "wires": [
+            [
+                "379c6a73fe486a58",
+                "5f6723f9484cced1",
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "379c6a73fe486a58",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "Alerte cpl03",
+        "func": "var devicesData = flow.get(\"$parent.cpl03\");\nvar msg2 = msg.payload;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.cpl03\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1040,
+        "wires": [
+            [
+                "268bd8bf3a8d4924"
+            ]
+        ]
+    },
+    {
+        "id": "5f6723f9484cced1",
+        "type": "debug",
+        "z": "bd7fdadec2d6549d",
+        "name": "debug 117",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "94c3a36b2516e09f",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "ais01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar bytes = msg.payload.uplink_message.decoded_payload.bytes;\n\n// Reconstituer la partie entière (bytes 6 à 9) — 4 octets\n// On combine les 4 octets en un entier 32 bits (big endian)\nvar integerPart = (bytes[6] << 24) | (bytes[7] << 16) | (bytes[8] << 8) | bytes[9];\n\n// Reconstituer la partie décimale (bytes 10 à 13) — 4 octets\nvar decimalPart = (bytes[10] << 24) | (bytes[11] << 16) | (bytes[12] << 8) | bytes[13];\n\n// Pour éviter les problèmes liés au bit de signe lors du décalage à gauche (car JS utilise 32 bits signés)\n// Convertir en unsigned via >>> 0 :\nintegerPart = integerPart >>> 0;\ndecimalPart = decimalPart >>> 0;\n\n// Calculer la valeur finale (en considérant que la partie décimale est divisée par 10^n)\n// Ici on suppose que la partie décimale représente des chiffres après la virgule, par exemple 4 chiffres, donc division par 10000\nvar value = integerPart + (decimalPart / 10000);\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n    \"value\":value,\n    \"byte6\": bytes[6],\n    \"byte7\": bytes[7],\n    \"byte8\": bytes[8],\n    \"byte9\": bytes[9],\n    \"byte10\": bytes[10],\n    \"byte11\": bytes[11],\n    \"byte12\": bytes[12],\n    \"byte13\": bytes[13]\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1080,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "391656f407ad734e",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "davele",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload.bytes[0],\n    \"distance\": ((msg.payload.uplink_message.decoded_payload.bytes[1] * 256) + msg.payload.uplink_message.decoded_payload.bytes[2]),\n    \"bpm\": msg.payload.uplink_message.decoded_payload.bytes[3],\n    \"lux\": msg.payload.uplink_message.decoded_payload.bytes[4]\n};\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[3] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value2 = ((msg.payload.uplink_message.decoded_payload.bytes[3] * 256) + msg.payload.uplink_message.decoded_payload.bytes[4]);\n}\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[5] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value3 = ((msg.payload.uplink_message.decoded_payload.bytes[5] * 256) + msg.payload.uplink_message.decoded_payload.bytes[6]);\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 380,
+        "wires": [
+            [
+                "d35518380c2038d5"
+            ]
+        ]
+    },
+    {
+        "id": "d89d0457592144ba",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "aqs01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n        \"temperature\": ((msg.payload.uplink_message.decoded_payload.bytes[2] << 8) | msg.payload.uplink_message.decoded_payload.bytes[3]),\n        \"humidity\": ((msg.payload.uplink_message.decoded_payload.bytes[4] << 8) | msg.payload.uplink_message.decoded_payload.bytes[5]),\n        \"pressure\": ((msg.payload.uplink_message.decoded_payload.bytes[6] << 8) | msg.payload.uplink_message.decoded_payload.bytes[7]),\n        \"co2\": ((msg.payload.uplink_message.decoded_payload.bytes[8] << 8) | msg.payload.uplink_message.decoded_payload.bytes[9])\n     };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1120,
+        "wires": [
+            [
+                "bc2d357bdba3f210"
+            ]
+        ]
+    },
+    {
+        "id": "8d50ae7fda2a3a3c",
+        "type": "switch",
+        "z": "bd7fdadec2d6549d",
+        "name": "milesight Interface",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "em300",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 190,
+        "y": 1180,
+        "wires": [
+            [
+                "a7d02b92a5fe2636"
+            ]
+        ]
+    },
+    {
+        "id": "a7d02b92a5fe2636",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "em300",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"humidity\": msg.payload.uplink_message.decoded_payload[\"humidity\"],\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"battery\"],\n  \"temperature\": msg.payload.uplink_message.decoded_payload[\"temperature\"]\n};\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1180,
+        "wires": [
+            [
+                "7bd3694006f92436"
+            ]
+        ]
+    },
+    {
+        "id": "7bd3694006f92436",
+        "type": "link out",
+        "z": "bd7fdadec2d6549d",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "e27efcb5fecdc72c"
+        ],
+        "x": 685,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "03ef47d8c3e7dea2",
+        "type": "telegram command",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "hello",
+        "command": "/hello",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "36f1cf07c6e6ca84",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1030,
+        "y": 40,
+        "wires": [
+            [
+                "4e09185f9dae5f10",
+                "73ef40b751c41f01"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "aed79bce46f130fe",
+        "type": "telegram command",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "Waterlow",
+        "command": "/waterlow",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "36f1cf07c6e6ca84",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1040,
+        "y": 80,
+        "wires": [
+            [
+                "607a2d97902e1510"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "78afd854740fef74",
+        "type": "telegram command",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "Lancelot",
+        "command": "/Lancelot",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "36f1cf07c6e6ca84",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1040,
+        "y": 180,
+        "wires": [
+            [
+                "8e9f98201941b052"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d6196ece20f74f66",
+        "type": "telegram command",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "lancelot",
+        "command": "/lancelot",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "36f1cf07c6e6ca84",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1030,
+        "y": 220,
+        "wires": [
+            [
+                "8e9f98201941b052"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "15f666b30a9449f4",
+        "type": "telegram command",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "Portes",
+        "command": "/porte",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "36f1cf07c6e6ca84",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1030,
+        "y": 120,
+        "wires": [
+            [
+                "296ef8a47fb4047a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "9967c5fa312e6bde",
+        "type": "telegram event",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "",
+        "bot": "36f1cf07c6e6ca84",
+        "event": "callback_query",
+        "autoanswer": true,
+        "x": 1060,
+        "y": 280,
+        "wires": [
+            [
+                "e48bd9e45ab3fe21"
+            ]
+        ]
+    },
+    {
+        "id": "d44931fe0ec84601",
+        "type": "telegram sender",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "Send msg",
+        "bot": "36f1cf07c6e6ca84",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1320,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f95598d381025cd5",
+        "type": "telegram sender",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "Send msg",
+        "bot": "36f1cf07c6e6ca84",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1320,
+        "y": 200,
+        "wires": [
+            [
+                "31c88bf4584eb6aa",
+                "28ca1e761dde49fb"
+            ]
+        ]
+    },
+    {
+        "id": "e0d61a319828c158",
+        "type": "telegram sender",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "send",
+        "bot": "36f1cf07c6e6ca84",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1910,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "268bd8bf3a8d4924",
+        "type": "telegram sender",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "Send msg",
+        "bot": "36f1cf07c6e6ca84",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 820,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "97f3a34543148b88",
+        "type": "telegram sender",
+        "z": "bd7fdadec2d6549d",
+        "d": true,
+        "name": "Send msg",
+        "bot": "36f1cf07c6e6ca84",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 800,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5a80307aa2d62f40",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 490,
+        "y": 580,
+        "wires": [
+            [
+                "b2721c0d07219228"
+            ]
+        ]
+    },
+    {
+        "id": "48ab7d72d00c8df9",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "Show Databases",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "x": 160,
+        "y": 600,
+        "wires": [
+            [
+                "55b9efae972c0b49"
+            ]
+        ]
+    },
+    {
+        "id": "55b9efae972c0b49",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "request",
+        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?q=SHOW%20DATABASES\";\nmsg.url = message.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 600,
+        "wires": [
+            [
+                "5a80307aa2d62f40"
+            ]
+        ]
+    },
+    {
+        "id": "b2721c0d07219228",
+        "type": "json",
+        "z": "fa0d81b075c058ed",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 630,
+        "y": 600,
+        "wires": [
+            [
+                "b9c963b9b5173924"
+            ]
+        ]
+    },
+    {
+        "id": "d6985278.97b0c8",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Résultat trié",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "b9c963b9b5173924",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Extraire et trier les noms",
+        "func": "// Votre réponse JSON est dans msg.payload\nlet response = msg.payload;\n\n// Vérifier la structure de la réponse\nif (response.results && response.results.length > 0 &&\n    response.results[0].series && response.results[0].series.length > 0 &&\n    response.results[0].series[0].values && response.results[0].series[0].values.length > 0) {\n\n    // Extraire les noms depuis response.results[0].series[0].values\n    let names = response.results[0].series[0].values.map(item => item[0]);\n\n    // Trier les noms par ordre alphabétique\n    names.sort();\n\n    // Formater la sortie avec des sauts de ligne\n    msg.payload = \"Bases de données trouvées :\\n\\n\" + names.join(\"\\n\");\n\n    return msg;\n} else {\n    // Si la structure de la réponse est incorrecte, retourner un message d'erreur\n    node.error('Structure de réponse JSON invalide.');\n    return null;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 600,
+        "wires": [
+            [
+                "d6985278.97b0c8"
+            ]
+        ]
+    },
+    {
+        "id": "f6f624a48a343620",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 670,
+        "y": 720,
+        "wires": [
+            [
+                "21529eb509242cf1"
+            ]
+        ]
+    },
+    {
+        "id": "0c3c25507ae5fb15",
+        "type": "change",
+        "z": "fa0d81b075c058ed",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "url",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 510,
+        "y": 720,
+        "wires": [
+            [
+                "f6f624a48a343620"
+            ]
+        ]
+    },
+    {
+        "id": "21529eb509242cf1",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 830,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "e7707d9ea540e76f",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "delete data",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "micheltello",
+        "payloadType": "str",
+        "x": 200,
+        "y": 740,
+        "wires": [
+            [
+                "e36f199e093f4dbe"
+            ]
+        ]
+    },
+    {
+        "id": "143bdec3b6614222",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "extract",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "apptestsimon01",
+        "payloadType": "str",
+        "x": 190,
+        "y": 780,
+        "wires": [
+            [
+                "b4fa0838115eed0f"
+            ]
+        ]
+    },
+    {
+        "id": "53f21e0a11c43c21",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "request",
+        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?db=\"+msg.payload+\"&q=SELECT * FROM devices WHERE \\\"name\\\"='pilowtech-01-canal-exterieur' GROUP BY * ORDER BY DESC LIMIT 50\";\nmsg.payload = message.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 700,
+        "wires": [
+            [
+                "0c3c25507ae5fb15"
+            ]
+        ]
+    },
+    {
+        "id": "6077e61c2009da12",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "manage database",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "apptestsimon01",
+        "payloadType": "str",
+        "x": 170,
+        "y": 700,
+        "wires": [
+            [
+                "53f21e0a11c43c21"
+            ]
+        ]
+    },
+    {
+        "id": "b4fa0838115eed0f",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "request",
+        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?db=\"+msg.payload+\"&q=SELECT * FROM devices\"; \nmsg.payload = message.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 780,
+        "wires": [
+            [
+                "0c3c25507ae5fb15"
+            ]
+        ]
+    },
+    {
+        "id": "e36f199e093f4dbe",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "request",
+        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?db=\" + msg.payload + \"&q=DELETE FROM devices WHERE time <= '2025-02-01T01:00:00Z' \"; \nmsg.payload = message.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 740,
+        "wires": [
+            [
+                "0c3c25507ae5fb15"
+            ]
+        ]
+    },
+    {
+        "id": "90c7865a6fd6d4eb",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "request",
+        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?q=DROP DATABASE \" + msg.payload ; \nmsg.payload = message.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 660,
+        "wires": [
+            [
+                "0c3c25507ae5fb15"
+            ]
+        ]
+    },
+    {
+        "id": "f98bf8dc748301dd",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "delete database",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "undefined",
+        "payloadType": "str",
+        "x": 160,
+        "y": 660,
+        "wires": [
+            [
+                "90c7865a6fd6d4eb"
+            ]
+        ]
+    },
+    {
+        "id": "d8c9c9de74d390b8",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "Create Flow",
+        "props": [
+            {
+                "p": "apikey",
+                "v": "NNSXS.RAWETP2QXVF2FY5KXRX3BD6OOAHIFIMXI22ARBI.CDPGDL5MEUS33JAJW63R2S3GRK6F3ZA4SSJYTVK7W2PNZWIVCUQQ",
+                "vt": "str"
+            },
+            {
+                "p": "userapp",
+                "v": "maniette@ttn",
+                "vt": "str"
+            },
+            {
+                "p": "chatId",
+                "v": "XXX",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 290,
+        "y": 40,
+        "wires": [
+            [
+                "fc3ed8a4421c3635"
+            ]
+        ]
+    },
+    {
+        "id": "1e642a664cadc75a",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Flow",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "4d8443436140288c",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Create flow",
+        "func": "var mqttNodeID = RED.util.generateId();\nvar influxNodeID = RED.util.generateId();\nvar consoleNodeID = RED.util.generateId();\n\nlet generatedFlow = [\n    {\n        \"id\": influxNodeID,\n        \"type\": \"influxdb out\",\n        \"z\": \"e688ba072607ad72\",\n        \"influxdb\": \"ef1b568734c2ffb5\",\n        \"name\": \"Influx\",\n        \"measurement\": \"devices\",\n        \"precision\": \"\",\n        \"retentionPolicy\": \"\",\n        \"database\": msg.dbname,\n        \"precisionV18FluxV20\": \"ms\",\n        \"retentionPolicyV18Flux\": \"\",\n        \"org\": \"organisation\",\n        \"bucket\": \"bucket\",\n        \"x\": 390,\n        \"y\": 100,\n        \"wires\": []\n    },\n    {\n        \"id\": RED.util.generateId(),\n        \"type\": \"mqtt in\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"mqtt in\",\n        \"topic\": \"v3/\"+msg.userapp+\"/devices/+/up\",\n        \"qos\": \"2\",\n        \"datatype\": \"auto-detect\",\n        \"broker\": mqttNodeID,\n        \"nl\": false,\n        \"rap\": true,\n        \"rh\": 0,\n        \"inputs\": 0,\n        \"x\": 70,\n        \"y\": 120,\n        \"wires\": [\n            [\n                consoleNodeID\n            ]\n        ]\n    },\n    {\n        \"id\": RED.util.generateId(),\n        \"type\": \"function\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"ChatID\",\n        \"func\": \"\",\n        \"outputs\": 1,\n        \"noerr\": 0,\n        \"initialize\": \"flow.set(\\\"chatId\\\",'\" + msg.chatId + \"');\\nflow.set(\\\"app\\\",'\" + msg.userapp+\"')\\n\",\n        \"finalize\": \"\",\n        \"libs\": [],\n        \"x\": 70,\n        \"y\": 40,\n        \"wires\": [\n            []\n        ]\n    },\n    {\n        \"id\": RED.util.generateId(),\n        \"type\": \"comment\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"API Key\",\n        \"info\": msg.apikey,\n        \"x\": 70,\n        \"y\": 80,\n        \"wires\": []\n    },\n    {\n        \"id\": consoleNodeID,\n        \"type\": \"subflow:d464bfcccd5fbf22\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"\",\n        \"x\": 220,\n        \"y\": 120,\n        \"wires\": [\n            [\n                influxNodeID\n            ],\n            []\n        ]\n    },\n    {\n        \"id\": mqttNodeID,\n        \"type\": \"mqtt-broker\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": msg.userapp,\n        \"broker\": \"eu1.cloud.thethings.network\",\n        \"port\": \"1883\",\n        \"clientid\": \"\",\n        \"autoConnect\": true,\n        \"usetls\": false,\n        \"protocolVersion\": \"4\",\n        \"keepalive\": \"60\",\n        \"cleansession\": true, \n        \"credentials\": {\n            \"user\": msg.userapp,\n            \"password\": msg.apikey\n        },\n        \"birthTopic\": \"\",\n        \"birthQos\": \"0\",\n        \"birthPayload\": \"\",\n        \"birthMsg\": {},\n        \"closeTopic\": \"\",\n        \"closeQos\": \"0\",\n        \"closePayload\": \"\",\n        \"closeMsg\": {},\n        \"willTopic\": \"\",\n        \"willQos\": \"0\",\n        \"willPayload\": \"\",\n        \"willMsg\": {},\n        \"userProps\": \"\",\n        \"sessionExpiry\": \"\"\n    }\n]\n\nmsg.payload = generatedFlow;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 40,
+        "wires": [
+            [
+                "1e642a664cadc75a"
+            ]
+        ]
+    },
+    {
+        "id": "8d51c5982d7fc7fa",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Create user",
+        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/admin/users\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n    \"name\": msg.name+\".\"+msg.firstname,\n    \"email\": msg.mail,\n    \"login\": msg.name + \".\" + msg.firstname,\n    \"password\": msg.name + \".\" + msg.firstname\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 200,
+        "wires": [
+            [
+                "628e0c9ad6204daf"
+            ]
+        ]
+    },
+    {
+        "id": "628e0c9ad6204daf",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "HTTP request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 200,
+        "wires": [
+            [
+                "function-build-request",
+                "2784bd765319b6e8"
+            ]
+        ]
+    },
+    {
+        "id": "38391bf3d6d37d39",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "Complete 1",
+        "props": [
+            {
+                "p": "userapp",
+                "v": "nico-home@ttn",
+                "vt": "str"
+            },
+            {
+                "p": "apikey",
+                "v": "NNSXS.TKMCSLTA6P2TDEEC3PQONUXESEVLZMMOYKG2LAQ.UBOMZUZZLQSJMCHAX3TEVGVH45YTMIFJRBD2TEUJPHAJIVS7H6RQ",
+                "vt": "str"
+            },
+            {
+                "p": "name",
+                "v": "castejon",
+                "vt": "str"
+            },
+            {
+                "p": "firstname",
+                "v": "nicolas",
+                "vt": "str"
+            },
+            {
+                "p": "mail",
+                "v": "nicolas.castejon@protonmail.com",
+                "vt": "str"
+            },
+            {
+                "p": "chatId",
+                "v": "XXX",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "3770fe5ea921e6c4"
+            ]
+        ]
+    },
+    {
+        "id": "fc3ed8a4421c3635",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "edit inject",
+        "func": "msg.userapp = msg.userapp.replace(' ', '');\nmsg.apikey = msg.apikey.replace(/\\s+/g, '').replace(' ', '');\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 40,
+        "wires": [
+            [
+                "4d8443436140288c"
+            ]
+        ]
+    },
+    {
+        "id": "3770fe5ea921e6c4",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "edit inject",
+        "func": "msg.name = msg.name.replace(/ /g, '').toLowerCase();\nmsg.firstname = msg.firstname.replace(/ /g, '').toLowerCase();\nmsg.login = msg.name + \".\" + msg.firstname;\n\nmsg.mail = msg.mail.replace(/ /g, '').toLowerCase();\nmsg.userapp = msg.userapp.replace(/ /g, '');\nmsg.apikey = msg.apikey.replace(/\\s+/g, '').replace(/ /g, '');\nmsg.dbname = msg.userapp.replace('@ttn', '').replace(/-/g, '').toLowerCase();\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 200,
+        "wires": [
+            [
+                "8d51c5982d7fc7fa",
+                "9bdc7f968867e52a",
+                "e64461a22d69e5d4"
+            ]
+        ]
+    },
+    {
+        "id": "function-build-request",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Get UserID",
+        "func": "msg.method = \"GET\";\nmsg.url = \"http://grafana:3000/api/users?query=\" + msg.login;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 260,
+        "wires": [
+            [
+                "http-request-get-orgid"
+            ]
+        ]
+    },
+    {
+        "id": "http-request-get-orgid",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 260,
+        "wires": [
+            [
+                "function-extract-orgid",
+                "e105a6930f2971f3"
+            ]
+        ]
+    },
+    {
+        "id": "function-extract-orgid",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Get OrgID",
+        "func": "msg.method = \"GET\";\nmsg.url = \"http://grafana:3000/api/users/\" + msg.payload[0].id;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 320,
+        "wires": [
+            [
+                "25d28695e5491c66"
+            ]
+        ]
+    },
+    {
+        "id": "e105a6930f2971f3",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Afficher UserID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload[0]",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "25d28695e5491c66",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 320,
+        "wires": [
+            [
+                "9f5f9fcb01d2229a",
+                "f88ba6c7117ba0a3",
+                "01a589485cd4d7e6"
+            ]
+        ]
+    },
+    {
+        "id": "9f5f9fcb01d2229a",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Create Dashboard",
+        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/dashboards/db\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\") // Utilise les identifiants de l'utilisateur cible\n};\nmsg.orgId = msg.payload.id;\nmsg.payload = {\n    \"dashboard\": {\n        \"id\": null,\n        \"uid\": \"dashboard-org-\" + msg.orgId,\n        \"title\": \"Tableau de bord\",\n        \"tags\": [\"org-\" + msg.orgId],\n        \"timezone\": \"browser\",\n        \"schemaVersion\": 17,\n        \"version\": 1,\n        \"refresh\": \"5m\"\n    },\n    \"folderId\": 0,\n    \"overwrite\": true\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 380,
+        "wires": [
+            [
+                "f7d6fbb253f4609b"
+            ]
+        ]
+    },
+    {
+        "id": "f7d6fbb253f4609b",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 380,
+        "wires": [
+            [
+                "600933c3cf66dc29",
+                "8e5475d11508111a"
+            ]
+        ]
+    },
+    {
+        "id": "600933c3cf66dc29",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Créer dashboard",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "f88ba6c7117ba0a3",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "afficher OrgID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "820cb810960c610a",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Create database",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "2c86bbccbc8b6d5e",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 500,
+        "wires": [
+            [
+                "820cb810960c610a"
+            ]
+        ]
+    },
+    {
+        "id": "1f78fcdb31b311b6",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "link db",
+        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/datasources\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\") // Utilise les identifiants de l'utilisateur cible\n};\nmsg.payload = {\n    \"name\": \"InfluxDB\",\n    \"type\": \"influxdb\",\n    \"url\": \"http://influxdb:8086\",\n    \"access\": \"proxy\",\n    \"database\": msg.dbname,\n    \"user\": \"moinards\",\n    \"secureJsonData\": {\n        \"password\": \"4kg=7j1ct\"\n    },\n    \"jsonData\": {\n        \"httpMode\": \"GET\",\n        \"version\": \"InfluxQL\"\n    }\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 500,
+        "wires": [
+            [
+                "2c86bbccbc8b6d5e"
+            ]
+        ]
+    },
+    {
+        "id": "2784bd765319b6e8",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Afficher UserID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "b36aa30.3a7276",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "HTTP Request",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 120,
+        "wires": [
+            [
+                "9c96feca3905e8c5"
+            ]
+        ]
+    },
+    {
+        "id": "64e53111d93ad666",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "create db",
+        "func": "var message={};\nmessage.payload = \"http://influxdb:8086/query?q=CREATE%20DATABASE%20\"+ msg.dbname;\nmsg.url = message.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 120,
+        "wires": [
+            [
+                "b36aa30.3a7276"
+            ]
+        ]
+    },
+    {
+        "id": "880d59c1b2f9d7b6",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "Create db",
+        "props": [
+            {
+                "p": "dbname",
+                "v": "test2",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 280,
+        "y": 120,
+        "wires": [
+            [
+                "64e53111d93ad666"
+            ]
+        ]
+    },
+    {
+        "id": "9c96feca3905e8c5",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Réponse API",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a34929ae96d2a87c",
+        "type": "http request",
+        "z": "fa0d81b075c058ed",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 440,
+        "wires": [
+            [
+                "1fe35090363ea74a",
+                "1f78fcdb31b311b6"
+            ]
+        ]
+    },
+    {
+        "id": "1fe35090363ea74a",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "maj prefs",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "8e5475d11508111a",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Update prefs Dash",
+        "func": "msg.method = \"PUT\";\nmsg.url = \"http://grafana:3000/api/user/preferences\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\") // Utilise les identifiants de l'utilisateur cible\n};\nmsg.payload = {\n    \"homeDashboardId\": msg.payload.id, \n    \"locale\" : \"fr\"\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 440,
+        "wires": [
+            [
+                "a34929ae96d2a87c"
+            ]
+        ]
+    },
+    {
+        "id": "964c4d83fcd87770",
+        "type": "comment",
+        "z": "fa0d81b075c058ed",
+        "name": "",
+        "info": "Voir la taille des databases\n\nsudo du -sh /var/lib/influxdb/data/* | sort -h\n\ninspecter les shards and co\n\nsudo influx_inspect report /var/lib/influxdb/data\n",
+        "x": 240,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "fb1a8c87d661b63f",
+        "type": "inject",
+        "z": "fa0d81b075c058ed",
+        "name": "Lister bases",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 130,
+        "y": 980,
+        "wires": [
+            [
+                "bc4c66340d69aabc"
+            ]
+        ]
+    },
+    {
+        "id": "bc4c66340d69aabc",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "SHOW DATABASES",
+        "func": "msg.topic = \"SHOW DATABASES\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 980,
+        "wires": [
+            [
+                "f13797de92e1448d"
+            ]
+        ]
+    },
+    {
+        "id": "0599982de01a9ce3",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "Pour chaque base",
+        "func": "const databases = msg.payload.map(row => row.name).filter(db => db !== '_internal');\nconst msgs = [];\n\nfor (const db of databases) {\n    msgs.push({\n        topic: `SHOW MEASUREMENTS`,\n        database: db,\n        dbname: db\n    });\n}\nreturn [msgs];",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 670,
+        "y": 980,
+        "wires": [
+            [
+                "ec197fe7d8a9b2c7"
+            ]
+        ]
+    },
+    {
+        "id": "0c3e2952c5a1f3b7",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "SELECT dernier point",
+        "func": "if (!msg.payload.length) return null;\n\nconst measurement = msg.payload[0].name;\nconst query = `SELECT * FROM \\\"${measurement}\\\" ORDER BY time DESC LIMIT 1`;\n\nmsg.topic = query;\nmsg.measurement = measurement;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1170,
+        "y": 980,
+        "wires": [
+            [
+                "ba618858f321dafe"
+            ]
+        ]
+    },
+    {
+        "id": "ce39cdb77a5a6a9d",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "Dernier point",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1570,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "9bdc7f968867e52a",
+        "type": "join",
+        "z": "fa0d81b075c058ed",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "",
+        "propertyType": "full",
+        "key": "payload",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1200,
+        "y": 140,
+        "wires": [
+            [
+                "4d8443436140288c",
+                "a0fd201cb0c7c98c"
+            ]
+        ]
+    },
+    {
+        "id": "01a589485cd4d7e6",
+        "type": "function",
+        "z": "fa0d81b075c058ed",
+        "name": "function 2",
+        "func": "var message = {\n  \"orgId\": msg.payload.orgId\n  };\nreturn message;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 200,
+        "wires": [
+            [
+                "9bdc7f968867e52a",
+                "adfa767cc77f22c9"
+            ]
+        ]
+    },
+    {
+        "id": "e64461a22d69e5d4",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "a0fd201cb0c7c98c",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "adfa767cc77f22c9",
+        "type": "debug",
+        "z": "fa0d81b075c058ed",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f13797de92e1448d",
+        "type": "influxdb in",
+        "z": "fa0d81b075c058ed",
+        "influxdb": "ef1b568734c2ffb5",
+        "name": "Influx",
+        "query": "SHOW DATABASES",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 470,
+        "y": 980,
+        "wires": [
+            [
+                "0599982de01a9ce3"
+            ]
+        ]
+    },
+    {
+        "id": "ec197fe7d8a9b2c7",
+        "type": "influxdb in",
+        "z": "fa0d81b075c058ed",
+        "influxdb": "ef1b568734c2ffb5",
+        "name": "SHOW MEASUREMENTS",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 920,
+        "y": 980,
+        "wires": [
+            [
+                "0c3e2952c5a1f3b7"
+            ]
+        ]
+    },
+    {
+        "id": "ba618858f321dafe",
+        "type": "influxdb in",
+        "z": "fa0d81b075c058ed",
+        "influxdb": "ef1b568734c2ffb5",
+        "name": "Requête final",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "",
+        "x": 1380,
+        "y": 980,
+        "wires": [
+            [
+                "ce39cdb77a5a6a9d"
+            ]
+        ]
+    },
+    {
+        "id": "ab6affc838d3de30",
+        "type": "mqtt in",
+        "z": "eb74a94ca0642070",
+        "name": "app",
+        "topic": "v3/mobilab-truck@ttn/devices/+/up",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9b586b4f8ca3767d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 140,
+        "wires": [
+            [
+                "1dd9bd11f2d9b4e4",
+                "6039eacaf594e958"
+            ]
+        ]
+    },
+    {
+        "id": "42235acd49c2d0fb",
+        "type": "comment",
+        "z": "eb74a94ca0642070",
+        "name": "API Key",
+        "info": "mobilab-truck APP\nNNSXS.GLSRHW6HARISQJJNHQURWPCVKL7EC5ZGDL7F6KQ.3AQJEQIK2I4CLNXYT3VGIBFXCKOVJJMG3A2NSFWKTRUBQ4AJTU3A",
+        "x": 100,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "5841c377a36792b0",
+        "type": "function",
+        "z": "eb74a94ca0642070",
+        "name": "ChatID",
+        "func": "",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "flow.set(\"chatId\",'-4215540322');\nflow.set(\"appId\",'mobilab-truck')\n",
+        "finalize": "",
+        "libs": [],
+        "x": 80,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1dd9bd11f2d9b4e4",
+        "type": "subflow:bd7fdadec2d6549d",
+        "z": "eb74a94ca0642070",
+        "name": "",
+        "x": 260,
+        "y": 140,
+        "wires": [
+            [
+                "6f70974b3ea98f59"
+            ],
+            [
+                "31d360189e4e69d6"
+            ]
+        ]
+    },
+    {
+        "id": "6039eacaf594e958",
+        "type": "debug",
+        "z": "eb74a94ca0642070",
+        "name": "debug 108",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 250,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "6f70974b3ea98f59",
+        "type": "debug",
+        "z": "eb74a94ca0642070",
+        "name": "debug 109",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 450,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "31d360189e4e69d6",
+        "type": "function",
+        "z": "eb74a94ca0642070",
+        "name": "Prepare data",
+        "func": "const payload = msg.payload;\n\nmsg.topic = `INSERT INTO sensor_data (\n    time,\n    device_name,\n    rssi,\n    snr,\n    humidity,\n    temperature,\n    temperature_sonde\n) VALUES (\n    NOW(),\n    '${payload.name}',\n    ${payload.rssi},\n    ${payload.snr},\n    ${payload.humidity},\n    ${payload.temperature},\n    ${payload.temperature_sonde}\n);`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 220,
+        "wires": [
+            [
+                "ac6b222838b1257d"
+            ]
+        ]
+    },
+    {
+        "id": "fa3de75b30b60871",
+        "type": "debug",
+        "z": "eb74a94ca0642070",
+        "name": "debug postgres",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 810,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ac6b222838b1257d",
+        "type": "postgresql",
+        "z": "eb74a94ca0642070",
+        "name": "",
+        "query": "{{topic}}",
+        "postgreSQLConfig": "b1b3382c8feafb97",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 510,
+        "y": 180,
+        "wires": [
+            [
+                "fa3de75b30b60871"
+            ]
+        ]
+    },
+    {
+        "id": "b8d79fdd5d5fb7c3",
+        "type": "inject",
+        "z": "179a94c74f682310",
+        "name": "lht52-04",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"name\":\"lht52-04\",\"rssi\":-106,\"snr\":10.2,\"humidity\":61.1,\"temperature\":52.72,\"temperature_sonde\":23.37}",
+        "payloadType": "json",
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "edb4f0ecbb79402c",
+                "84374ade8c8ebaa5"
+            ]
+        ]
+    },
+    {
+        "id": "eff397c550547440",
+        "type": "inject",
+        "z": "179a94c74f682310",
+        "name": "lht52-05",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"name\":\"lht52-05\",\"rssi\":-106,\"snr\":10.2,\"humidity\":61.1,\"temperature\":23.72,\"temperature_sonde\":23.37}",
+        "payloadType": "json",
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "d1c22b0898df1fba"
+            ]
+        ]
+    },
+    {
+        "id": "dc4b4c310821c481",
+        "type": "function",
+        "z": "179a94c74f682310",
+        "name": "ChatID",
+        "func": "",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "flow.set(\"chatId\",'-4215540322');\nflow.set(\"appId\",'mobilab-truck')\nflow.set(\"orgId\", '154')",
+        "finalize": "",
+        "libs": [],
+        "x": 100,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d1c22b0898df1fba",
+        "type": "function",
+        "z": "179a94c74f682310",
+        "name": "récup le msg filtré via \"console mobilab\"",
+        "func": "var message = {\n  \"name\": \"lht52-04\",\n  \"rssi\": -100,\n  \"snr\": 1,\n  \"value\": 16.48,\n  \"battery\": 2,\n  \"tempC\": 28,\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 400,
+        "wires": [
+            [
+                "12e36b0df2806f74"
+            ]
+        ]
+    },
+    {
+        "id": "12e36b0df2806f74",
+        "type": "function",
+        "z": "179a94c74f682310",
+        "name": "Ajout de orgId",
+        "func": "\nmsg.payload.orgId = flow.get(\"orgId\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "edb4f0ecbb79402c",
+        "type": "debug",
+        "z": "179a94c74f682310",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "84374ade8c8ebaa5",
+        "type": "function",
+        "z": "179a94c74f682310",
+        "name": "Ajout de values",
+        "func": "// Extract all sensor values from the incoming message payload object.\nlet name_val = msg.payload.name;\nlet rssi_val = msg.payload.rssi;\nlet snr_val = msg.payload.snr;\nlet humidity_val = msg.payload.humidity;\nlet temperature_val = msg.payload.temperature;\nlet temp_sonde_val = msg.payload.temperature_sonde;\n\n// Construct the parameterized query and put it in msg.query instead of msg.payload.\nmsg.query = \"INSERT INTO sensor_data (name, rssi, snr, humidity, temperature, temperature_sonde) VALUES ($1, $2, $3, $4, $5, $6)\";\n\n// Create an array of parameters and put it in msg.params.\nmsg.params = [name_val, rssi_val, snr_val, humidity_val, temperature_val, temp_sonde_val];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 200,
+        "wires": [
+            [
+                "9548d0845cd81dd7",
+                "234d78a9011d5898"
+            ]
+        ]
+    },
+    {
+        "id": "9548d0845cd81dd7",
+        "type": "debug",
+        "z": "179a94c74f682310",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "234d78a9011d5898",
+        "type": "postgresql",
+        "z": "179a94c74f682310",
+        "name": "iot_data",
+        "query": "",
+        "postgreSQLConfig": "b1b3382c8feafb97",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 590,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7ad177fccd4a88f4",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-influxdb": "0.7.0",
+            "node-red-contrib-postgresql": "0.14.2",
+            "node-red-contrib-telegrambot": "16.3.2"
+        }
+    }
+]
