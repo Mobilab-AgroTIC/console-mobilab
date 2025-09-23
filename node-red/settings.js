@@ -75,16 +75,13 @@ module.exports = {
      */
     adminAuth: {
         type: "credentials",
-        users: [{
-            username: "moinards",
-            password: "$2a$08$ewoXvOsdNAF6Xwfc70wGxeDY0IOncYEVZ.GayuFfadGjpRx.5UmBW",
+        users: [
+            {
+            username: process.env.NR_ADMIN_USER,
+            password: process.env.NR_ADMIN_PASS_HASH,
             permissions: "*"
-        },
-        {
-           username: "ncastejon",
-           password: "$2y$08$mo.gaAauKty3xe5hgH212.4YgqX6lhBB93BQjvgNulcMSKKK.wcim",
-           permissions: "*"
-}]
+            }
+        ]
     },
 
     /** The following property can be used to enable HTTPS

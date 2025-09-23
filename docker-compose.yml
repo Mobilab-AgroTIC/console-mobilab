@@ -3,6 +3,8 @@ services:
     image: nodered/node-red:4.1
     environment:
       - TZ=${TIMEZONE}
+      - NR_ADMIN_USER=${NR_ADMIN_USER}
+      - NR_ADMIN_PASS_HASH=${NR_ADMIN_PASS_HASH}
     ports:
       - "${NODE_RED_HOST_PORT}:1880"
     networks:
