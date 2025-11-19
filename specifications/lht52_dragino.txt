@@ -1,0 +1,153 @@
+{
+  "name": "as.up.data.forward",
+  "time": "2025-11-19T12:52:18.517222543Z",
+  "identifiers": [
+    {
+      "device_ids": {
+        "device_id": "lht52-01",
+        "application_ids": {
+          "application_id": "mobilab-truck"
+        },
+        "dev_eui": "A84041F2618893D1",
+        "join_eui": "A840410000000100",
+        "dev_addr": "260BB70D"
+      }
+    }
+  ],
+  "data": {
+    "@type": "type.googleapis.com/ttn.lorawan.v3.ApplicationUp",
+    "end_device_ids": {
+      "device_id": "lht52-01",
+      "application_ids": {
+        "application_id": "mobilab-truck"
+      },
+      "dev_eui": "A84041F2618893D1",
+      "join_eui": "A840410000000100",
+      "dev_addr": "260BB70D"
+    },
+    "correlation_ids": [
+      "gs:uplink:01KAE2RH859BM7CCAJHRB8W6DT"
+    ],
+    "received_at": "2025-11-19T12:52:18.512938626Z",
+    "uplink_message": {
+      "session_key_id": "AY5lZO/yNo3eazN5aoThLg==",
+      "f_port": 2,
+      "f_cnt": 44929,
+      "frm_payload": "BcYCXAVMAWkdvWw=",
+      "decoded_payload": {
+        "Ext": 1,
+        "Hum_SHT": 60.4,
+        "Systimestamp": 1763556716,
+        "TempC_DS": 13.56,
+        "TempC_SHT": 14.78
+      },
+      "normalized_payload": [
+        {
+          "air": {
+            "location": "indoor",
+            "relativeHumidity": 60.4,
+            "temperature": 14.78
+          }
+        },
+        {
+          "air": {
+            "location": "outdoor",
+            "temperature": 13.56
+          }
+        }
+      ],
+      "rx_metadata": [
+        {
+          "gateway_ids": {
+            "gateway_id": "lisah-ug65-1",
+            "eui": "24E124FFFEF7E3D6"
+          },
+          "time": "2025-11-19T12:52:18.326Z",
+          "timestamp": 3090483086,
+          "rssi": -84,
+          "channel_rssi": -84,
+          "snr": 14.8,
+          "frequency_offset": "95",
+          "location": {
+            "latitude": 43.61944841808217,
+            "longitude": 3.857522711001851,
+            "altitude": 80,
+            "source": "SOURCE_REGISTRY"
+          },
+          "uplink_token": "ChoKGAoMbGlzYWgtdWc2NS0xEggk4ST//vfj1hCOj9TBCxoMCIL79sgGEKXiyJMBILCFlvn4xIECKgwIgvv2yAYQgLu5mwE=",
+          "channel_index": 6,
+          "gps_time": "2025-11-19T12:52:18.326Z",
+          "received_at": "2025-11-19T12:52:18.292248075Z"
+        },
+        {
+          "gateway_ids": {
+            "gateway_id": "lisah-ug56-2",
+            "eui": "24E124FFFEF7C4D0"
+          },
+          "time": "2025-11-19T12:52:18.258Z",
+          "timestamp": 1323635962,
+          "rssi": -116,
+          "channel_rssi": -116,
+          "snr": -7.8,
+          "frequency_offset": "315",
+          "location": {
+            "latitude": 43.6203241420018,
+            "longitude": 3.85776400607577,
+            "altitude": 40,
+            "source": "SOURCE_REGISTRY"
+          },
+          "uplink_token": "ChoKGAoMbGlzYWgtdWc1Ni0yEggk4ST//vfE0BD6qZT3BBoMCIL79sgGEITNpLEBIJDh5/bCydwVKgsIgvv2yAYQgImDew==",
+          "channel_index": 6,
+          "gps_time": "2025-11-19T12:52:18.258Z",
+          "received_at": "2025-11-19T12:52:18.201161269Z"
+        }
+      ],
+      "settings": {
+        "data_rate": {
+          "lora": {
+            "bandwidth": 125000,
+            "spreading_factor": 7,
+            "coding_rate": "4/5"
+          }
+        },
+        "frequency": "867700000",
+        "timestamp": 3090483086,
+        "time": "2025-11-19T12:52:18.326Z"
+      },
+      "received_at": "2025-11-19T12:52:18.310352462Z",
+      "consumed_airtime": "0.061696s",
+      "version_ids": {
+        "brand_id": "dragino",
+        "model_id": "lht52",
+        "hardware_version": "_unknown_hw_version_",
+        "firmware_version": "1.0",
+        "band_id": "EU_863_870"
+      },
+      "network_ids": {
+        "net_id": "000013",
+        "ns_id": "EC656E0000000181",
+        "tenant_id": "ttn",
+        "cluster_id": "eu1",
+        "cluster_address": "eu1.cloud.thethings.network"
+      },
+      "last_battery_percentage": {
+        "f_cnt": 44923,
+        "value": 39.130436,
+        "received_at": "2025-11-19T10:52:18.063145530Z"
+      }
+    }
+  },
+  "correlation_ids": [
+    "gs:uplink:01KAE2RH859BM7CCAJHRB8W6DT"
+  ],
+  "origin": "ip-10-100-5-200.eu-west-1.compute.internal",
+  "context": {
+    "tenant-id": "CgN0dG4="
+  },
+  "visibility": {
+    "rights": [
+      "RIGHT_APPLICATION_TRAFFIC_READ"
+    ]
+  },
+  "unique_id": "01KAE2RHENNKA695FS6KK72ZN1"
+}
