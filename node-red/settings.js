@@ -75,13 +75,16 @@ module.exports = {
      */
     adminAuth: {
         type: "credentials",
-        users: [
-            {
-            username: process.env.NR_ADMIN_USER,
-            password: process.env.NR_ADMIN_PASS_HASH,
+        users: [{
+            username: "moinards",
+            password: "$2a$08$ewoXvOsdNAF6Xwfc70wGxeDY0IOncYEVZ.GayuFfadGjpRx.5UmBW",
             permissions: "*"
-            }
-        ]
+        },
+        {
+           username: "ncastejon",
+           password: "$2y$08$mo.gaAauKty3xe5hgH212.4YgqX6lhBB93BQjvgNulcMSKKK.wcim",
+           permissions: "*"
+}]
     },
 
     /** The following property can be used to enable HTTPS
@@ -339,11 +342,14 @@ module.exports = {
      * provided here will enable file-based context that flushes to disk every 30 seconds.
      * Refer to the documentation for further options: https://nodered.org/docs/api/context/
      */
-    //contextStorage: {
-    //    default: {
-    //        module:"localfilesystem"
-    //    },
-    //},
+    contextStorage: {
+       default: {
+           module:"memory"
+       },
+       file: {
+            module:"localfilesystem"
+       }
+    },
 
     /** `global.keys()` returns a list of all properties set in global context.
      * This allows them to be displayed in the Context Sidebar within the editor.
