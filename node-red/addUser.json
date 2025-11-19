@@ -1,0 +1,676 @@
+[
+    {
+        "id": "082a241cf92bcb4b",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "configQueryDB",
+        "func": "if (!msg.dbname) return node.error(\"dbname manquant\");\n\nlet db = String(msg.dbname).trim().toLowerCase();\n\n// Remplace tirets et espaces par _\ndb = db.replace(/[-\\s]/g, '_');\n\n// Supprime les caractères non autorisés\ndb = db.replace(/[^a-z0-9_]/g, '');\n\n// refuse un nom vide\nif (!db.length) return node.error(\"dbname invalide après nettoyage\");\n\n// construit la requête\nmsg.query = `CREATE DATABASE ${db};`;\n\nmsg.cleanedDbName = db; // si tu veux l’utiliser plus loin\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 80,
+        "wires": [
+            [
+                "60e7eb56608a0de2"
+            ]
+        ]
+    },
+    {
+        "id": "60e7eb56608a0de2",
+        "type": "postgresql",
+        "z": "2ebe77c4aa864fe2",
+        "name": "postgres",
+        "query": "",
+        "postgreSQLConfig": "b1b3382c8feafb97",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 580,
+        "y": 80,
+        "wires": [
+            [
+                "cdd7c287f2aeb223"
+            ]
+        ]
+    },
+    {
+        "id": "cdd7c287f2aeb223",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "queryCreateDB",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "3ba98142f1252936",
+        "type": "inject",
+        "z": "2ebe77c4aa864fe2",
+        "name": "dbname",
+        "props": [
+            {
+                "p": "dbname",
+                "v": "pilowtech-3",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 240,
+        "y": 80,
+        "wires": [
+            [
+                "082a241cf92bcb4b"
+            ]
+        ]
+    },
+    {
+        "id": "7645528f9e2bc598",
+        "type": "inject",
+        "z": "2ebe77c4aa864fe2",
+        "name": "input",
+        "props": [
+            {
+                "p": "userapp",
+                "v": "test@ttn",
+                "vt": "str"
+            },
+            {
+                "p": "name",
+                "v": "test",
+                "vt": "str"
+            },
+            {
+                "p": "firstname",
+                "v": "test",
+                "vt": "str"
+            },
+            {
+                "p": "mail",
+                "v": "test@test.com",
+                "vt": "str"
+            },
+            {
+                "p": "chatId",
+                "v": "XXX",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 140,
+        "wires": [
+            [
+                "2590ac132fca675e"
+            ]
+        ]
+    },
+    {
+        "id": "abf18036cd1401c0",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "createUser",
+        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/admin/users\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n    \"name\": msg.name+\".\"+msg.firstname,\n    \"email\": msg.mail,\n    \"login\": msg.name + \".\" + msg.firstname,\n    \"password\": msg.name + \".\" + msg.firstname\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 140,
+        "wires": [
+            [
+                "341dd86eca854b04"
+            ]
+        ]
+    },
+    {
+        "id": "341dd86eca854b04",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 140,
+        "wires": [
+            [
+                "1771ed607c797c73",
+                "0e715034ca7621c7"
+            ]
+        ]
+    },
+    {
+        "id": "1771ed607c797c73",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "Afficher UserID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "12722805fcd97150",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "rmUserMainOrg",
+        "func": "if (!msg.userId) {\n    node.error(\"userId manquant pour suppression de la Main Org\", msg);\n    return null;\n}\n\nconst mainOrgId = 1; // Main Org\n\nmsg.method = \"DELETE\";\nmsg.url = `http://grafana:3000/api/orgs/${mainOrgId}/users/${msg.userId}`;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(\"admin:admin\").toString(\"base64\")\n};\n\n// DELETE n'a pas besoin de body\nmsg.payload = {};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 380,
+        "wires": [
+            [
+                "29f175586f5157ee"
+            ]
+        ]
+    },
+    {
+        "id": "29f175586f5157ee",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 380,
+        "wires": [
+            [
+                "689064093fa2c368",
+                "649f75ace358568f"
+            ]
+        ]
+    },
+    {
+        "id": "689064093fa2c368",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "addDashboard",
+        "func": "// Create Dashboard\n\n// On vérifie juste qu'on a bien un orgId qui traîne encore dans le msg\nif (!msg.orgId) {\n    node.warn(\"orgId manquant : le dashboard sera créé dans l'org active par défaut de l'utilisateur.\");\n}\n\n// Requête de création de dashboard\nmsg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/dashboards/db\";\n\n// Authentification avec l'utilisateur final\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\"),\n    \"X-Grafana-Org-Id\": String(msg.orgId)\n};\n\nmsg.payload = {\n    dashboard: {\n        id: null,\n        uid: \"dashboard-org-\" + (msg.orgId ?? \"no-org\"),\n        title: \"Tableau de bord\",\n        tags: [\"org-\" + (msg.orgId ?? \"no-org\")],\n        timezone: \"browser\",\n        schemaVersion: 17,\n        version: 1,\n        refresh: \"5m\"\n    },\n    folderId: 0,\n    overwrite: true\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 440,
+        "wires": [
+            [
+                "a347ce8c2a498ec8"
+            ]
+        ]
+    },
+    {
+        "id": "649f75ace358568f",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "afficher OrgID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "a347ce8c2a498ec8",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 440,
+        "wires": [
+            [
+                "42f5fefea761b123",
+                "6521dfb30c509216"
+            ]
+        ]
+    },
+    {
+        "id": "42f5fefea761b123",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "Créer dashboard",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "6521dfb30c509216",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "updatePrefs",
+        "func": "if (!msg.payload || !msg.payload.id || !msg.payload.uid) {\n    node.error(\"Impossible de récupérer l'id/uid du dashboard\", msg);\n    return null;\n}\n\nmsg.dashboardId = msg.payload.id;\nmsg.dashboardUid = msg.payload.uid;\n\n\nmsg.method = \"PUT\";\nmsg.url = \"http://grafana:3000/api/org/preferences\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\"),\n    \"X-Grafana-Org-Id\": String(msg.orgId)\n};\n\nmsg.payload = {\n    homeDashboardUID: msg.dashboardUid,\n    language: \"fr-FR\",        \n    timezone: \"browser\"\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 500,
+        "wires": [
+            [
+                "bbcd2badd3b4c901"
+            ]
+        ]
+    },
+    {
+        "id": "bbcd2badd3b4c901",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 500,
+        "wires": [
+            [
+                "a58f40d259664775",
+                "29ad76607cc8d195"
+            ]
+        ]
+    },
+    {
+        "id": "a58f40d259664775",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "maj prefs",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "29ad76607cc8d195",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "linkDB",
+        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/datasources\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\"),\n    \"X-Grafana-Org-Id\": String(msg.orgId)\n};\n\n// Nettoyage du nom de db si pas déjà fait\nlet db = String(msg.dbname).trim().toLowerCase();\ndb = db.replace(/[-\\s]/g, \"_\");\ndb = db.replace(/[^a-z0-9_]/g, \"\");\nmsg.cleanedDb = db;\n\nmsg.payload = {\n    \"name\": \"postgres-\" + db,\n    \"type\": \"postgres\",\n    \"access\": \"proxy\",\n    \"url\": \"postgres:5432\",\n    \"user\": \"admin\",\n    \"secureJsonData\": {\n        \"password\": \"admin\"\n    },\n    \"database\": db,\n    \"jsonData\": {\n        \"sslmode\": \"disable\",\n        \"postgresVersion\": 1500,\n        \"timescaledb\": false,\n        \"maxOpenConns\": 100,\n        \"maxIdleConns\": 100,\n        \"connMaxLifetime\": 14400\n    }\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 560,
+        "wires": [
+            [
+                "7019a3405cd04208"
+            ]
+        ]
+    },
+    {
+        "id": "7019a3405cd04208",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 560,
+        "wires": [
+            [
+                "42ca69079ed37b3e"
+            ]
+        ]
+    },
+    {
+        "id": "42ca69079ed37b3e",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "Create database",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "2590ac132fca675e",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "editInput",
+        "func": "// --- fonctions utilitaires ---\n// Supprime accents + caractères spéciaux\nfunction normalize(str) {\n    return str\n        .normalize(\"NFD\")                     // décompose accents\n        .replace(/[\\u0300-\\u036f]/g, \"\")      // supprime accents\n        .replace(/\\s+/g, \"\")                  // supprime espaces\n        .toLowerCase();\n}\n\n// Nettoie une valeur pour en faire un identifiant SQL/Grafana/Postgres\nfunction cleanIdentifier(str) {\n    return normalize(str)\n        .replace(/[^a-z0-9_]/g, \"\");          // garde uniquement safe\n}\n\n\n// --- Nettoyage noms et login ---\nmsg.name = normalize(msg.name);\nmsg.firstname = normalize(msg.firstname);\nmsg.login = msg.name + \".\" + msg.firstname;\n\n\n// --- Mail ---\nmsg.mail = String(msg.mail || \"\").trim().toLowerCase();\n\n\n// --- userapp => sert pour dbname ---\nmsg.userapp = normalize(msg.userapp);\n\n// dbname : retire “@ttn”, retire tout caractère non autorisé\nmsg.dbname = cleanIdentifier(\n    msg.userapp.replace(\"@ttn\", \"\")\n);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 140,
+        "wires": [
+            [
+                "082a241cf92bcb4b",
+                "abf18036cd1401c0"
+            ]
+        ]
+    },
+    {
+        "id": "4cf950ae2f1d9ef3",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "addUserToOrg",
+        "func": "if (!msg.payload || typeof msg.payload.orgId === \"undefined\") {\n    node.error(\"orgId manquant dans la réponse de /api/orgs\", msg);\n    return null;\n}\n\nmsg.orgId = msg.payload.orgId;\n\nmsg.method = \"POST\";\nmsg.url = `http://grafana:3000/api/orgs/${msg.orgId}/users`;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(\"admin:admin\").toString(\"base64\")\n};\n\nmsg.payload = {\n    loginOrEmail: msg.login,\n    role: \"Admin\"   // ou \"Viewer\" si tu préfères\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 260,
+        "wires": [
+            [
+                "2adc3f4b1559bb6d"
+            ]
+        ]
+    },
+    {
+        "id": "ade9aa8175ef91bd",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 200,
+        "wires": [
+            [
+                "519fdd2ff0883fa2",
+                "4cf950ae2f1d9ef3"
+            ]
+        ]
+    },
+    {
+        "id": "519fdd2ff0883fa2",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "afficher OrgID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "0e715034ca7621c7",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "createOrg",
+        "func": "// On récupère l'id de l'utilisateur créé par l'API admin/users\nmsg.userId = msg.payload.id;\n\n// Création de l'org côté admin\nmsg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/orgs\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    // admin:admin → adapte si besoin\n    \"Authorization\": \"Basic \" + Buffer.from(\"admin:admin\").toString(\"base64\")\n};\n\nmsg.payload = {\n    name: \"org-\" + msg.login\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 200,
+        "wires": [
+            [
+                "ade9aa8175ef91bd"
+            ]
+        ]
+    },
+    {
+        "id": "2adc3f4b1559bb6d",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 260,
+        "wires": [
+            [
+                "42e81fa01bf0d480",
+                "6f3fb7f3468833db"
+            ]
+        ]
+    },
+    {
+        "id": "42e81fa01bf0d480",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "addUserToOrg",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "6f3fb7f3468833db",
+        "type": "function",
+        "z": "2ebe77c4aa864fe2",
+        "name": "SetUserOrgID",
+        "func": "if (!msg.userId || !msg.orgId) {\n    node.error(\"userId ou orgId manquant pour le switch d'org\", msg);\n    return null;\n}\n\nmsg.method = \"POST\";\nmsg.url = `http://grafana:3000/api/users/${msg.userId}/using/${msg.orgId}`;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(\"admin:admin\").toString(\"base64\")\n};\n\nmsg.payload = {};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 320,
+        "wires": [
+            [
+                "bf64db4fba64d00f"
+            ]
+        ]
+    },
+    {
+        "id": "bf64db4fba64d00f",
+        "type": "http request",
+        "z": "2ebe77c4aa864fe2",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 320,
+        "wires": [
+            [
+                "d3ccea3fc2ca6f18",
+                "12722805fcd97150"
+            ]
+        ]
+    },
+    {
+        "id": "d3ccea3fc2ca6f18",
+        "type": "debug",
+        "z": "2ebe77c4aa864fe2",
+        "name": "afficher OrgID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "b1b3382c8feafb97",
+        "type": "postgreSQLConfig",
+        "name": "postgres",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "postgres",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "admin",
+        "userFieldType": "str",
+        "password": "admin",
+        "passwordFieldType": "str"
+    },
+    {
+        "id": "14f476e38db47e9a",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-postgresql": "0.15.4"
+        }
+    }
+]
