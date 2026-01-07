@@ -1,0 +1,676 @@
+[
+    {
+        "id": "ce885b0d71a31e0d",
+        "type": "inject",
+        "z": "02a9741c1b0f658d",
+        "name": "lht52:2 (versId)",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"lht52-03\",\"application_ids\":{\"application_id\":\"chapitre\"},\"dev_eui\":\"A84041B53189C133\",\"join_eui\":\"A840410000000100\",\"dev_addr\":\"260B0809\"},\"correlation_ids\":[\"gs:uplink:01KC63YXTYPYWXER9SG6C5J9NQ\"],\"received_at\":\"2025-12-11T07:10:44.778199175Z\",\"uplink_message\":{\"session_key_id\":\"AZEIwx1K8goMnyb1xbDK7g==\",\"f_port\":2,\"f_cnt\":36836,\"frm_payload\":\"BQ8DnwUNAWk6bnM=\",\"decoded_payload\":{\"Ext\":1,\"Hum_SHT\":92.77,\"Systimestamp\":1765437043,\"TempC_DS\":13.93,\"TempC_SHT\":12.99},\"normalized_payload\":[{\"air\":{\"location\":\"indoor\",\"relativeHumidity\":92.7,\"temperature\":12.95}},{\"air\":{\"location\":\"outdoor\",\"temperature\":12.93}}],\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"eui-a84041ffff25542c\",\"eui\":\"A84041FFFF25542C\"},\"time\":\"2025-12-11T07:10:44.518658Z\",\"timestamp\":1524793051,\"rssi\":-113,\"channel_rssi\":-113,\"snr\":4.8,\"frequency_offset\":\"-45\",\"uplink_token\":\"CiIKIAoUZXVpLWE4NDA0MWZmZmYyNTU0MmMSCKhAQf//JVQsENv9idcFGgwI9NzpyQYQgIenkQIg+I7+pbDhGA==\",\"channel_index\":5,\"received_at\":\"2025-12-11T07:10:44.538328489Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"867500000\",\"timestamp\":1524793051,\"time\":\"2025-12-11T07:10:44.518658Z\"},\"received_at\":\"2025-12-11T07:10:44.575079560Z\",\"consumed_airtime\":\"0.061696s\",\"version_ids\":{\"brand_id\":\"dragino\",\"model_id\":\"lht52\",\"hardware_version\":\"_unknown_hw_version_\",\"firmware_version\":\"1.0\",\"band_id\":\"EU_863_870\"},\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"},\"last_battery_percentage\":{\"f_cnt\":36787,\"value\":39.130436,\"received_at\":\"2025-12-10T15:10:44.744554979Z\"}}}",
+        "payloadType": "json",
+        "x": 120,
+        "y": 1120,
+        "wires": [
+            [
+                "624fe9f43632e28d"
+            ]
+        ]
+    },
+    {
+        "id": "720a289596ba418a",
+        "type": "inject",
+        "z": "02a9741c1b0f658d",
+        "name": "lht52-01",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"sonar-01\",\"application_ids\":{\"application_id\":\"chapitree\"},\"dev_eui\":\"70B3D57ED006570F\",\"join_eui\":\"A840410000000101\",\"dev_addr\":\"260BBFF4\"},\"correlation_ids\":[\"gs:uplink:01KABZAZ39S61FDZRSHEYJF8R7\"],\"received_at\":\"2025-11-18T17:13:59.351577212Z\",\"uplink_message\":{\"session_key_id\":\"AZm4bIMdB73gKSiYasLGeQ==\",\"f_port\":1,\"f_cnt\":28785,\"frm_payload\":\"UgAP\",\"decoded_payload\":{\"bytes\":[82,0,15]},\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"eui-a84041ffff25542c\",\"eui\":\"A84041FFFF25542C\"},\"time\":\"2025-11-18T17:13:59.067949Z\",\"timestamp\":1953719129,\"rssi\":-91,\"channel_rssi\":-91,\"snr\":11,\"frequency_offset\":\"129\",\"uplink_token\":\"CiIKIAoUZXVpLWE4NDA0MWZmZmYyNTU0MmMSCKhAQf//JVQsENnGzaMHGgsI19LyyAYQmobHRCCop/CV7qgv\",\"channel_index\":2,\"received_at\":\"2025-11-18T17:13:57.949226017Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"868500000\",\"timestamp\":1953719129,\"time\":\"2025-11-18T17:13:59.067949Z\"},\"received_at\":\"2025-11-18T17:13:59.145981768Z\",\"consumed_airtime\":\"0.051456s\",\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"}}}",
+        "payloadType": "json",
+        "x": 140,
+        "y": 1080,
+        "wires": [
+            [
+                "624fe9f43632e28d"
+            ]
+        ]
+    },
+    {
+        "id": "624fe9f43632e28d",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "Check appID / devID",
+        "func": "// On garde le message TTN dans msg.ttn pour la suite\nmsg.ttn = msg.payload;\n\n// On récupère appId et deviceId dans le payload\nconst appId    = msg?.payload?.end_device_ids?.application_ids?.application_id;\nconst deviceId = msg?.payload?.end_device_ids?.device_id;\n\n// Si pas d'appId → sortie 3\nif (!appId) {\n    return [null, null, msg];   // SORTIE 3\n}\n\n\nmsg.appId = appId;\nmsg.deviceId = deviceId;\n\n// Récupération de la variable de contexte dans le STORE \"file\"\nlet apps = flow.get(\"apps\", \"file\");\n\nif (!apps || typeof apps !== \"object\") {\n    node.warn(\"Fallback VersionID : flow.get('apps','file') vide ou non-objet, initialisation à {}\");\n    apps = {};\n    // On sauve tout de suite un objet vide pour initialiser le store \"file\"\n    flow.set(\"apps\", apps, \"file\");\n}\n\n// Vérifier si l'app existe\nconst appKnown = Object.prototype.hasOwnProperty.call(apps, appId);\n\n// Si app inconnue → sortie 3\nif (!appKnown) {\n    msg.appId = appId;\n    node.warn(`App inconnue : ${appId}`);\n\n    let pendingApps = flow.get(\"pendingApps\", \"file\") || {};\n    pendingApps[appId] = {\n        ttn: msg.ttn,\n        savedAt: Date.now()\n    };\n    flow.set(\"pendingApps\", pendingApps, \"file\");\n    \n    return [null, null, msg];   // SORTIE 3\n}\n\n// Si on arrive ici → app connue\n// Récupérer les devices de l'app\nconst devices = (apps[appId] && apps[appId].devices) ? apps[appId].devices : {};\n\n// Vérifier si device existe dans cette app\nconst deviceKnown = deviceId && Object.prototype.hasOwnProperty.call(devices, deviceId);\n\n// Cas 1 : app connue + device connu → sortie 1\nif (deviceKnown) {\n    msg.deviceId = deviceId;\n\n    // 🔥 Ajout demandé : on met la config du device dans msg.context\n    msg.context = devices[deviceId];  \n\n    node.warn(`Device connu :\\n- app : ${appId}\\n- device : ${deviceId}`);\n    return [msg, null, null];   // SORTIE 1\n}\n\n// Cas 2 : app connue + device inconnu → sortie 2\nmsg.deviceId = deviceId;\nnode.warn(`Device inconnu : ${deviceId} dans app ${appId}`);\nreturn [null, msg, null];       // SORTIE 2\n",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 960,
+        "wires": [
+            [
+                "d65b50f13a733d70"
+            ],
+            [
+                "19eb2ca16cf0b169"
+            ],
+            [
+                "7cd3b0c106356f4f"
+            ]
+        ],
+        "outputLabels": [
+            "known Device",
+            "new Device",
+            "new App"
+        ]
+    },
+    {
+        "id": "312745e096204d9a",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "admin",
+        "func": "",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "flow.set(\"adminChatId\",'-5031429626');\n",
+        "finalize": "",
+        "libs": [],
+        "x": 90,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fb7b2f5d9cc376a7",
+        "type": "switch",
+        "z": "02a9741c1b0f658d",
+        "name": "callback_query",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "createApp",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ignoreApp",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 300,
+        "y": 840,
+        "wires": [
+            [
+                "3ef0c74c27ea6e2e"
+            ],
+            [
+                "3ef0c74c27ea6e2e"
+            ],
+            [
+                "09f19f3a6d83721f"
+            ]
+        ]
+    },
+    {
+        "id": "3ef0c74c27ea6e2e",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "Create App",
+        "func": "\n// DEBUG pour voir ce qui arrive (tu pourras les virer après)\nnode.warn(\"DEBUG callback payload : \" + JSON.stringify(msg.payload));\n\n// 1) Vérifier qu'on a bien un callback_query\nif (!msg.payload || msg.payload.type !== \"callback_query\") {\n    return null;  // pas pour nous\n}\n\n// 2) Récupérer data (callback_data) → chez toi, c'est payload.data ou payload.content\nlet data = msg.payload.data || msg.payload.content || \"\";\nnode.warn(\"DEBUG callback data : \" + data);\n\n// 3) Parser action|appId\nlet parts  = data.split(\"|\");\nlet action = parts[0] || null;\nlet appId  = parts[1] || null;\n\nif (!action) {\n    node.warn(\"handleCreateAppDecision : action manquante dans callback_data. data=\" + data);\n    return null;\n}\nif (!appId) {\n    node.warn(\"handleCreateAppDecision : appId manquant dans callback_data. data=\" + data);\n    return null;\n}\n\n// 4) Récupérer chatId et messageId (on sécurise un peu)\nlet chatId =\n    msg.payload.chatId ||\n    (msg.payload.message && msg.payload.message.chat && msg.payload.message.chat.id);\n\nlet messageId =\n    msg.payload.messageId ||\n    (msg.payload.message && msg.payload.message.message_id);\n\nif (!chatId) {\n    node.warn(\"handleCreateAppDecision : chatId introuvable dans le callback.\");\n    return null;\n}\n\n// 5) Récupérer / initialiser apps dans le STORE \"file\"\nlet apps = flow.get(\"apps\", \"file\");\nif (!apps || typeof apps !== \"object\") {\n    node.warn(\"handleCreateAppDecision : init apps = {} dans le store 'file'.\");\n    apps = {};\n    flow.set(\"apps\", apps, \"file\");\n}\n\n// 6) Construire un message pour supprimer le message d'origine (boutons)\nif (messageId) {\n    const msgDelete = {\n        payload: {\n            chatId: chatId,          // 👈 OBLIGATOIRE\n            type: \"deleteMessage\",\n            content: messageId       // 👈 l'ID du message à supprimer\n        }\n    };\n    // On envoie la suppression AVANT la réponse\n    node.send(msgDelete);\n} else {\n    node.warn(\"handleCreateAppDecision : messageId introuvable, impossible de supprimer le message.\");\n}\n\n\n\nif (action === \"createApp\") {\n\n    // 7a) Récupérer la trame TTN en pending pour cette app\n    let pendingApps = flow.get(\"pendingApps\", \"file\") || {};\n    let pending = pendingApps[appId] || null;\n    let ttn = pending ? pending.ttn : null;\n\n    if (!ttn) {\n        node.warn(`handleCreateAppDecision : aucune trame TTN en pending pour app \"${appId}\".`);\n    }\n\n    // 7b) Créer l'entrée apps[appId] (sans lastMsg)\n    if (!apps[appId]) {\n        apps[appId] = {\n            chatId: \"XXX\",\n            devices: {}\n        };\n        node.warn(`handleCreateAppDecision : app \"${appId}\" créée dans apps.`);\n    } else {\n        node.warn(`handleCreateAppDecision : app \"${appId}\" existe déjà, pas recréée.`);\n    }\n\n    // 7c) Nettoyer le pending pour cette app\n    if (pending) {\n        delete pendingApps[appId];\n        flow.set(\"pendingApps\", pendingApps, \"file\");\n    }\n\n//  🧹 Tri des clés avant sauvegarde\n    //Fonction de tri qui va etre appelée plus bas\n    function sortKeys(obj) {\n        if (!obj || typeof obj !== \"object\") return obj;\n        const sorted = {};\n        Object.keys(obj).sort().forEach(k => {\n            sorted[k] = obj[k];\n        });\n        return sorted;\n    }\n\n\n    // 7d) trier les devices de cette app si déjà existants\n    if (apps[appId].devices) {\n        apps[appId].devices = sortKeys(apps[appId].devices);\n        // et trier les metrics de chaque device au passage\n        Object.keys(apps[appId].devices).forEach(dId => {\n            const dev = apps[appId].devices[dId];\n            if (dev.metrics) {\n                dev.metrics = sortKeys(dev.metrics);\n            }\n        });\n    }\n\n    // 7e) trier la racine apps\n    apps = sortKeys(apps);\n\n    // 7f) puis seulement sauvegarder\n    flow.set(\"apps\", apps, \"file\");\n\n\n    // 8) Préparer la réponse Telegram\n    msg.payload = {\n        chatId: chatId,\n        type: \"message\",\n        content: `✅ L'app \"${appId}\" a été créée dans la console.\\nLes prochains uplinks seront traités.`\n    };\n\n    // 9) Préparer le message de réinjection vers Check appID\n    let reinjectMsg = null;\n    if (ttn) {\n        reinjectMsg = {\n            payload: ttn\n            // tu peux aussi remettre appId/deviceId si tu veux\n            // appId: appId,\n            // deviceId: ttn?.end_device_ids?.device_id\n        };\n    }\n\n    // Sortie 1 = Telegram, sortie 2 = réinjection TTN\n    return [msg, reinjectMsg];\n}\n\n\n\nif (action === \"ignoreApp\") {\n    // On ne touche pas à apps, comportement \"comme avant\"\n    node.warn(`handleCreateAppDecision : app \"${appId}\" ignorée, aucune création.`);\n    msg.payload = {\n        chatId: chatId,\n        type: \"message\",\n        content: `❌ L'app \"${appId}\" n'a pas été créée.\\nLes uplinks seront ignorés comme avant.`\n    };\n    \n    return msg;\n}\n\n// 10) Action inconnue\nnode.warn(`handleCreateAppDecision : action inconnue \"${action}\" dans callback_data (data=\"${data}\").`);\nreturn null;\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 820,
+        "wires": [
+            [
+                "840a4cac44978aa4"
+            ],
+            [
+                "a9635ba167fe5eeb"
+            ]
+        ],
+        "outputLabels": [
+            "telegram",
+            "check appID"
+        ]
+    },
+    {
+        "id": "840a4cac44978aa4",
+        "type": "telegram sender",
+        "z": "02a9741c1b0f658d",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 615,
+        "y": 800,
+        "wires": [
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "09f19f3a6d83721f",
+        "type": "debug",
+        "z": "02a9741c1b0f658d",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "bbd1bbfd0b15800d",
+        "type": "telegram event",
+        "z": "02a9741c1b0f658d",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "event": "callback_query",
+        "autoanswer": false,
+        "x": 55,
+        "y": 860,
+        "wires": [
+            [
+                "3679b86cd69a4475"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "3679b86cd69a4475",
+        "type": "switch",
+        "z": "02a9741c1b0f658d",
+        "name": "type",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "callback_query",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 150,
+        "y": 860,
+        "wires": [
+            [
+                "fb7b2f5d9cc376a7"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f0f91d3015d5a2b2",
+        "type": "http in",
+        "z": "02a9741c1b0f658d",
+        "name": "Webhook TTN",
+        "url": "/ttn/uplink",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 960,
+        "wires": [
+            [
+                "624fe9f43632e28d",
+                "return_200"
+            ]
+        ]
+    },
+    {
+        "id": "b3462c5f6f823436",
+        "type": "inject",
+        "z": "02a9741c1b0f658d",
+        "name": "porte 1",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"porte-01\",\"application_ids\":{\"application_id\":\"mobilab-truck\"},\"dev_eui\":\"70B3D57ED0072D6C\",\"join_eui\":\"0000000000000000\",\"dev_addr\":\"260B7E4E\"},\"correlation_ids\":[\"gs:uplink:01K71FCN0MB0BA21P7D3NQ1TSW\"],\"received_at\":\"2025-10-08T08:35:47.556876883Z\",\"uplink_message\":{\"session_key_id\":\"AZl2rHHCAzLVJCH6gefqcg==\",\"f_port\":1,\"f_cnt\":18339,\"frm_payload\":\"AC4ANgHxABgAMiRO\",\"decoded_payload\":{\"LAST_WATER_LEAK_DURATION\":0,\"MOD\":2,\"DOOR_OPEN_STATUS\":1,\"WATER_LEAK_TIMES\":0},\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"lisah-ug65-1\",\"eui\":\"24E124FFFEF7E3D6\"},\"time\":\"2025-10-08T08:35:47.328Z\",\"timestamp\":403505293,\"rssi\":-82,\"channel_rssi\":-82,\"snr\":13.5,\"frequency_offset\":\"230\",\"location\":{\"latitude\":43.61944841808217,\"longitude\":3.857522711001851,\"altitude\":80,\"source\":\"SOURCE_REGISTRY\"},\"uplink_token\":\"ChoKGAoMbGlzYWgtdWc2NS0xEggk4ST//vfj1hCNgbTAARoMCOPEmMcGELDDl6YBIMjNqJbfkekGKgwI48SYxwYQgMSznAE=\",\"channel_index\":3,\"gps_time\":\"2025-10-08T08:35:47.328Z\",\"received_at\":\"2025-10-08T08:35:47.330007620Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"867100000\",\"timestamp\":403505293,\"time\":\"2025-10-08T08:35:47.328Z\"},\"received_at\":\"2025-10-08T08:35:47.349656096Z\",\"consumed_airtime\":\"0.061696s\",\"packet_error_rate\":0.04761905,\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"}}}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 1000,
+        "wires": [
+            [
+                "624fe9f43632e28d"
+            ]
+        ]
+    },
+    {
+        "id": "4b9b860e8a2dd757",
+        "type": "inject",
+        "z": "02a9741c1b0f658d",
+        "name": "porte 0",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"porte-01\",\"application_ids\":{\"application_id\":\"mobilab-truck\"},\"dev_eui\":\"70B3D57ED0072D6C\",\"join_eui\":\"0000000000000000\",\"dev_addr\":\"260B7E4E\"},\"correlation_ids\":[\"gs:uplink:01K71FCN0MB0BA21P7D3NQ1TSW\"],\"received_at\":\"2025-10-08T08:35:47.556876883Z\",\"uplink_message\":{\"session_key_id\":\"AZl2rHHCAzLVJCH6gefqcg==\",\"f_port\":1,\"f_cnt\":18339,\"frm_payload\":\"AC4ANgHxABgAMiRO\",\"decoded_payload\":{\"BAT_V\":2.742,\"LAST_WATER_LEAK_DURATION\":0,\"MOD\":2,\"DOOR_OPEN_STATUS\":0,\"WATER_LEAK_TIMES\":0},\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"lisah-ug65-1\",\"eui\":\"24E124FFFEF7E3D6\"},\"time\":\"2025-10-08T08:35:47.328Z\",\"timestamp\":403505293,\"rssi\":-82,\"channel_rssi\":-82,\"snr\":13.5,\"frequency_offset\":\"230\",\"location\":{\"latitude\":43.61944841808217,\"longitude\":3.857522711001851,\"altitude\":80,\"source\":\"SOURCE_REGISTRY\"},\"uplink_token\":\"ChoKGAoMbGlzYWgtdWc2NS0xEggk4ST//vfj1hCNgbTAARoMCOPEmMcGELDDl6YBIMjNqJbfkekGKgwI48SYxwYQgMSznAE=\",\"channel_index\":3,\"gps_time\":\"2025-10-08T08:35:47.328Z\",\"received_at\":\"2025-10-08T08:35:47.330007620Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"867100000\",\"timestamp\":403505293,\"time\":\"2025-10-08T08:35:47.328Z\"},\"received_at\":\"2025-10-08T08:35:47.349656096Z\",\"consumed_airtime\":\"0.061696s\",\"packet_error_rate\":0.04761905,\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"}}}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 1040,
+        "wires": [
+            [
+                "624fe9f43632e28d"
+            ]
+        ]
+    },
+    {
+        "id": "return_200",
+        "type": "http response",
+        "z": "02a9741c1b0f658d",
+        "name": "OK (HTTP:200)",
+        "statusCode": "200",
+        "headers": {},
+        "x": 320,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "a9635ba167fe5eeb",
+        "type": "link out",
+        "z": "02a9741c1b0f658d",
+        "name": "Retour_CheckAppID",
+        "mode": "link",
+        "links": [
+            "797e39f9b621e572"
+        ],
+        "x": 700,
+        "y": 840,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "797e39f9b621e572",
+        "type": "link in",
+        "z": "02a9741c1b0f658d",
+        "name": "App/Dev created",
+        "links": [
+            "a9635ba167fe5eeb",
+            "f9c29be5e625f19b"
+        ],
+        "x": 120,
+        "y": 920,
+        "wires": [
+            [
+                "624fe9f43632e28d"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "19eb2ca16cf0b169",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "devID inconnu",
+        "func": "// Ce node est branché sur la sortie \"new Device\" de Check appID / devID\n\nconst appId    = msg.appId;\nconst deviceId = msg.deviceId;\n\nif (!appId || !deviceId) {\n    node.warn(\"Init new device : appId ou deviceId manquant.\");\n    return msg; // on laisse passer mais sans rien faire\n}\n\n// Récupérer le message TTN brut (on l'avait mis dans msg.ttn au début du flow)\nconst ttn = msg.ttn || msg.payload || {};\n\n// 1) Récupérer devEUI\nconst devEUI = ttn?.end_device_ids?.dev_eui || null;\n\n// 2) Récupérer la liste des rx_metadata\nconst rxList = Array.isArray(ttn?.uplink_message?.rx_metadata)\n    ? ttn.uplink_message.rx_metadata\n    : [];\n\n// 3) Calcul du max RSSI et max SNR\nlet rssiMax = null;\nlet snrMax  = null;\n\nfor (const rx of rxList) {\n    if (typeof rx.rssi === \"number\") {\n        if (rssiMax === null || rx.rssi > rssiMax) {\n            rssiMax = rx.rssi;\n        }\n    }\n    if (typeof rx.snr === \"number\") {\n        if (snrMax === null || rx.snr > snrMax) {\n            snrMax = rx.snr;\n        }\n    }\n}\n\n// 4) Moyenne des lat/lon sur les gateways qui en ont\nlet latSum = 0;\nlet lonSum = 0;\nlet locCount = 0;\n\nfor (const rx of rxList) {\n    const lat = rx?.location?.latitude;\n    const lon = rx?.location?.longitude;\n    if (typeof lat === \"number\" && typeof lon === \"number\") {\n        latSum += lat;\n        lonSum += lon;\n        locCount++;\n    }\n}\n\nconst latitude  = locCount > 0 ? (latSum / locCount) : null;\nconst longitude = locCount > 0 ? (lonSum / locCount) : null;\n\n// 5) lastSeen : priorité à uplink_message.received_at, sinon received_at\nconst lastSeen =\n    ttn?.uplink_message?.received_at ||\n    ttn?.received_at ||\n    null;\n\n// 6) Récupérer / initialiser apps dans le store \"file\"\nlet apps = flow.get(\"apps\", \"file\");\nif (!apps || typeof apps !== \"object\") {\n    node.warn(\"Init new device : apps inexistant, init à {}.\");\n    apps = {};\n}\n\n// On s'assure que l'app existe (normalement oui, on est sur la branche 'app connue')\nif (!apps[appId]) {\n    apps[appId] = {\n        chatId: \"XXX\",   // à ajuster ailleurs si besoin\n        devices: {}\n    };\n}\n\n// On s'assure que le container devices existe\nif (!apps[appId].devices || typeof apps[appId].devices !== \"object\") {\n    apps[appId].devices = {};\n}\n\n// 7) Si le device existe déjà, on ne l'écrase pas\nif (apps[appId].devices[deviceId]) {\n    node.warn(`Init new device : device \"${deviceId}\" existe déjà dans app \"${appId}\", pas recréé.`);\n} else {\n    // Création du device avec ta structure minimale\n    apps[appId].devices[deviceId] = {\n        deviceEUI: devEUI,\n        deviceName : deviceId,\n        deviceType: {\n            brand: null,            // à définir plus tard (ex: \"dragino\")\n            model: null,            // ex: \"lht52\"\n            hardwareVersion: null,\n            softwareVersion: null\n        },\n        alertEnabled: true,         // ON par défaut\n        meta: {\n            battery: null,          // inconnu à ce stade\n            batteryTreshold: null,  // à définir plus tard\n            lastSeen: lastSeen,\n            latitude: latitude,\n            longitude: longitude,\n            rssi: rssiMax,\n            snr: snrMax\n        },\n        metrics: {\n            // vide : dépendra du type de capteur (LHT52, sonar, porte, etc.)\n        },\n        alertState: {\n            alertFrequency: \"1d\",\n            lastNoDataAlert_2d: 0,\n            lastNoDataAlert_1w: 0,\n            lastNoDataAlert_1m: 0\n        }\n    };\n\n    node.warn(`Init new device : device \"${deviceId}\" créé dans app \"${appId}\".`);\n}\n\n// 8) Sauvegarde dans le store \"file\"\n// 🧹 Tri des clés avant sauvegarde\n    function sortKeys(obj) {\n        if (!obj || typeof obj !== \"object\") return obj;\n        const sorted = {};\n        Object.keys(obj).sort().forEach(k => {\n            sorted[k] = obj[k];\n        });\n        return sorted;\n    }\n\n// 8.1) trier les metrics du device qu’on vient de créer (même si c’est vide, ça ne gêne pas)\nconst dev = apps[appId].devices[deviceId];\nif (dev.metrics) {\n    dev.metrics = sortKeys(dev.metrics);\n}\n\n// 8.2) trier tous les devices de cette app\napps[appId].devices = sortKeys(apps[appId].devices);\n\n// 8.3) trier la racine apps\napps = sortKeys(apps);\n\n// 8.4) sauvegarde\nflow.set(\"apps\", apps, \"file\");\n\n\n// 9) Mettre la config du device dans msg.context pour la suite du flow\nmsg.context = apps[appId].devices[deviceId];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 960,
+        "wires": [
+            [
+                "cc01a694ef3ac936"
+            ]
+        ]
+    },
+    {
+        "id": "7cd3b0c106356f4f",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "appID inconnu",
+        "func": "// ID du chat Telegram admin (à adapter)\nconst adminChatId = flow.get(\"adminChatId\");\n\nconst appId    = msg.appId;\nconst deviceId = msg.deviceId || \"(deviceId inconnu)\";\n\n// Si pas d'appId, on ne pose pas de question\nif (!appId) {\n    node.warn(\"askCreateApp : appId manquant, pas de demande Telegram.\");\n    return null;\n}\n\n// On prépare le texte du message\nconst text = \n    `Nouvelle app ! \\n` +\n    `App : ${appId}\\n` +\n    `Device : ${deviceId}\\n\\n` +\n    `Voulez-vous créer cette app dans la console ?`;\n\n// On encode l'action dans callback_data pour le prochain flow\n// Format : createApp|<appId>  ou ignoreApp|<appId>\nmsg.payload = {\n    chatId: adminChatId,\n    type: \"message\",\n    content: text,\n    options: {\n        reply_markup: {\n            inline_keyboard: [\n                [\n                    { text: \"✅ Oui, créer l'app\", callback_data: `createApp|${appId}` },\n                    { text: \"❌ Non\",             callback_data: `ignoreApp|${appId}` }\n                ]\n            ]\n        }\n    }\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1000,
+        "wires": [
+            [
+                "b9cdbf24d689c4f3"
+            ]
+        ]
+    },
+    {
+        "id": "b9cdbf24d689c4f3",
+        "type": "telegram sender",
+        "z": "02a9741c1b0f658d",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 675,
+        "y": 1000,
+        "wires": [
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "d65b50f13a733d70",
+        "type": "link out",
+        "z": "02a9741c1b0f658d",
+        "name": "App connue / device connu",
+        "mode": "link",
+        "links": [
+            "3f36f373b5f20dfd"
+        ],
+        "x": 600,
+        "y": 920,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "3f36f373b5f20dfd",
+        "type": "link in",
+        "z": "02a9741c1b0f658d",
+        "name": "link in 2",
+        "links": [
+            "d65b50f13a733d70"
+        ],
+        "x": 115,
+        "y": 1220,
+        "wires": [
+            [
+                "adb5d6e84730336a",
+                "6959792d6750da08"
+            ]
+        ]
+    },
+    {
+        "id": "adb5d6e84730336a",
+        "type": "switch",
+        "z": "02a9741c1b0f658d",
+        "name": "deviceType",
+        "property": "context.deviceType.model",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "lht52",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ps-lb",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 230,
+        "y": 1220,
+        "wires": [
+            [
+                "10fc614b6dce4db3"
+            ],
+            [
+                "4dcb59c95d0352b9"
+            ],
+            [
+                "8d4df80cab503f68"
+            ]
+        ]
+    },
+    {
+        "id": "10fc614b6dce4db3",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "lht52",
+        "func": "const appId    = msg.appId;\nconst deviceId = msg.deviceId;\nconst ttn      = msg.ttn || msg.payload || {};\n\nlet apps = flow.get(\"apps\", \"file\") || {};\n\n// ---------------------------------------------------------------\n// 1) Vérif existence device dans apps\n// ---------------------------------------------------------------\nif (!apps[appId] || !apps[appId].devices || !apps[appId].devices[deviceId]) {\n    node.warn(`Parser LHT52 : device \"${deviceId}\" introuvable dans apps[\"${appId}\"]`);\n    return msg;\n}\n\nlet dev = apps[appId].devices[deviceId];\n\nconst uplink = ttn?.uplink_message;\nif (!uplink) {\n    node.warn(\"Parser LHT52 : uplink_message absent.\");\n    return msg;\n}\n\nconst fPort = uplink.f_port;\nconst rx0   = uplink.rx_metadata?.[0] || {};\n\ndev.meta = dev.meta || {};\ndev.metrics = dev.metrics || {};\n\n// --- état “device tout neuf” : metrics vide ? ---\nconst metricsIsEmpty = Object.keys(dev.metrics).length === 0;\nconst batteryThresholdMissing = dev.meta.batteryTreshold == null;\n\n// ---------------------------------------------------------------\n// 2) Init de base si device tout juste créé (au premier uplink utile)\n// ---------------------------------------------------------------\nif (metricsIsEmpty && batteryThresholdMissing && fPort === 2) {\n    // On initialise le seuil batterie par défaut\n    dev.meta.batteryTreshold = 2800;\n\n    // On va lire les valeurs actuelles si dispo\n    const hum  = uplink.decoded_payload?.Hum_SHT ?? null;\n    const temp = uplink.decoded_payload?.TempC_SHT ?? null;\n    const tempP = uplink.decoded_payload?.TempC_DS ?? null;\n\n    dev.metrics = {\n        humidity: {\n            value: hum,\n            min: 0,\n            max: 100,\n            unity: \"%\",\n            alertOn: false,\n            lastAlert: 0\n        },\n        temperature: {\n            value: temp,\n            min: -10,\n            max: 40,\n            unity: \"°C\",\n            alertOn: false,\n            lastAlert: 0\n        },\n        temperature_probe: {\n            value: tempP,\n            min: -10,\n            max: 40,\n            unity: \"°C\",\n            alertOn: false,\n            lastAlert: 0\n        }\n    };\n\n    node.warn(\n        `Init metrics LHT52 : metrics + batteryTreshold=2800 pour device \"${deviceId}\" (app \"${appId}\").`\n    );\n}\n\n\n// ---------------------------------------------------------------\n// 3) Mise à jour des meta communes (rssi / snr / lastSeen)\n// ---------------------------------------------------------------\nif (typeof rx0.rssi === \"number\") dev.meta.rssi = rx0.rssi;\nif (typeof rx0.snr  === \"number\") dev.meta.snr  = rx0.snr;\n\ndev.meta.lastSeen =\n    ttn?.uplink_message?.received_at ||\n    ttn?.received_at ||\n    dev.meta.lastSeen || null;\n\n\n// ---------------------------------------------------------------\n// 4) Traitement PORT 2 : maj des values de metrics\n// ---------------------------------------------------------------\nlet message = {\n    deviceId: deviceId,\n    rssi: dev.meta.rssi ?? null,\n    snr:  dev.meta.snr  ?? null\n};\n\nif (fPort === 2) {\n    const hum   = uplink.decoded_payload?.Hum_SHT ?? null;\n    const temp  = uplink.decoded_payload?.TempC_SHT ?? null;\n    const tempP = uplink.decoded_payload?.TempC_DS ?? null;\n\n    // payload de sortie\n    message.humidity          = hum;\n    message.temperature       = temp;\n    message.temperature_probe = tempP;\n\n    // S’assurer que les metrics existent, même si ce n’était pas un “premier” uplink\n    if (!dev.metrics.humidity) {\n        dev.metrics.humidity = {\n            value: null,\n            min: 0,\n            max: 100,\n            unity: \"%\",\n            alertOn: false,\n            lastAlert: 0\n        };\n    }\n    if (!dev.metrics.temperature) {\n        dev.metrics.temperature = {\n            value: null,\n            min: -10,\n            max: 40,\n            unity: \"°C\",\n            alertOn: false,\n            lastAlert: 0\n        };\n    }\n    if (!dev.metrics.temperature_probe) {\n        dev.metrics.temperature_probe = {\n            value: null,\n            min: -10,\n            max: 40,\n            unity: \"°C\",\n            alertOn: false,\n            lastAlert: 0\n        };\n    }\n\n    // On ne change que les values\n    dev.metrics.humidity.value          = hum;\n    dev.metrics.temperature.value       = temp;\n    dev.metrics.temperature_probe.value = tempP;\n}\n\n\n// ---------------------------------------------------------------\n// 5) Traitement PORT 5 : maj meta battery / rssi / snr\n// ---------------------------------------------------------------\nif (fPort === 5) {\n    const bat = uplink.decoded_payload?.Bat_mV ?? null;\n\n    message.battery = bat;\n\n    if (bat != null) {\n        dev.meta.battery = bat;\n    }\n}\n\n\n// ---------------------------------------------------------------\n// 6) Sauvegarde et sortie\n// ---------------------------------------------------------------\napps[appId].devices[deviceId] = dev;\nflow.set(\"apps\", apps, \"file\");\n\nmsg.context = dev;       // contexte complet à jour\nmsg.payload = message;   // payload simplifié pour la suite (Grafana, etc.)\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1200,
+        "wires": [
+            [
+                "fbb4c0e79326abc1"
+            ]
+        ]
+    },
+    {
+        "id": "6959792d6750da08",
+        "type": "debug",
+        "z": "02a9741c1b0f658d",
+        "name": "appId 1 / device 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 250,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "8d4df80cab503f68",
+        "type": "debug",
+        "z": "02a9741c1b0f658d",
+        "name": "OTHERWISE",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "4dcb59c95d0352b9",
+        "type": "debug",
+        "z": "02a9741c1b0f658d",
+        "name": "ps-lb",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 410,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "fbb4c0e79326abc1",
+        "type": "debug",
+        "z": "02a9741c1b0f658d",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "cc01a694ef3ac936",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "deviceInfos in payload",
+        "func": "// Node : Detect deviceType (2 outputs)\n\n// Vérifs de base\nconst appId = msg.appId;\nconst deviceId = msg.deviceId;\nif (!appId || !deviceId) {\n    node.warn(\"Detect deviceType : appId ou deviceId manquant.\");\n    return [null, msg];\n}\n\nconst ttn = msg.ttn || msg.payload || {};\n\n// ---------------------------------------------------\n// 1) Définition explicite des chemins à explorer\n// ---------------------------------------------------\nconst SOURCES = [\n    ttn?.end_device_ids?.version_ids,\n    ttn?.uplink_message?.version_ids,\n    ttn?.uplink_message?.decoded_payload,\n    // futur ajout :\n    // ttn?.uplink_message?.vendor_data,\n];\n\n// ---------------------------------------------------\n// 2) Synonymes possibles par champ\n// ---------------------------------------------------\nconst FIELD_SYNONYMS = {\n    brand: [\"brand\", \"brand_id\", \"marque\", \"manufacturer\", \"fabricant\"],\n    model: [\"model\", \"model_id\", \"type\", \"modele\"],\n    hardwareVersion: [\"hardwareVersion\", \"hardware_version\", \"hw_version\", \"hwVer\"],\n    softwareVersion: [\"softwareVersion\", \"firmware_version\", \"fw_version\", \"sw_version\"]\n};\n\n\n// ---------------------------------------------------\n// 3) Helper : renvoie la première clé trouvée dans une source\n// ---------------------------------------------------\nfunction pickFirst(source, candidates) {\n    if (!source || typeof source !== \"object\") return null;\n\n    for (const key of candidates) {\n        if (source[key] != null) {\n            return source[key];\n        }\n    }\n    return null;\n}\n\n\n// ---------------------------------------------------\n// 4) Recherche dans les sources\n// ---------------------------------------------------\nconst found = {\n    brand: null,\n    model: null,\n    hardwareVersion: null,\n    softwareVersion: null\n};\n\nfor (const src of SOURCES) {\n    if (!src || typeof src !== \"object\") continue;\n\n    if (found.brand == null) found.brand = pickFirst(src, FIELD_SYNONYMS.brand);\n    if (found.model == null) found.model = pickFirst(src, FIELD_SYNONYMS.model);\n    if (found.hardwareVersion == null) found.hardwareVersion = pickFirst(src, FIELD_SYNONYMS.hardwareVersion);\n    if (found.softwareVersion == null) found.softwareVersion = pickFirst(src, FIELD_SYNONYMS.softwareVersion);\n}\n\n\n// ---------------------------------------------------\n// 5) Si aucun champ trouvé → sortie 2\n// ---------------------------------------------------\nconst somethingFound = Object.values(found).some(v => v != null);\n\nif (!somethingFound) {\n    node.warn(`Detect deviceType : aucune info trouvée pour \"${deviceId}\".`);\n    return [null, msg];   // sortie 2\n}\n\n\n// ---------------------------------------------------\n// 6) Mise à jour dans apps\n// ---------------------------------------------------\nlet apps = flow.get(\"apps\", \"file\") || {};\nconst dev = apps?.[appId]?.devices?.[deviceId];\n\nif (!dev) {\n    node.warn(`Detect deviceType : device \"${deviceId}\" introuvable dans apps.`);\n    return [null, msg];\n}\n\ndev.deviceType = dev.deviceType || {};\n\nif (found.brand != null) dev.deviceType.brand = dev.deviceType.brand ?? found.brand;\nif (found.model != null) dev.deviceType.model = dev.deviceType.model ?? found.model;\nif (found.hardwareVersion != null) dev.deviceType.hardwareVersion = dev.deviceType.hardwareVersion ?? found.hardwareVersion;\nif (found.softwareVersion != null) dev.deviceType.softwareVersion = dev.deviceType.softwareVersion ?? found.softwareVersion;\n\nflow.set(\"apps\", apps, \"file\");\nmsg.context = dev;\n\nnode.warn(\n    `Detect deviceType OK : ${deviceId} → ` +\n    `brand=\"${dev.deviceType.brand}\", model=\"${dev.deviceType.model}\".`\n);\n\n\n// ---------------------------------------------------\n// 7) Sortie 1 = success, sortie 2 = fail\n// ---------------------------------------------------\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 960,
+        "wires": [
+            [
+                "f9c29be5e625f19b"
+            ],
+            [
+                "9314bdf623883dfc"
+            ]
+        ],
+        "outputLabels": [
+            "Succes",
+            "notFound"
+        ]
+    },
+    {
+        "id": "f9c29be5e625f19b",
+        "type": "link out",
+        "z": "02a9741c1b0f658d",
+        "name": "Retour_CheckAppID",
+        "mode": "link",
+        "links": [
+            "797e39f9b621e572"
+        ],
+        "x": 980,
+        "y": 940,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "9314bdf623883dfc",
+        "type": "function",
+        "z": "02a9741c1b0f658d",
+        "name": "port:5 ",
+        "func": "// Node : Detect Dragino on FPort=5 using 7-byte legacy format\n// Entrée : msg.appId, msg.deviceId, msg.ttn, msg.context\n// Sortie 1 : modèle Dragino reconnu → msg\n// Sortie 2 : rien trouvé → msg\nconst DRAGINO_MODELS = {\n    0x09: { brand: \"dragino\", model: \"lht52\" },\n    0x16: { brand: \"dragino\", model: \"ps-lb\" },\n        // 0x0B: { brand: \"dragino\", model: \"xxx\" },\n\n};\n\nconst appId    = msg.appId;\nconst deviceId = msg.deviceId;\n\nif (!appId || !deviceId) {\n    node.warn(\"Detect Dragino (fport5) : appId ou deviceId manquant.\");\n    return [null, msg];\n}\n\nconst ttn    = msg.ttn || msg.payload || {};\nconst uplink = ttn.uplink_message || {};\n\n// 1) Vérifier f_port\nconst fPort = uplink.f_port;\nif (fPort !== 5) {\n    // Ce node ne traite que le port 5\n    return [null, msg];\n}\n\n// 2) Récupérer les bytes à partir de frm_payload (base64)\nlet bytes = null;\nconst frm = uplink.frm_payload;\n\nif (typeof frm === \"string\") {\n    try {\n        const buf = Buffer.from(frm, \"base64\");\n        bytes = Array.from(buf);\n    } catch (e) {\n        node.warn(\"Detect Dragino (fport5) : impossible de décoder frm_payload base64.\");\n        return [null, msg];\n    }\n}\n\n// 3) Filtre sur le format : ici on ne traite que le \"format historique\" (7 bytes)\n// ex : 09 01 00 01 00 0B 3A\n//\n// Si plus tard Dragino utilise un autre format (10 bytes, 12 bytes, etc.),\n// tu feras un AUTRE node dédié à ce format, branché sur la sortie 2.\nif (!Array.isArray(bytes) || bytes.length !== 7) {\n    node.warn(\n        `Detect Dragino (fport5) : format non reconnu (bytes.length=${bytes?.length}).` +\n        \" Sortie fail pour traitement ultérieur.\"\n    );\n    return [null, msg];\n}\n\n// 5) On regarde d'abord le decoded_payload s'il existe\nconst dp = uplink.decoded_payload || {};\n\nlet sensorModel   = null;\nlet softwareVer   = null;\nlet batteryVolts  = null;\n\n// a) sensor model : priorité à decoded_payload.Sensor_Model\nif (dp.Sensor_Model != null) {\n    sensorModel = Number(dp.Sensor_Model);\n} else {\n    sensorModel = bytes[0];  // fallback sur le 1er byte\n}\n\n// b) firmware / software version\nif (dp.Firmware_Version != null) {\n    // ex : \"100\" → v1.0.0\n    const fwStr = String(dp.Firmware_Version);\n    if (/^\\d+$/.test(fwStr) && fwStr.length === 3) {\n        softwareVer = `${fwStr[0]}.${fwStr[1]}.${fwStr[2]}`;\n    } else {\n        softwareVer = fwStr; // au pire on stocke brut\n    }\n} else {\n    // fallback sur bytes[1] / bytes[2]\n    const fw1 = bytes[1];\n    const fw2 = bytes[2];\n    softwareVer = `${fw1}.${fw2}.0`;\n}\n\n// c) batterie : priorité à decoded_payload.Bat_mV\nif (dp.Bat_mV != null) {\n    batteryVolts = Number(dp.Bat_mV) / 1000.0;\n} else {\n    const batRaw = (bytes[5] << 8) | bytes[6];\n    batteryVolts = batRaw / 1000.0;\n}\n\n// 6) Vérifier que le modelByte correspond à un modèle Dragino connu\nconst modelInfo = DRAGINO_MODELS[sensorModel];\nif (!modelInfo) {\n    node.warn(\n        `Detect Dragino (fport5) : sensorModel=0x${sensorModel.toString(16)} non listé dans DRAGINO_MODELS.`\n    );\n    return [null, msg];\n}\n\n// 7) Mise à jour dans apps\nlet apps = flow.get(\"apps\", \"file\") || {};\nconst dev = apps?.[appId]?.devices?.[deviceId];\n\nif (!dev) {\n    node.warn(`Detect Dragino (fport5) : device \"${deviceId}\" introuvable dans apps.`);\n    return [null, msg];\n}\n\ndev.deviceType = dev.deviceType || {};\n\nif (!dev.deviceType.brand)            dev.deviceType.brand            = modelInfo.brand;\nif (!dev.deviceType.model)            dev.deviceType.model            = modelInfo.model;\nif (!dev.deviceType.softwareVersion)  dev.deviceType.softwareVersion  = softwareVer;\nif (!dev.deviceType.hardwareVersion)  dev.deviceType.hardwareVersion  = null;\n\ndev.meta = dev.meta || {};\ndev.meta.battery = batteryVolts;\n\n// Sauvegarde + mise à jour msg.context\nflow.set(\"apps\", apps, \"file\");\nmsg.context = dev;\n\nnode.warn(\n    `Detect Dragino (fport5, 7 bytes) OK : \"${deviceId}\" → ` +\n    `brand=\"${dev.deviceType.brand}\", model=\"${dev.deviceType.model}\", ` +\n    `soft=\"${dev.deviceType.softwareVersion}\", bat=${batteryVolts.toFixed(3)} V.`\n);\n\n// Succès → sortie 1\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 980,
+        "wires": [
+            [],
+            []
+        ],
+        "outputLabels": [
+            "success",
+            "fail"
+        ]
+    },
+    {
+        "id": "389caaaa5d0b8f80",
+        "type": "telegram bot",
+        "botname": "mobilab_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "c858c6496ae39ea1",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-telegrambot": "16.3.2"
+        }
+    }
+]
