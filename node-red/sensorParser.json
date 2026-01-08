@@ -1,0 +1,1599 @@
+[
+    {
+        "id": "bf6048c645ac625c",
+        "type": "switch",
+        "z": "d464bfcccd5fbf22",
+        "name": "Autoconstruction",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "pilowtech",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "debit",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "irritrace",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "sel",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "senpow",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "watermark",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "sonar",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "waterlow",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "porte",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lancelot",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "bme680",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "furgo",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "temperature",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "davele",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "latex",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 16,
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "3c94fcc3680d63a2"
+            ],
+            [
+                "3c94fcc3680d63a2"
+            ],
+            [
+                "3c94fcc3680d63a2"
+            ],
+            [
+                "3c94fcc3680d63a2"
+            ],
+            [
+                "3c94fcc3680d63a2"
+            ],
+            [
+                "3c94fcc3680d63a2"
+            ],
+            [
+                "3c94fcc3680d63a2"
+            ],
+            [
+                "762d11be3b2f0f21"
+            ],
+            [
+                "552821188b827927"
+            ],
+            [
+                "b88c22fa49aec2e7"
+            ],
+            [
+                "b2b2752807b47f2e"
+            ],
+            [
+                "133f4ff08b8aa880"
+            ],
+            [
+                "30aefbd310cf53ce"
+            ],
+            [
+                "fef1d84c745d383f"
+            ],
+            [
+                "fe9a13e81e796e07"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "762d11be3b2f0f21",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "waterlow",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n        \"value\": msg.payload.uplink_message.decoded_payload[\"WATER_LEAK_STATUS\"]\n    };\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 140,
+        "wires": [
+            [
+                "9c47a76bb296d5e6",
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "3c94fcc3680d63a2",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "2 bytes/valeur : Irritrace, pilowtech, Watermark, sonar, debit",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload.bytes[0],\n    \"value\": ((msg.payload.uplink_message.decoded_payload.bytes[1] * 256) + msg.payload.uplink_message.decoded_payload.bytes[2])\n};\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[3] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value2 = ((msg.payload.uplink_message.decoded_payload.bytes[3] * 256) + msg.payload.uplink_message.decoded_payload.bytes[4]);\n}\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[5] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value3 = ((msg.payload.uplink_message.decoded_payload.bytes[5] * 256) + msg.payload.uplink_message.decoded_payload.bytes[6]);\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 100,
+        "wires": [
+            [
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "b88c22fa49aec2e7",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lancelot",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n    \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n    \"battery\": msg.payload.uplink_message.decoded_payload.bytes[0],\n};\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 220,
+        "wires": [
+            [
+                "6f1a5553abf29bc2",
+                "d0a65c2652c1eadd"
+            ]
+        ]
+    },
+    {
+        "id": "bbc7bcb497bfa16b",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "1 byte/valeur : ",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n    \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n    \"power\": msg.payload.uplink_message.decoded_payload.bytes[0],\n    \"value\": msg.payload.uplink_message.decoded_payload.bytes[1]\n};\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[2] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[2] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value2 = msg.payload.uplink_message.decoded_payload.bytes[2];\n}\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 60,
+        "wires": [
+            [
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "9c47a76bb296d5e6",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Alerte Waterlow",
+        "func": "var devicesData = flow.get(\"$parent.waterlow\");\nvar msg2 = msg.payload;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.waterlow\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 140,
+        "wires": [
+            [
+                "7abc21dea2b85528"
+            ]
+        ]
+    },
+    {
+        "id": "31bde15c56c56caf",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Alerte Porte",
+        "func": "var devicesData = flow.get(\"$parent.porte\");\nvar msg2 = msg.payload;\nvar oldValue;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n  oldValue = devicesData[capteurIndex].state;\n  // Le \"capteur\" existe dans l'array, mettez à jour son état\n  devicesData[capteurIndex].state = msg2.value;\n\n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value,\n    \"power\": msg2.power\n  }\n    ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.porte\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram = {};\n\nif (oldValue != msg.payload.value) {\n  oldValue = msg.payload.value;\n  msg.telegram.payload = {}\n  msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n  msg.telegram.payload.content = \"la \" + msg2.name + \" passe en \" + msg2.value;\n  msg.telegram.payload.type = \"message\";\n  return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 180,
+        "wires": [
+            [
+                "7abc21dea2b85528"
+            ]
+        ]
+    },
+    {
+        "id": "262886bae1507376",
+        "type": "telegram command",
+        "z": "d464bfcccd5fbf22",
+        "name": "hello",
+        "command": "/hello",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "13a22ed40a8ebda2",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1030,
+        "y": 40,
+        "wires": [
+            [
+                "8924e91ed7b9a5d2",
+                "d7e937b7997a5791"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5c228ceac303b522",
+        "type": "telegram command",
+        "z": "d464bfcccd5fbf22",
+        "name": "Waterlow",
+        "command": "/waterlow",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "13a22ed40a8ebda2",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1040,
+        "y": 80,
+        "wires": [
+            [
+                "d738c62dc7981d59"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8924e91ed7b9a5d2",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "msg",
+        "func": "var message_connu = {\n    \"chatId\": msg.payload.chatId,\n    \"content\": \"Bonjour !\\n\\nVoici ce que vous pouvez m'envoyer comme commande :\\n\\n- /waterlow : pour connaître l'état de vos waterlow\\n- /porte : pour vérifier l'état de vos portes\\n- /lancelot : pour actionner vos Lancelot\\n\\nN'hésitez pas à me demander ou bien à appuyer directement sur les mots en bleu! \\n\\n Pour info, votre id :  \" + msg.payload.chatId,\n    \"type\": \"message\"\n}\n\nif (msg.payload.chatId == flow.get(\"$parent.chatId\")) \n{\n    msg.payload = message_connu\n    return msg\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 40,
+        "wires": [
+            [
+                "2497b54bc635f035",
+                "d7e937b7997a5791"
+            ]
+        ]
+    },
+    {
+        "id": "d738c62dc7981d59",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "msg",
+        "func": "if (msg.payload.chatId== flow.get(\"$parent.chatId\")){\n    \n    //msg.payload={}\n    msg.payload.chatId = msg.payload.chatId;\n\n    // Récupérer l'array \"devicesData\" depuis la variable de contexte\n    var devicesData = flow.get(\"$parent.waterlow\");\n    \n    if (Array.isArray(devicesData)) {\n      // Générer le message avec l'état des capteurs\n      var message = \"État des Waterlows :\\n\";\n    \n      devicesData.forEach(function (device) {\n        message += device.name + \" : \" + device.state + \"\\n\";\n      });\n    \n      msg.payload.content = message;\n      return msg;\n    } \n    \n    else {\n      msg.payload.content = \"Aucun Waterlow trouvé !\";\n    }\n    \n    msg.payload.type = \"message\";\n    return msg\n}\nelse {}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 80,
+        "wires": [
+            [
+                "2497b54bc635f035"
+            ]
+        ]
+    },
+    {
+        "id": "2497b54bc635f035",
+        "type": "telegram sender",
+        "z": "d464bfcccd5fbf22",
+        "name": "Send msg",
+        "bot": "13a22ed40a8ebda2",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1320,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "06e9cf0709bca3a8",
+        "type": "telegram sender",
+        "z": "d464bfcccd5fbf22",
+        "name": "Send msg",
+        "bot": "13a22ed40a8ebda2",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1320,
+        "y": 200,
+        "wires": [
+            [
+                "f09dac01b1c7e514",
+                "447691cfc3dcecd9"
+            ]
+        ]
+    },
+    {
+        "id": "4f7b7ab7ecbf34e9",
+        "type": "telegram command",
+        "z": "d464bfcccd5fbf22",
+        "name": "Lancelot",
+        "command": "/Lancelot",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "13a22ed40a8ebda2",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1040,
+        "y": 180,
+        "wires": [
+            [
+                "8c4147de435e2ec2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f09dac01b1c7e514",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "save msgId",
+        "func": "// We store the messageId to be able to edit this reply in the callback query. \ncontext.global.keyboard.messageId = msg.payload.sentMessageId;\n\nreturn [ msg ];\n",
+        "outputs": "1",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8c4147de435e2ec2",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "msg",
+        "func": "if (msg.payload.chatId == flow.get(\"$parent.chatId\")) {\n\n  context.global.keyboard = { messageId: msg.payload.messageId };\n\n\n  var inputArray = flow.get(\"$parent.lancelot\");\n  // Vérifier si l'array existe déjà dans le contexte\n  if (!inputArray) {\n    // Si l'array n'existe pas, initialisez-le avec un array vide\n  }\n  // Initialiser un nouvel array pour stocker les boutons transformés du clavier\n  var keyboardButtons = [];\n\n  // Utiliser forEach pour itérer sur chaque élément du tableau\n  inputArray.forEach(function (item) {\n    // Extraire le nom du bouton (si \"name\" est défini, sinon utiliser une valeur par défaut)\n    var buttonText = item.name || \"no_name\";\n    // Extraire le callback_data du bouton (si \"name\" est défini, sinon utiliser une valeur par défaut)\n    var callbackData = item.name || \"no_name\";\n\n    var button = {\n      text: buttonText,\n      callback_data: callbackData\n    };\n\n    keyboardButtons.push(button);\n  });\n\n  var transformedArray = keyboardButtons.map(function (item) {\n    return [item];\n  });\n\n\n  var transformedObject = {\n    \"inline_keyboard\": transformedArray\n  };\n  var opts = {\n    reply_to_message_id: msg.payload.messageId,\n    reply_markup: JSON.stringify(transformedObject)\n  };\n\n  msg.payload.content = 'Bien reçu ! Quelle martelière dois-je fermer ?';\n  msg.payload.options = opts;\n\n  return [msg];\n}\nelse { };",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 200,
+        "wires": [
+            [
+                "06e9cf0709bca3a8"
+            ]
+        ]
+    },
+    {
+        "id": "6636899d67fd9721",
+        "type": "telegram command",
+        "z": "d464bfcccd5fbf22",
+        "name": "lancelot",
+        "command": "/lancelot",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "13a22ed40a8ebda2",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1030,
+        "y": 220,
+        "wires": [
+            [
+                "8c4147de435e2ec2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "71c9d95085303ef2",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Prepare downlink",
+        "func": "return {\n  \"payload\": {\n    \"downlinks\": [{\n      \"f_port\": 15,\n      \"frm_payload\": \"AQ==\", //\"frm_payload\": Buffer.from(bytes).toString('base64'),\n      \"priority\": \"NORMAL\"\n    }]\n  },\n  \"topic\" : \"v3/\"+flow.get(\"$parent.appId\")+\"@ttn/devices/\"+msg.payload.device+\"/down/push\" //\"<ApplicationID>>/devices/\" + dev_id + \"/down\";\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1790,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3c3643559898e097",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "envoi",
+        "func": "var messageId = context.global.keyboard.Id;\n\nmsg.payload.type = 'message';\nmsg.payload.content = \"C'est parti pour \" + messageId +\"! L'activation peut prendre jusqu'à 5 minutes.\";\nmsg.payload.device = messageId;\n// You could also send a editMessageReplyMarkup with an empty reply_markup here\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1570,
+        "y": 240,
+        "wires": [
+            [
+                "71c9d95085303ef2",
+                "9059f79d4f687e92",
+                "ed3cae844408646b"
+            ]
+        ]
+    },
+    {
+        "id": "1e8eca5f38d88f30",
+        "type": "switch",
+        "z": "d464bfcccd5fbf22",
+        "name": "check callback data",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "istype",
+                "v": "string",
+                "vt": "string"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 1390,
+        "y": 280,
+        "wires": [
+            [
+                "3c3643559898e097"
+            ],
+            [
+                "84aaca228f0665e7"
+            ],
+            [
+                "b633aa7e3c85b0e9"
+            ]
+        ]
+    },
+    {
+        "id": "9059f79d4f687e92",
+        "type": "telegram sender",
+        "z": "d464bfcccd5fbf22",
+        "name": "send",
+        "bot": "13a22ed40a8ebda2",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1910,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ed3cae844408646b",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Remove message",
+        "func": "// Hide the keyboard and forget the messageId\nmsg.payload.type = 'deleteMessage';\nmsg.payload.content = context.global.keyboard.messageId\ncontext.global.keyboard.messageId = null;\n\n// You could also send a editMessageReplyMarkup with an empty reply_markup here\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1790,
+        "y": 260,
+        "wires": [
+            [
+                "9059f79d4f687e92"
+            ]
+        ]
+    },
+    {
+        "id": "e7e8ba69b4428dd3",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "filtre",
+        "func": "if (msg.payload.chatId== flow.get(\"$parent.chatId\")){\n    return msg;\n}\n\nelse ;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1210,
+        "y": 280,
+        "wires": [
+            [
+                "1e8eca5f38d88f30"
+            ]
+        ]
+    },
+    {
+        "id": "84aaca228f0665e7",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "annulation",
+        "func": "// Hide the keyboard and forget the messageId\nmsg.payload.type = 'message';\nmsg.payload.content = \"Annulation.\"\n\n// You could also send a editMessageReplyMarkup with an empty reply_markup here\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 280,
+        "wires": [
+            [
+                "9059f79d4f687e92",
+                "ed3cae844408646b"
+            ]
+        ]
+    },
+    {
+        "id": "b633aa7e3c85b0e9",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "confirmation",
+        "func": "// This is the message id of the initial keyboard that is simply exchanged by a new one.\nvar messageId = context.global.keyboard.messageId;\ncontext.global.keyboard.Id = msg.payload.content;\n\n// This is a sample of how to send a second inline keyboard with modified buttons\nvar reply_markup = JSON.stringify({\n    \"inline_keyboard\": [[\n                {\n                    \"text\": msg.payload.content + \", sûr ?\",\n                    \"callback_data\": \"1\"        \n                }, \n                {\n                    \"text\": \"Fausse manip !\",\n                    \"callback_data\": \"0\"           \n                }]\n            ]\n  });\n\n\nvar options = {\n    chat_id : msg.payload.chatId,\n    reply_markup : reply_markup,\n    message_id : messageId\n};\n\nmsg.payload.type = 'editMessageReplyMarkup';\nmsg.payload.content = reply_markup;\nmsg.payload.options = options;\n\nreturn [ msg ];\n",
+        "outputs": "1",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 320,
+        "wires": [
+            [
+                "9059f79d4f687e92"
+            ]
+        ]
+    },
+    {
+        "id": "16435a1b49f31d20",
+        "type": "telegram event",
+        "z": "d464bfcccd5fbf22",
+        "name": "",
+        "bot": "13a22ed40a8ebda2",
+        "event": "callback_query",
+        "autoanswer": true,
+        "x": 1060,
+        "y": 280,
+        "wires": [
+            [
+                "e7e8ba69b4428dd3"
+            ]
+        ]
+    },
+    {
+        "id": "b2b2752807b47f2e",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "bme680",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"HR\": msg.payload.uplink_message.decoded_payload[\"HR\"],\n  \"T\": msg.payload.uplink_message.decoded_payload[\"T\"],\n  \"P\": msg.payload.uplink_message.decoded_payload[\"P\"],\n  \"IAQ\": msg.payload.uplink_message.decoded_payload[\"IAQ\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 260,
+        "wires": [
+            [
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "3a8e45e87c4c429f",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "pslb",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {};\n\nif (msg.payload.uplink_message.f_port == 2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": (msg.payload.uplink_message.decoded_payload.bytes[0]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[1],\n        \"model\": (msg.payload.uplink_message.decoded_payload.bytes[2]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[3],\n        \"value\": (msg.payload.uplink_message.decoded_payload.bytes[4]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[5],\n        \"value2\": (msg.payload.uplink_message.decoded_payload.bytes[6]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[7],\n        \"value3\": (msg.payload.uplink_message.decoded_payload.bytes[8])\n    };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": (msg.payload.uplink_message.decoded_payload.bytes[5]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[6]\n    };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 480,
+        "wires": [
+            [
+                "723817c06befb539"
+            ]
+        ]
+    },
+    {
+        "id": "411df791ad33f969",
+        "type": "switch",
+        "z": "d464bfcccd5fbf22",
+        "name": "Dragino Interface",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "pslb",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ps-lb",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "sn50",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 190,
+        "y": 500,
+        "wires": [
+            [
+                "3a8e45e87c4c429f"
+            ],
+            [
+                "3a8e45e87c4c429f"
+            ],
+            [
+                "56f393fb9ca9494d"
+            ]
+        ]
+    },
+    {
+        "id": "a6b51756d63a59e5",
+        "type": "switch",
+        "z": "d464bfcccd5fbf22",
+        "name": "Dragino sensor",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "tracker",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lwl02",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lds02",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lht52",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lht65",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "dds45",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "dds75",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lds12",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "llds12",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "aiso1",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ais01",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "lms01",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "s31",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "cpl03",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "aqs01",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "dds20",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 16,
+        "x": 180,
+        "y": 680,
+        "wires": [
+            [
+                "93144df2d81db01c"
+            ],
+            [
+                "c368201db762dec8"
+            ],
+            [
+                "1921f4dbc3c5216c"
+            ],
+            [
+                "34397a33b665baae"
+            ],
+            [
+                "62d442c87ad26d87"
+            ],
+            [
+                "2f6e71d2333f4fb6"
+            ],
+            [
+                "27dd91d75615164f"
+            ],
+            [
+                "832ada1ffc3edd82"
+            ],
+            [
+                "832ada1ffc3edd82"
+            ],
+            [],
+            [
+                "f9de1b0822bb3c17",
+                "684a7fae524dc148"
+            ],
+            [
+                "3872a84650780fde"
+            ],
+            [
+                "c54d4bbaee0ee47b"
+            ],
+            [
+                "1dcd820c05aa42fd"
+            ],
+            [
+                "1205083f97485ee5"
+            ],
+            [
+                "2f6e71d2333f4fb6"
+            ]
+        ]
+    },
+    {
+        "id": "93144df2d81db01c",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "trackerD",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"Tem\"],\n        \"latitude\": msg.payload.uplink_message.decoded_payload[\"Latitude\"],\n        \"longitude\": msg.payload.uplink_message.decoded_payload[\"Longitude\"]\n     };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n    };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 600,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "1921f4dbc3c5216c",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lds02",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n  \"value\": msg.payload.uplink_message.decoded_payload[\"DOOR_OPEN_STATUS\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 680,
+        "wires": [
+            [
+                "1ab6398c72e89e8b",
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "34397a33b665baae",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lht52",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n        \"temperature_sonde\": msg.payload.uplink_message.decoded_payload[\"TempC_DS\"]\n     };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat_mV\"],\n   };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 720,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "62d442c87ad26d87",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lht65",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n        \"temperature_sonde\": msg.payload.uplink_message.decoded_payload[\"TempC_DS\"]\n     };\n}\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 760,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "2f6e71d2333f4fb6",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "dds45 (ultrason)",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar distanceStr = msg.payload.uplink_message.decoded_payload[\"Distance\"];\nvar distance = parseInt(distanceStr, 10); // Convertit \"1200mm\" en 1200\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"value\": distance,\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat\"],\n  \"tempC\": msg.payload.uplink_message.decoded_payload[\"TempC_DS18B20\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 800,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "27dd91d75615164f",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "dds75 (ultrason)",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar distanceStr = msg.payload.uplink_message.decoded_payload[\"Distance\"];\nvar distance = parseInt(distanceStr, 10); // Convertit \"1200cm\" en 1200\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"value\": msg.payload.uplink_message.decoded_payload[\"value\"],\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 840,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "832ada1ffc3edd82",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lds (lidar)",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"value\": msg.payload.uplink_message.decoded_payload[\"Lidar_distance\"],\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat\"],\n  \"temp\": msg.payload.uplink_message.decoded_payload[\"Lidar_temp\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 880,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "f9de1b0822bb3c17",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "d": true,
+        "name": "ais01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n    \"value\": (\n        ((msg.payload.uplink_message.decoded_payload.bytes[6] << 24) |\n            (msg.payload.uplink_message.decoded_payload.bytes[7] << 16) |\n            (msg.payload.uplink_message.decoded_payload.bytes[8] << 8) |\n            msg.payload.uplink_message.decoded_payload.bytes[9]) +\n        ((msg.payload.uplink_message.decoded_payload.bytes[10] << 24) |\n            (msg.payload.uplink_message.decoded_payload.bytes[11] << 16) |\n            (msg.payload.uplink_message.decoded_payload.bytes[12] << 8) |\n            msg.payload.uplink_message.decoded_payload.bytes[13]) / Math.pow(10, 8)\n    )\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 920,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "c368201db762dec8",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lwl02",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n        \"value\": msg.payload.uplink_message.decoded_payload[\"WATER_LEAK_STATUS\"]\n    };\nmsg.payload=message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 640,
+        "wires": [
+            [
+                "b1b6a5d4afd775b1",
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "552821188b827927",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Porte",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"BAT_V\"],\n  \"value\": msg.payload.uplink_message.decoded_payload[\"DOOR_OPEN_STATUS\"]\n};\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "31bde15c56c56caf",
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "b1b6a5d4afd775b1",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Alerte lwl02",
+        "func": "var devicesData = flow.get(\"$parent.waterlow\");\nvar msg2 = msg.payload;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.waterlow\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 640,
+        "wires": [
+            [
+                "7d93e2352eed3858"
+            ]
+        ]
+    },
+    {
+        "id": "1ab6398c72e89e8b",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Alerte lds02",
+        "func": "var devicesData = flow.get(\"$parent.porte\");\nvar msg2 = msg.payload;\nvar oldValue;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n  oldValue = devicesData[capteurIndex].state;\n  // Le \"capteur\" existe dans l'array, mettez à jour son état\n  devicesData[capteurIndex].state = msg2.value;\n\n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value,\n    \"power\": msg2.power\n  }\n    ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.porte\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram = {};\n\nif (oldValue != msg.payload.value) {\n  oldValue = msg.payload.value;\n  msg.telegram.payload = {}\n  msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n  msg.telegram.payload.content = \"la \" + msg2.name + \" passe en \" + msg2.value;\n  msg.telegram.payload.type = \"message\";\n  return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 680,
+        "wires": [
+            [
+                "7d93e2352eed3858"
+            ]
+        ]
+    },
+    {
+        "id": "942e7a2cc81663cf",
+        "type": "link in",
+        "z": "d464bfcccd5fbf22",
+        "name": "link in 1",
+        "links": [
+            "475a1d9499668bc9",
+            "6f1a5553abf29bc2",
+            "723817c06befb539",
+            "af32f50da229d3df",
+            "232a94310d14f0e3"
+        ],
+        "x": 45,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "475a1d9499668bc9",
+        "type": "link out",
+        "z": "d464bfcccd5fbf22",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "942e7a2cc81663cf"
+        ],
+        "x": 685,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "6f1a5553abf29bc2",
+        "type": "link out",
+        "z": "d464bfcccd5fbf22",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "942e7a2cc81663cf"
+        ],
+        "x": 885,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "7d93e2352eed3858",
+        "type": "telegram sender",
+        "z": "d464bfcccd5fbf22",
+        "name": "Send msg",
+        "bot": "13a22ed40a8ebda2",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 820,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "91b30844c3d5d467",
+        "type": "telegram command",
+        "z": "d464bfcccd5fbf22",
+        "name": "Portes",
+        "command": "/porte",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "13a22ed40a8ebda2",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 1030,
+        "y": 120,
+        "wires": [
+            [
+                "5bc4f467770e3f99"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5bc4f467770e3f99",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "msg",
+        "func": "if (msg.payload.chatId== flow.get(\"$parent.chatId\")){\n    \n    //msg.payload={}\n    msg.payload.chatId = msg.payload.chatId;\n\n    // Récupérer l'array \"devicesData\" depuis la variable de contexte\n    var devicesData = flow.get(\"$parent.porte\");\n    \n    if (Array.isArray(devicesData)) {\n      // Générer le message avec l'état des capteurs\n      var message = \"État des portes :\\n\";\n    \n      devicesData.forEach(function (device) {\n        message += device.name + \" : \" + device.state + \"\\n\";\n      });\n    \n      msg.payload.content = message;\n      return msg;\n    } \n    \n    else {\n      msg.payload.content = \"Aucune porte trouvé !\";\n    }\n    \n    msg.payload.type = \"message\";\n    return msg\n}\nelse {}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 120,
+        "wires": [
+            [
+                "2497b54bc635f035"
+            ]
+        ]
+    },
+    {
+        "id": "723817c06befb539",
+        "type": "link out",
+        "z": "d464bfcccd5fbf22",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "942e7a2cc81663cf"
+        ],
+        "x": 695,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "7abc21dea2b85528",
+        "type": "telegram sender",
+        "z": "d464bfcccd5fbf22",
+        "name": "Send msg",
+        "bot": "13a22ed40a8ebda2",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 800,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0a65c2652c1eadd",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "gestion_lancelot",
+        "func": "var devicesData = flow.get(\"$parent.lancelot\");\nvar msg2 = msg.payload;\nmsg2.value=0;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.lancelot\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 220,
+        "wires": [
+            [
+                "7abc21dea2b85528"
+            ]
+        ]
+    },
+    {
+        "id": "3872a84650780fde",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lms01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n    \"value\": ((msg.payload.uplink_message.decoded_payload.bytes[2] << 8) | msg.payload.uplink_message.decoded_payload.bytes[3]),\n    \"value2\": ((msg.payload.uplink_message.decoded_payload.bytes[4] << 8) | msg.payload.uplink_message.decoded_payload.bytes[5]),\n    \"value3\": ((msg.payload.uplink_message.decoded_payload.bytes[6] << 8) | msg.payload.uplink_message.decoded_payload.bytes[7]),\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 960,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "56f393fb9ca9494d",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "sn50v3",
+        "func": "// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": 1,\n    \"snr\": 1,\n    \"battery\": (msg.payload.uplink_message.decoded_payload.bytes[11]),\n    \"value\": (msg.payload.uplink_message.decoded_payload.bytes[0]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[1],\n    \"value2\": (msg.payload.uplink_message.decoded_payload.bytes[2]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[3],\n    \"value3\": (msg.payload.uplink_message.decoded_payload.bytes[4]) << 8 | msg.payload.uplink_message.decoded_payload.bytes[5],\n};\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 520,
+        "wires": [
+            [
+                "723817c06befb539"
+            ]
+        ]
+    },
+    {
+        "id": "133f4ff08b8aa880",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "furgo",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n    \"value\": (msg.payload.uplink_message.decoded_payload[\"ADC1_V\"])\n};\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 300,
+        "wires": [
+            [
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "30aefbd310cf53ce",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "lht52",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"],\n        \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n        \"temperature_sonde\": msg.payload.uplink_message.decoded_payload[\"TempC_DS\"]\n     };\n}\n\nif (msg.payload.uplink_message.f_port == 5) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": msg.payload.uplink_message.decoded_payload[\"Bat_mV\"],\n   };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 340,
+        "wires": [
+            [
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "c54d4bbaee0ee47b",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "s31",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload[\"BatV\"],\n    \"temperature\": msg.payload.uplink_message.decoded_payload[\"TempC_SHT\"],\n    \"humidity\": msg.payload.uplink_message.decoded_payload[\"Hum_SHT\"]\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1000,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "d7e937b7997a5791",
+        "type": "debug",
+        "z": "d464bfcccd5fbf22",
+        "name": "debug 110",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1330,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "447691cfc3dcecd9",
+        "type": "debug",
+        "z": "d464bfcccd5fbf22",
+        "name": "debug 113",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1470,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "1dcd820c05aa42fd",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "cpl03",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": 0,\n    \"value\": (msg.payload.uplink_message.decoded_payload.bytes[0])\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1040,
+        "wires": [
+            [
+                "18634a1656645661",
+                "8672ab882a732fa3",
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "18634a1656645661",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "Alerte cpl03",
+        "func": "var devicesData = flow.get(\"$parent.cpl03\");\nvar msg2 = msg.payload;\nvar oldValue ;\nvar alerte = \"\";\n\n// Vérifier si l'array existe déjà dans le contexte\nif (!devicesData) {\n  devicesData = []; // Si l'array n'existe pas, initialisez-le avec un array vide\n}\n\n\n// Rechercher l'index de l'élément correspondant au \"capteur 2\" dans l'array\nvar capteurIndex = devicesData.findIndex(function (device) {\n  return device.name === msg2.name;\n});\n\n// Vérifier si l'élément \"capteur 2\" a été trouvé\nif (capteurIndex !== -1) {\n\n    oldValue = devicesData[capteurIndex].state;\n    // Le \"capteur\" existe dans l'array, mettez à jour son état\n    devicesData[capteurIndex].state = msg2.value;\n    \n} else {\n  // Le \"capteur\" n'existe pas dans l'array, donc nous allons le créer\n  var nouveauCapteur = {\n    \"name\": msg2.name,\n    \"state\": msg2.value}\n  ;\n  devicesData.push(nouveauCapteur);\n}\n\n// Fonction de comparaison pour trier par ordre alphabétique des noms\nfunction compareName(a, b) {\n  var nameA = a.name.toLowerCase();\n  var nameB = b.name.toLowerCase();\n  if (nameA < nameB) return -1;\n  if (nameA > nameB) return 1;\n  return 0;\n}\n\n// Trier l'array par ordre alphabétique des noms des capteurs en utilisant la fonction de comparaison\ndevicesData.sort(compareName);\n\n// Enregistrer à nouveau l'array trié dans la variable de contexte \"devicesData\"\nflow.set(\"$parent.cpl03\", devicesData);\n\n// Envoi alerte si l'état a changé\nmsg.telegram={};\n\nif (oldValue != msg.payload.value){\n    oldValue = msg.payload.value;\n    msg.telegram.payload={}\n    msg.telegram.payload.chatId = flow.get(\"$parent.chatId\");\n    msg.telegram.payload.content = \"le \" + msg2.name + \" passe en \" + msg2.value ;\n    msg.telegram.payload.type = \"message\";\n    return msg.telegram;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 1040,
+        "wires": [
+            [
+                "7d93e2352eed3858"
+            ]
+        ]
+    },
+    {
+        "id": "8672ab882a732fa3",
+        "type": "debug",
+        "z": "d464bfcccd5fbf22",
+        "name": "debug 117",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "684a7fae524dc148",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "ais01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar bytes = msg.payload.uplink_message.decoded_payload.bytes;\n\n// Reconstituer la partie entière (bytes 6 à 9) — 4 octets\n// On combine les 4 octets en un entier 32 bits (big endian)\nvar integerPart = (bytes[6] << 24) | (bytes[7] << 16) | (bytes[8] << 8) | bytes[9];\n\n// Reconstituer la partie décimale (bytes 10 à 13) — 4 octets\nvar decimalPart = (bytes[10] << 24) | (bytes[11] << 16) | (bytes[12] << 8) | bytes[13];\n\n// Pour éviter les problèmes liés au bit de signe lors du décalage à gauche (car JS utilise 32 bits signés)\n// Convertir en unsigned via >>> 0 :\nintegerPart = integerPart >>> 0;\ndecimalPart = decimalPart >>> 0;\n\n// Calculer la valeur finale (en considérant que la partie décimale est divisée par 10^n)\n// Ici on suppose que la partie décimale représente des chiffres après la virgule, par exemple 4 chiffres, donc division par 10000\nvar value = integerPart + (decimalPart / 10000);\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n    \"value\":value,\n    \"byte6\": bytes[6],\n    \"byte7\": bytes[7],\n    \"byte8\": bytes[8],\n    \"byte9\": bytes[9],\n    \"byte10\": bytes[10],\n    \"byte11\": bytes[11],\n    \"byte12\": bytes[12],\n    \"byte13\": bytes[13]\n};\n\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1080,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "fef1d84c745d383f",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "davele",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\n// Construire le message avec les valeurs maximales de RSSI et SNR\nvar message = {\n    \"name\": msg.payload.end_device_ids.device_id,\n    \"rssi\": maxRSSI,\n    \"snr\": maxSNR,\n    \"battery\": msg.payload.uplink_message.decoded_payload.bytes[0],\n    \"distance\": ((msg.payload.uplink_message.decoded_payload.bytes[1] * 256) + msg.payload.uplink_message.decoded_payload.bytes[2]),\n    \"bpm\": msg.payload.uplink_message.decoded_payload.bytes[3],\n    \"lux\": msg.payload.uplink_message.decoded_payload.bytes[4]\n};\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[3] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value2 = ((msg.payload.uplink_message.decoded_payload.bytes[3] * 256) + msg.payload.uplink_message.decoded_payload.bytes[4]);\n}\n\n// Vérifie si msg.payload.uplink_message.decoded_payload.bytes[3] existe\nif (msg.payload.uplink_message.decoded_payload.bytes[5] !== undefined) {\n    // Si oui, ajoute la deuxième valeur\n    message.value3 = ((msg.payload.uplink_message.decoded_payload.bytes[5] * 256) + msg.payload.uplink_message.decoded_payload.bytes[6]);\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 380,
+        "wires": [
+            [
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "1205083f97485ee5",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "aqs01",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n    // Mettre à jour les valeurs maximales si nécessaire\n    if (currentRSSI > maxRSSI) {\n        maxRSSI = currentRSSI;\n    }\n\n    if (currentSNR > maxSNR) {\n        maxSNR = currentSNR;\n    }\n}\n\nvar message = {}\n\nif (msg.payload.uplink_message.f_port==2) {\n    message = {\n        \"name\": msg.payload.end_device_ids.device_id,\n        \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n        \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n        \"battery\": ((msg.payload.uplink_message.decoded_payload.bytes[0] << 8) | msg.payload.uplink_message.decoded_payload.bytes[1]),\n        \"temperature\": ((msg.payload.uplink_message.decoded_payload.bytes[2] << 8) | msg.payload.uplink_message.decoded_payload.bytes[3]),\n        \"humidity\": ((msg.payload.uplink_message.decoded_payload.bytes[4] << 8) | msg.payload.uplink_message.decoded_payload.bytes[5]),\n        \"pressure\": ((msg.payload.uplink_message.decoded_payload.bytes[6] << 8) | msg.payload.uplink_message.decoded_payload.bytes[7]),\n        \"co2\": ((msg.payload.uplink_message.decoded_payload.bytes[8] << 8) | msg.payload.uplink_message.decoded_payload.bytes[9])\n     };\n}\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1120,
+        "wires": [
+            [
+                "475a1d9499668bc9"
+            ]
+        ]
+    },
+    {
+        "id": "dd8fe97c69b1414a",
+        "type": "switch",
+        "z": "d464bfcccd5fbf22",
+        "name": "milesight Interface",
+        "property": "payload.end_device_ids.device_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "em300",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 190,
+        "y": 1180,
+        "wires": [
+            [
+                "3059fc0b04938477"
+            ]
+        ]
+    },
+    {
+        "id": "3059fc0b04938477",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "em300",
+        "func": "var maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\n// Parcourir tous les éléments de rx_metadata pour trouver les valeurs maximales de RSSI et SNR\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n  var currentRSSI = msg.payload.uplink_message.rx_metadata[i].rssi;\n  var currentSNR = msg.payload.uplink_message.rx_metadata[i].snr;\n\n  // Mettre à jour les valeurs maximales si nécessaire\n  if (currentRSSI > maxRSSI) {\n    maxRSSI = currentRSSI;\n  }\n\n  if (currentSNR > maxSNR) {\n    maxSNR = currentSNR;\n  }\n}\n\nvar message = {\n  \"name\": msg.payload.end_device_ids.device_id,\n  \"rssi\": msg.payload.uplink_message.rx_metadata[0].rssi,\n  \"snr\": msg.payload.uplink_message.rx_metadata[0].snr,\n  \"humidity\": msg.payload.uplink_message.decoded_payload[\"humidity\"],\n  \"battery\": msg.payload.uplink_message.decoded_payload[\"battery\"],\n  \"temperature\": msg.payload.uplink_message.decoded_payload[\"temperature\"]\n};\n\nmsg.payload = message;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1180,
+        "wires": [
+            [
+                "232a94310d14f0e3"
+            ]
+        ]
+    },
+    {
+        "id": "232a94310d14f0e3",
+        "type": "link out",
+        "z": "d464bfcccd5fbf22",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "942e7a2cc81663cf"
+        ],
+        "x": 685,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "fe9a13e81e796e07",
+        "type": "function",
+        "z": "d464bfcccd5fbf22",
+        "name": "latex",
+        "func": "// Récupération du RSSI et SNR maximum\nvar maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var rssi = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var snr = msg.payload.uplink_message.rx_metadata[i].snr;\n    if (rssi > maxRSSI) maxRSSI = rssi;\n    if (snr > maxSNR) maxSNR = snr;\n}\n\n// Raccourci vers le tableau de bytes\nvar b = msg.payload.uplink_message.decoded_payload.bytes;\n\n// Construction du message de sortie\nmsg.payload = {\n    name: msg.payload.end_device_ids.device_id,\n    rssi: maxRSSI,\n    snr: maxSNR,\n    min: (b[0] << 8) + b[1],              // mm\n    max: (b[2] << 8) + b[3],              // mm\n    mean: ((b[4] << 8) + b[5]) / 10.0,     // mm, 1 décimale\n    sd: ((b[6] << 8) + b[7]) / 10.0,      // mm, 1 décimale\n    median: ((b[8] << 8) + b[9]),      // mm\n    validCount : b[10],\n    battery: b[11]\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 420,
+        "wires": [
+            [
+                "6f1a5553abf29bc2"
+            ]
+        ]
+    },
+    {
+        "id": "13a22ed40a8ebda2",
+        "type": "telegram bot",
+        "d": true,
+        "botname": "mobilab_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "addressfamily": "",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": true
+    }
+]
