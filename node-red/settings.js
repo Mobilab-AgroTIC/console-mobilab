@@ -84,7 +84,13 @@ module.exports = {
            username: "ncastejon",
            password: "$2y$08$mo.gaAauKty3xe5hgH212.4YgqX6lhBB93BQjvgNulcMSKKK.wcim",
            permissions: "*"
-}]
+	},
+	{
+	  username: "basile",
+	  password: "$2y$08$.h1lwf.pzGq135S9eiH9bukx4PgWpB/fWgkTuxlFeUkUScnHjvP3.",
+	  permissions: "*"
+	}
+	]
     },
 
     /** The following property can be used to enable HTTPS

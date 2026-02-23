@@ -13,7 +13,7 @@ services:
       - node-red-data:/data
       - ./node-red/settings.js:/data/settings.js
       # NEW: Mount the schema script so Node-RED can read it
-      - ./postgres/schema.sql:/usr/src/node-red/create_schema.sql:ro
+      - ./postgres/schema.sql:/usr/src/node-red/create_schema.sql #:ro
     depends_on:
       - postgres
 
@@ -64,6 +64,23 @@ services:
     depends_on:
       - postgres
 
+  influxdb:
+    image: influxdb:1.8
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+      - ./influxdb/influxdb.conf:/etc/influxdb/influxdb.conf
+    networks:
+      - console-mobilab-network
+    restart: unless-stopped
+    environment:
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+
+
 volumes:
   node-red-data:
     name: node-red-data
@@ -71,6 +88,8 @@ volumes:
     name: grafana-data
   postgres-data:
     name: postgres-data
+  influxdb-data:
+    name: influxdb-data
 
 networks:
   console-mobilab-network:
