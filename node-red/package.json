@@ -3,5 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "description": "Node-RED project for console-mobilab",
-  "dependencies": {}
+  "dependencies": {
+      "node-red-contrib-postgresql": "~0.15.4",
+      "node-red-contrib-telegrambot": "~16.3.2"
+  }
 }
