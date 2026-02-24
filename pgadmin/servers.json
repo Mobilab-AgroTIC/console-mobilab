@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Mobilab PostgreSQL",
+      "Group": "Mobilab",
+      "Port": 5432,
+      "Username": "admin",
+      "Host": "postgres",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres"
+    }
+  }
+}

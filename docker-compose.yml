@@ -1,34 +1,68 @@
-version: "3.7"
-
 services:
   node-red:
-    image: nodered/node-red:latest
+    image: nodered/node-red:4.1
     environment:
-      - TZ=Europe/Amsterdam
+      - TZ=${TIMEZONE}
+      - NR_ADMIN_USER=${NR_ADMIN_USER}
+      - NR_ADMIN_PASS_HASH=${NR_ADMIN_PASS_HASH}
     ports:
-      - "1880:1880"
+      - "${NODE_RED_HOST_PORT}:1880"
     networks:
       - console-mobilab-network
     volumes:
       - node-red-data:/data
       - ./node-red/settings.js:/data/settings.js
+      # NEW: Mount the schema script so Node-RED can read it
+      - ./postgres/schema.sql:/usr/src/node-red/create_schema.sql #:ro
+    depends_on:
+      - postgres
 
   grafana:
-    image: grafana/grafana-oss:latest
+    image: grafana/grafana-oss:12.1.1
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - TZ=Europe/Amsterdam
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - TZ=${TIMEZONE}
     ports:
-      - "3002:3000"
+      - "${GRAFANA_HOST_PORT}:3000"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - /usr/share/grafana/public/img/:grafana/img/
-      - /usr/share/grafana/public/views/index.html:grafana/index.html
+      - ./grafana/mobilab_logo.svg:/usr/share/grafana/public/img/grafana_icon.svg:ro
+      - ./grafana/mobilab_logo.png:/usr/share/grafana/public/img/fav32.png:ro
     networks:
       - console-mobilab-network
+    depends_on:
+      - postgres
     restart: unless-stopped
+
+  postgres:
+    image: timescale/timescaledb:2.22.0-pg16
+    ports:
+      - "${POSTGRES_HOST_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - console-mobilab-network
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=postgres
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "${PGADMIN_HOST_PORT}:80"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+    networks:
+      - console-mobilab-network
+    depends_on:
+      - postgres
 
   influxdb:
     image: influxdb:1.8
@@ -36,6 +70,7 @@ services:
       - "8086:8086"
     volumes:
       - influxdb-data:/var/lib/influxdb
+      - ./influxdb/influxdb.conf:/etc/influxdb/influxdb.conf
     networks:
       - console-mobilab-network
     restart: unless-stopped
@@ -45,10 +80,17 @@ services:
       - INFLUXDB_ADMIN_PASSWORD=admin
       - INFLUXDB_HTTP_AUTH_ENABLED=true
 
+
 volumes:
   node-red-data:
+    name: node-red-data
   grafana-data:
+    name: grafana-data
+  postgres-data:
+    name: postgres-data
   influxdb-data:
+    name: influxdb-data
 
 networks:
   console-mobilab-network:
+    name: console-mobilab-network
