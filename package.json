@@ -1,7 +1,0 @@
-{
-  "name": "console-mobilab",
-  "version": "0.0.1",
-  "private": true,
-  "description": "Node-RED project for console-mobilab",
-  "dependencies": {}
-}
