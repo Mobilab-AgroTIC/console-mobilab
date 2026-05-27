@@ -10,9 +10,9 @@ services:
     networks:
       - console-mobilab-network
     volumes:
-      - node-red-data:/data #mount data files 
-      - ./node-red/settings.js:/data/settings.js  #Mount Settings.js
-      - ./postgres/schema/:/usr/src/node-red/schema/ #:ro  #Mount schema sql files
+      - node-red-data:/data
+      - ./node-red/settings.js:/data/settings.js
+      - ./postgres/tables:/usr/src/node-red/tables:ro
     depends_on:
       - postgres
 
