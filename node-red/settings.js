@@ -288,8 +288,7 @@ module.exports = {
  *  - logging
  *  - contextStorage
  *  - exportGlobalContextKeys
- *  - externalModules
- ******************************************************************************/
+ *  - externalModules ******************************************************************************/
 
     /** Uncomment the following to run node-red in your preferred language.
      * Available languages include: en-US (default), ja, de, zh-CN, zh-TW, ru, ko
@@ -434,7 +433,7 @@ module.exports = {
 
         projects: {
             /** To enable the Projects feature, set this value to true */
-            enabled: false,
+            enabled: true,
             workflow: {
                 /** Set the default projects workflow mode.
                  *  - manual - you must manually commit changes

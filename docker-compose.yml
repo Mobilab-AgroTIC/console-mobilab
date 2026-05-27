@@ -10,10 +10,9 @@ services:
     networks:
       - console-mobilab-network
     volumes:
-      - node-red-data:/data
-      - ./node-red/settings.js:/data/settings.js
-      # NEW: Mount the schema script so Node-RED can read it
-      - ./postgres/schema.sql:/usr/src/node-red/create_schema.sql #:ro
+      - node-red-data:/data #mount data files 
+      - ./node-red/settings.js:/data/settings.js  #Mount Settings.js
+      - ./postgres/schema/:/usr/src/node-red/schema/ #:ro  #Mount schema sql files
     depends_on:
       - postgres
 

@@ -1,24 +1,31 @@
 [
     {
-        "id": "fa0d81b075c058ed",
+        "id": "21af1b700522993f",
         "type": "tab",
-        "label": "Manage Console mobilab",
+        "label": "System Setup",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "37026a48a7bdafcf",
+        "type": "tab",
+        "label": "Telegram Commands",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "eb74a94ca0642070",
+        "id": "2278cf8893f4b3b9",
         "type": "tab",
-        "label": "mobilab-truck",
+        "label": "App/Device Registry",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "179a94c74f682310",
+        "id": "53b2a5a1966a825e",
         "type": "tab",
-        "label": "Flux 1",
+        "label": "Data Pipeline",
         "disabled": false,
         "info": "",
         "env": []
@@ -31,7 +38,7 @@
         "category": "",
         "in": [
             {
-                "x": 20,
+                "x": 40,
                 "y": 420,
                 "wires": [
                     {
@@ -51,7 +58,7 @@
         ],
         "out": [
             {
-                "x": 100,
+                "x": 200,
                 "y": 40,
                 "wires": [
                     {
@@ -61,7 +68,7 @@
                 ]
             },
             {
-                "x": 1940,
+                "x": 2040,
                 "y": 220,
                 "wires": [
                     {
@@ -76,48 +83,78 @@
         "color": "#3FADB5"
     },
     {
-        "id": "74264c139abde2da",
-        "type": "junction",
-        "z": "179a94c74f682310",
-        "x": 560,
-        "y": 280,
-        "wires": [
-            []
-        ]
+        "id": "b1b3382c8feafb97",
+        "type": "postgreSQLConfig",
+        "name": "postgres",
+        "host": "postgres",
+        "hostFieldType": "str",
+        "port": 5432,
+        "portFieldType": "num",
+        "database": "mobilab",
+        "databaseFieldType": "str",
+        "ssl": "false",
+        "sslFieldType": "bool",
+        "applicationName": "",
+        "applicationNameType": "str",
+        "max": 10,
+        "maxFieldType": "num",
+        "idle": 1000,
+        "idleFieldType": "num",
+        "connectionTimeout": 10000,
+        "connectionTimeoutFieldType": "num",
+        "user": "admin",
+        "userFieldType": "str",
+        "password": "admin",
+        "passwordFieldType": "str"
     },
     {
-        "id": "283a670c.e20a28",
-        "type": "tls-config",
-        "name": "Default",
-        "cert": "",
-        "key": "",
-        "ca": "",
-        "certname": "",
-        "keyname": "",
-        "caname": "",
-        "servername": "",
-        "verifyservercert": true
+        "id": "389caaaa5d0b8f80",
+        "type": "telegram bot",
+        "botname": "mobilab_dev_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
     },
     {
-        "id": "ef1b568734c2ffb5",
+        "id": "2afe54430aca3057",
         "type": "influxdb",
-        "hostname": "simonmoinard.ddns.net",
-        "port": "82",
+        "d": true,
+        "hostname": "influxdb",
+        "port": 8086,
         "protocol": "http",
-        "database": "hubis",
-        "name": "",
+        "database": "test",
+        "name": "influx",
         "usetls": false,
-        "tls": "283a670c.e20a28",
+        "tls": "",
         "influxdbVersion": "1.8-flux",
         "url": "http://influxdb:8086",
-        "timeout": "",
+        "timeout": 10,
         "rejectUnauthorized": true
     },
     {
-        "id": "9b586b4f8ca3767d",
+        "id": "9f34202a9fd9425c",
         "type": "mqtt-broker",
-        "z": "eb74a94ca0642070",
-        "name": "mobilab-truck app",
+        "d": true,
+        "name": "simon@ttn",
         "broker": "eu1.cloud.thethings.network",
         "port": "1883",
         "clientid": "",
@@ -132,7 +169,6 @@
         "birthPayload": "",
         "birthMsg": {},
         "closeTopic": "",
-        "closeQos": "0",
         "closePayload": "",
         "closeMsg": {},
         "willTopic": "",
@@ -141,85 +177,6 @@
         "willMsg": {},
         "userProps": "",
         "sessionExpiry": ""
-    },
-    {
-        "id": "09010d32b18e20c7",
-        "type": "postgreSQLConfig",
-        "name": "postgres",
-        "host": "postgres",
-        "hostFieldType": "str",
-        "port": 5432,
-        "portFieldType": "num",
-        "database": "iot_data",
-        "databaseFieldType": "str",
-        "ssl": "false",
-        "sslFieldType": "bool",
-        "applicationName": "",
-        "applicationNameType": "str",
-        "max": 10,
-        "maxFieldType": "num",
-        "idle": 1000,
-        "idleFieldType": "num",
-        "connectionTimeout": 10000,
-        "connectionTimeoutFieldType": "num",
-        "user": "admin",
-        "userFieldType": "str",
-        "password": "admin",
-        "passwordFieldType": "str"
-    },
-    {
-        "id": "b1b3382c8feafb97",
-        "type": "postgreSQLConfig",
-        "name": "postgres",
-        "host": "postgres",
-        "hostFieldType": "str",
-        "port": 5432,
-        "portFieldType": "num",
-        "database": "iot_data",
-        "databaseFieldType": "str",
-        "ssl": "false",
-        "sslFieldType": "bool",
-        "applicationName": "",
-        "applicationNameType": "str",
-        "max": 10,
-        "maxFieldType": "num",
-        "idle": 1000,
-        "idleFieldType": "num",
-        "connectionTimeout": 10000,
-        "connectionTimeoutFieldType": "num",
-        "user": "admin",
-        "userFieldType": "str",
-        "password": "admin",
-        "passwordFieldType": "str"
-    },
-    {
-        "id": "eb1637893eb715cd",
-        "type": "telegram bot",
-        "d": true,
-        "botname": "mobilab_bot",
-        "usernames": "",
-        "chatids": "",
-        "baseapiurl": "",
-        "testenvironment": false,
-        "updatemode": "polling",
-        "addressfamily": "",
-        "pollinterval": "300",
-        "usesocks": false,
-        "sockshost": "",
-        "socksprotocol": "socks5",
-        "socksport": "6667",
-        "socksusername": "anonymous",
-        "sockspassword": "",
-        "bothost": "",
-        "botpath": "",
-        "localbothost": "",
-        "localbotport": "8443",
-        "publicbotport": "8443",
-        "privatekey": "",
-        "certificate": "",
-        "useselfsignedcertificate": false,
-        "sslterminated": false,
-        "verboselogging": true
     },
     {
         "id": "d86793857733f664",
@@ -298,12 +255,17 @@
                 "t": "cont",
                 "v": "davele",
                 "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "latex",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 14,
-        "x": 190,
+        "outputs": 15,
+        "x": 290,
         "y": 160,
         "wires": [
             [
@@ -347,6 +309,9 @@
             ],
             [
                 "391656f407ad734e"
+            ],
+            [
+                "fe9a13e81e796e07"
             ]
         ]
     },
@@ -361,7 +326,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 500,
         "y": 140,
         "wires": [
             [
@@ -381,7 +346,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
+        "x": 660,
         "y": 100,
         "wires": [
             [
@@ -400,7 +365,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 500,
         "y": 220,
         "wires": [
             [
@@ -420,7 +385,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 520,
         "y": 60,
         "wires": [
             [
@@ -439,7 +404,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
+        "x": 720,
         "y": 140,
         "wires": [
             [
@@ -458,7 +423,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 710,
         "y": 180,
         "wires": [
             [
@@ -477,7 +442,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1170,
+        "x": 1270,
         "y": 40,
         "wires": [
             [
@@ -497,7 +462,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1170,
+        "x": 1270,
         "y": 80,
         "wires": [
             [
@@ -516,7 +481,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1470,
+        "x": 1570,
         "y": 200,
         "wires": [
             []
@@ -533,7 +498,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1180,
+        "x": 1280,
         "y": 200,
         "wires": [
             [
@@ -552,7 +517,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1790,
+        "x": 1890,
         "y": 220,
         "wires": [
             []
@@ -569,7 +534,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1570,
+        "x": 1670,
         "y": 240,
         "wires": [
             [
@@ -606,7 +571,7 @@
         "checkall": "false",
         "repair": false,
         "outputs": 3,
-        "x": 1390,
+        "x": 1490,
         "y": 280,
         "wires": [
             [
@@ -631,7 +596,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1790,
+        "x": 1890,
         "y": 260,
         "wires": [
             [
@@ -650,7 +615,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1210,
+        "x": 1310,
         "y": 280,
         "wires": [
             [
@@ -669,7 +634,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1590,
+        "x": 1690,
         "y": 280,
         "wires": [
             [
@@ -689,7 +654,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1590,
+        "x": 1690,
         "y": 320,
         "wires": [
             [
@@ -708,7 +673,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 500,
         "y": 260,
         "wires": [
             [
@@ -727,8 +692,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 420,
+        "x": 490,
+        "y": 460,
         "wires": [
             [
                 "4cd9e02a7c54fa5d"
@@ -762,8 +727,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 3,
-        "x": 190,
-        "y": 440,
+        "x": 290,
+        "y": 480,
         "wires": [
             [
                 "241eee23f252cc9d"
@@ -868,7 +833,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 16,
-        "x": 180,
+        "x": 280,
         "y": 680,
         "wires": [
             [
@@ -931,7 +896,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 500,
         "y": 600,
         "wires": [
             [
@@ -950,7 +915,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 680,
         "wires": [
             [
@@ -970,7 +935,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 720,
         "wires": [
             [
@@ -989,7 +954,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 760,
         "wires": [
             [
@@ -1009,7 +974,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 520,
         "y": 800,
         "wires": [
             [
@@ -1028,7 +993,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 520,
         "y": 840,
         "wires": [
             [
@@ -1047,7 +1012,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 500,
         "y": 880,
         "wires": [
             [
@@ -1067,7 +1032,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 920,
         "wires": [
             [
@@ -1086,7 +1051,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 640,
         "wires": [
             [
@@ -1106,7 +1071,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 180,
         "wires": [
             [
@@ -1126,7 +1091,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 650,
         "y": 640,
         "wires": [
             [
@@ -1145,7 +1110,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 650,
         "y": 680,
         "wires": [
             [
@@ -1164,7 +1129,7 @@
             "4cd9e02a7c54fa5d",
             "7bd3694006f92436"
         ],
-        "x": 45,
+        "x": 145,
         "y": 40,
         "wires": [
             []
@@ -1179,7 +1144,7 @@
         "links": [
             "e27efcb5fecdc72c"
         ],
-        "x": 685,
+        "x": 785,
         "y": 760,
         "wires": []
     },
@@ -1192,7 +1157,7 @@
         "links": [
             "e27efcb5fecdc72c"
         ],
-        "x": 885,
+        "x": 985,
         "y": 60,
         "wires": []
     },
@@ -1207,7 +1172,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1170,
+        "x": 1270,
         "y": 120,
         "wires": [
             [
@@ -1224,8 +1189,8 @@
         "links": [
             "e27efcb5fecdc72c"
         ],
-        "x": 695,
-        "y": 400,
+        "x": 795,
+        "y": 440,
         "wires": []
     },
     {
@@ -1239,7 +1204,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
+        "x": 720,
         "y": 220,
         "wires": [
             [
@@ -1258,7 +1223,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 960,
         "wires": [
             [
@@ -1277,8 +1242,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 460,
+        "x": 500,
+        "y": 500,
         "wires": [
             [
                 "4cd9e02a7c54fa5d"
@@ -1296,7 +1261,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 300,
         "wires": [
             [
@@ -1315,7 +1280,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 340,
         "wires": [
             [
@@ -1334,7 +1299,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 1000,
         "wires": [
             [
@@ -1354,7 +1319,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1330,
+        "x": 1430,
         "y": 20,
         "wires": []
     },
@@ -1370,7 +1335,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1470,
+        "x": 1570,
         "y": 160,
         "wires": []
     },
@@ -1385,7 +1350,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 1040,
         "wires": [
             [
@@ -1406,7 +1371,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 650,
         "y": 1040,
         "wires": [
             [
@@ -1426,7 +1391,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 530,
+        "x": 630,
         "y": 1080,
         "wires": []
     },
@@ -1441,7 +1406,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 1080,
         "wires": [
             [
@@ -1460,7 +1425,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 380,
         "wires": [
             [
@@ -1479,7 +1444,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 1120,
         "wires": [
             [
@@ -1504,7 +1469,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 190,
+        "x": 290,
         "y": 1180,
         "wires": [
             [
@@ -1523,7 +1488,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 490,
         "y": 1180,
         "wires": [
             [
@@ -1540,7 +1505,7 @@
         "links": [
             "e27efcb5fecdc72c"
         ],
-        "x": 685,
+        "x": 785,
         "y": 1180,
         "wires": []
     },
@@ -1561,7 +1526,7 @@
         "useregex": false,
         "removeregexcommand": false,
         "outputs": 2,
-        "x": 1030,
+        "x": 1130,
         "y": 40,
         "wires": [
             [
@@ -1588,7 +1553,7 @@
         "useregex": false,
         "removeregexcommand": false,
         "outputs": 2,
-        "x": 1040,
+        "x": 1140,
         "y": 80,
         "wires": [
             [
@@ -1614,7 +1579,7 @@
         "useregex": false,
         "removeregexcommand": false,
         "outputs": 2,
-        "x": 1040,
+        "x": 1140,
         "y": 180,
         "wires": [
             [
@@ -1640,7 +1605,7 @@
         "useregex": false,
         "removeregexcommand": false,
         "outputs": 2,
-        "x": 1030,
+        "x": 1130,
         "y": 220,
         "wires": [
             [
@@ -1666,7 +1631,7 @@
         "useregex": false,
         "removeregexcommand": false,
         "outputs": 2,
-        "x": 1030,
+        "x": 1130,
         "y": 120,
         "wires": [
             [
@@ -1684,7 +1649,7 @@
         "bot": "36f1cf07c6e6ca84",
         "event": "callback_query",
         "autoanswer": true,
-        "x": 1060,
+        "x": 1160,
         "y": 280,
         "wires": [
             [
@@ -1701,7 +1666,7 @@
         "bot": "36f1cf07c6e6ca84",
         "haserroroutput": false,
         "outputs": 1,
-        "x": 1320,
+        "x": 1420,
         "y": 80,
         "wires": [
             []
@@ -1716,7 +1681,7 @@
         "bot": "36f1cf07c6e6ca84",
         "haserroroutput": false,
         "outputs": 1,
-        "x": 1320,
+        "x": 1420,
         "y": 200,
         "wires": [
             [
@@ -1734,7 +1699,7 @@
         "bot": "36f1cf07c6e6ca84",
         "haserroroutput": false,
         "outputs": 1,
-        "x": 1910,
+        "x": 2010,
         "y": 340,
         "wires": [
             []
@@ -1746,10 +1711,10 @@
         "z": "bd7fdadec2d6549d",
         "d": true,
         "name": "Send msg",
-        "bot": "36f1cf07c6e6ca84",
+        "bot": "389caaaa5d0b8f80",
         "haserroroutput": false,
         "outputs": 1,
-        "x": 820,
+        "x": 920,
         "y": 840,
         "wires": [
             []
@@ -1761,467 +1726,58 @@
         "z": "bd7fdadec2d6549d",
         "d": true,
         "name": "Send msg",
-        "bot": "36f1cf07c6e6ca84",
+        "bot": "389caaaa5d0b8f80",
         "haserroroutput": false,
         "outputs": 1,
-        "x": 800,
+        "x": 900,
         "y": 160,
         "wires": [
             []
         ]
     },
     {
-        "id": "5a80307aa2d62f40",
-        "type": "http request",
-        "z": "fa0d81b075c058ed",
-        "name": "",
-        "method": "POST",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "basic",
-        "senderr": false,
-        "headers": [],
+        "id": "fe9a13e81e796e07",
+        "type": "function",
+        "z": "bd7fdadec2d6549d",
+        "name": "latex",
+        "func": "// Récupération du RSSI et SNR maximum\nvar maxRSSI = msg.payload.uplink_message.rx_metadata[0].rssi;\nvar maxSNR = msg.payload.uplink_message.rx_metadata[0].snr;\n\nfor (var i = 1; i < msg.payload.uplink_message.rx_metadata.length; i++) {\n    var rssi = msg.payload.uplink_message.rx_metadata[i].rssi;\n    var snr = msg.payload.uplink_message.rx_metadata[i].snr;\n    if (rssi > maxRSSI) maxRSSI = rssi;\n    if (snr > maxSNR) maxSNR = snr;\n}\n\n// Raccourci vers le tableau de bytes\nvar b = msg.payload.uplink_message.decoded_payload.bytes;\n\n// Construction du message de sortie\nmsg.payload = {\n    name: msg.payload.end_device_ids.device_id,\n    rssi: maxRSSI,\n    snr: maxSNR,\n    min: (b[0] << 8) + b[1],              // mm\n    max: (b[2] << 8) + b[3],              // mm\n    mean: ((b[4] << 8) + b[5]) / 10.0,     // mm, 1 décimale\n    sd: ((b[6] << 8) + b[7]) / 10.0,      // mm, 1 décimale\n    median: ((b[8] << 8) + b[9]),      // mm\n    validCount : b[10],\n    battery: b[11]\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 490,
-        "y": 580,
+        "y": 420,
         "wires": [
             [
-                "b2721c0d07219228"
+                "d35518380c2038d5"
             ]
         ]
     },
     {
-        "id": "48ab7d72d00c8df9",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "Show Databases",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "",
-        "topic": "",
-        "x": 160,
-        "y": 600,
-        "wires": [
-            [
-                "55b9efae972c0b49"
-            ]
-        ]
-    },
-    {
-        "id": "55b9efae972c0b49",
+        "id": "5f0665fb9754ddf4",
         "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "request",
-        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?q=SHOW%20DATABASES\";\nmsg.url = message.payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 600,
-        "wires": [
-            [
-                "5a80307aa2d62f40"
-            ]
-        ]
-    },
-    {
-        "id": "b2721c0d07219228",
-        "type": "json",
-        "z": "fa0d81b075c058ed",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 630,
-        "y": 600,
-        "wires": [
-            [
-                "b9c963b9b5173924"
-            ]
-        ]
-    },
-    {
-        "id": "d6985278.97b0c8",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "Résultat trié",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1010,
-        "y": 600,
-        "wires": []
-    },
-    {
-        "id": "b9c963b9b5173924",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Extraire et trier les noms",
-        "func": "// Votre réponse JSON est dans msg.payload\nlet response = msg.payload;\n\n// Vérifier la structure de la réponse\nif (response.results && response.results.length > 0 &&\n    response.results[0].series && response.results[0].series.length > 0 &&\n    response.results[0].series[0].values && response.results[0].series[0].values.length > 0) {\n\n    // Extraire les noms depuis response.results[0].series[0].values\n    let names = response.results[0].series[0].values.map(item => item[0]);\n\n    // Trier les noms par ordre alphabétique\n    names.sort();\n\n    // Formater la sortie avec des sauts de ligne\n    msg.payload = \"Bases de données trouvées :\\n\\n\" + names.join(\"\\n\");\n\n    return msg;\n} else {\n    // Si la structure de la réponse est incorrecte, retourner un message d'erreur\n    node.error('Structure de réponse JSON invalide.');\n    return null;\n}\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 810,
-        "y": 600,
-        "wires": [
-            [
-                "d6985278.97b0c8"
-            ]
-        ]
-    },
-    {
-        "id": "f6f624a48a343620",
-        "type": "http request",
-        "z": "fa0d81b075c058ed",
-        "name": "",
-        "method": "POST",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "basic",
-        "senderr": false,
-        "headers": [],
-        "x": 670,
-        "y": 720,
-        "wires": [
-            [
-                "21529eb509242cf1"
-            ]
-        ]
-    },
-    {
-        "id": "0c3c25507ae5fb15",
-        "type": "change",
-        "z": "fa0d81b075c058ed",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "url",
-                "pt": "msg",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 510,
-        "y": 720,
-        "wires": [
-            [
-                "f6f624a48a343620"
-            ]
-        ]
-    },
-    {
-        "id": "21529eb509242cf1",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "",
-        "active": true,
-        "console": "false",
-        "complete": "false",
-        "x": 830,
-        "y": 720,
-        "wires": []
-    },
-    {
-        "id": "e7707d9ea540e76f",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "delete data",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "",
-        "topic": "",
-        "payload": "micheltello",
-        "payloadType": "str",
-        "x": 200,
-        "y": 740,
-        "wires": [
-            [
-                "e36f199e093f4dbe"
-            ]
-        ]
-    },
-    {
-        "id": "143bdec3b6614222",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "extract",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "",
-        "topic": "",
-        "payload": "apptestsimon01",
-        "payloadType": "str",
-        "x": 190,
-        "y": 780,
-        "wires": [
-            [
-                "b4fa0838115eed0f"
-            ]
-        ]
-    },
-    {
-        "id": "53f21e0a11c43c21",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "request",
-        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?db=\"+msg.payload+\"&q=SELECT * FROM devices WHERE \\\"name\\\"='pilowtech-01-canal-exterieur' GROUP BY * ORDER BY DESC LIMIT 50\";\nmsg.payload = message.payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 700,
-        "wires": [
-            [
-                "0c3c25507ae5fb15"
-            ]
-        ]
-    },
-    {
-        "id": "6077e61c2009da12",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "manage database",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "",
-        "topic": "",
-        "payload": "apptestsimon01",
-        "payloadType": "str",
-        "x": 170,
-        "y": 700,
-        "wires": [
-            [
-                "53f21e0a11c43c21"
-            ]
-        ]
-    },
-    {
-        "id": "b4fa0838115eed0f",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "request",
-        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?db=\"+msg.payload+\"&q=SELECT * FROM devices\"; \nmsg.payload = message.payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 780,
-        "wires": [
-            [
-                "0c3c25507ae5fb15"
-            ]
-        ]
-    },
-    {
-        "id": "e36f199e093f4dbe",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "request",
-        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?db=\" + msg.payload + \"&q=DELETE FROM devices WHERE time <= '2025-02-01T01:00:00Z' \"; \nmsg.payload = message.payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 740,
-        "wires": [
-            [
-                "0c3c25507ae5fb15"
-            ]
-        ]
-    },
-    {
-        "id": "90c7865a6fd6d4eb",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "request",
-        "func": "var message={};\nmessage.payload = \"http://localhost:8086/query?q=DROP DATABASE \" + msg.payload ; \nmsg.payload = message.payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 660,
-        "wires": [
-            [
-                "0c3c25507ae5fb15"
-            ]
-        ]
-    },
-    {
-        "id": "f98bf8dc748301dd",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "delete database",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "",
-        "topic": "",
-        "payload": "undefined",
-        "payloadType": "str",
-        "x": 160,
-        "y": 660,
-        "wires": [
-            [
-                "90c7865a6fd6d4eb"
-            ]
-        ]
-    },
-    {
-        "id": "d8c9c9de74d390b8",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "Create Flow",
-        "props": [
-            {
-                "p": "apikey",
-                "v": "NNSXS.RAWETP2QXVF2FY5KXRX3BD6OOAHIFIMXI22ARBI.CDPGDL5MEUS33JAJW63R2S3GRK6F3ZA4SSJYTVK7W2PNZWIVCUQQ",
-                "vt": "str"
-            },
-            {
-                "p": "userapp",
-                "v": "maniette@ttn",
-                "vt": "str"
-            },
-            {
-                "p": "chatId",
-                "v": "XXX",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 290,
-        "y": 40,
-        "wires": [
-            [
-                "fc3ed8a4421c3635"
-            ]
-        ]
-    },
-    {
-        "id": "1e642a664cadc75a",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "Flow",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1030,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "4d8443436140288c",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Create flow",
-        "func": "var mqttNodeID = RED.util.generateId();\nvar influxNodeID = RED.util.generateId();\nvar consoleNodeID = RED.util.generateId();\n\nlet generatedFlow = [\n    {\n        \"id\": influxNodeID,\n        \"type\": \"influxdb out\",\n        \"z\": \"e688ba072607ad72\",\n        \"influxdb\": \"ef1b568734c2ffb5\",\n        \"name\": \"Influx\",\n        \"measurement\": \"devices\",\n        \"precision\": \"\",\n        \"retentionPolicy\": \"\",\n        \"database\": msg.dbname,\n        \"precisionV18FluxV20\": \"ms\",\n        \"retentionPolicyV18Flux\": \"\",\n        \"org\": \"organisation\",\n        \"bucket\": \"bucket\",\n        \"x\": 390,\n        \"y\": 100,\n        \"wires\": []\n    },\n    {\n        \"id\": RED.util.generateId(),\n        \"type\": \"mqtt in\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"mqtt in\",\n        \"topic\": \"v3/\"+msg.userapp+\"/devices/+/up\",\n        \"qos\": \"2\",\n        \"datatype\": \"auto-detect\",\n        \"broker\": mqttNodeID,\n        \"nl\": false,\n        \"rap\": true,\n        \"rh\": 0,\n        \"inputs\": 0,\n        \"x\": 70,\n        \"y\": 120,\n        \"wires\": [\n            [\n                consoleNodeID\n            ]\n        ]\n    },\n    {\n        \"id\": RED.util.generateId(),\n        \"type\": \"function\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"ChatID\",\n        \"func\": \"\",\n        \"outputs\": 1,\n        \"noerr\": 0,\n        \"initialize\": \"flow.set(\\\"chatId\\\",'\" + msg.chatId + \"');\\nflow.set(\\\"app\\\",'\" + msg.userapp+\"')\\n\",\n        \"finalize\": \"\",\n        \"libs\": [],\n        \"x\": 70,\n        \"y\": 40,\n        \"wires\": [\n            []\n        ]\n    },\n    {\n        \"id\": RED.util.generateId(),\n        \"type\": \"comment\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"API Key\",\n        \"info\": msg.apikey,\n        \"x\": 70,\n        \"y\": 80,\n        \"wires\": []\n    },\n    {\n        \"id\": consoleNodeID,\n        \"type\": \"subflow:d464bfcccd5fbf22\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": \"\",\n        \"x\": 220,\n        \"y\": 120,\n        \"wires\": [\n            [\n                influxNodeID\n            ],\n            []\n        ]\n    },\n    {\n        \"id\": mqttNodeID,\n        \"type\": \"mqtt-broker\",\n        \"z\": \"e688ba072607ad72\",\n        \"name\": msg.userapp,\n        \"broker\": \"eu1.cloud.thethings.network\",\n        \"port\": \"1883\",\n        \"clientid\": \"\",\n        \"autoConnect\": true,\n        \"usetls\": false,\n        \"protocolVersion\": \"4\",\n        \"keepalive\": \"60\",\n        \"cleansession\": true, \n        \"credentials\": {\n            \"user\": msg.userapp,\n            \"password\": msg.apikey\n        },\n        \"birthTopic\": \"\",\n        \"birthQos\": \"0\",\n        \"birthPayload\": \"\",\n        \"birthMsg\": {},\n        \"closeTopic\": \"\",\n        \"closeQos\": \"0\",\n        \"closePayload\": \"\",\n        \"closeMsg\": {},\n        \"willTopic\": \"\",\n        \"willQos\": \"0\",\n        \"willPayload\": \"\",\n        \"willMsg\": {},\n        \"userProps\": \"\",\n        \"sessionExpiry\": \"\"\n    }\n]\n\nmsg.payload = generatedFlow;\nreturn msg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 890,
-        "y": 40,
-        "wires": [
-            [
-                "1e642a664cadc75a"
-            ]
-        ]
-    },
-    {
-        "id": "8d51c5982d7fc7fa",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Create user",
-        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/admin/users\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n};\nmsg.payload = {\n    \"name\": msg.name+\".\"+msg.firstname,\n    \"email\": msg.mail,\n    \"login\": msg.name + \".\" + msg.firstname,\n    \"password\": msg.name + \".\" + msg.firstname\n};\nreturn msg;",
+        "z": "21af1b700522993f",
+        "name": "createUser",
+        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/admin/users\";\n\nmsg.payload = {\n    \"name\": msg.login,\n    \"email\": msg.mail,\n    \"login\": msg.login,\n    \"password\": msg.login\n};\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
-        "y": 200,
+        "x": 390,
+        "y": 120,
         "wires": [
             [
-                "628e0c9ad6204daf"
+                "6e364491c742143e"
             ]
         ]
     },
     {
-        "id": "628e0c9ad6204daf",
+        "id": "6e364491c742143e",
         "type": "http request",
-        "z": "fa0d81b075c058ed",
+        "z": "21af1b700522993f",
         "name": "HTTP request",
         "method": "use",
         "ret": "obj",
@@ -2234,238 +1790,56 @@
         "authType": "basic",
         "senderr": false,
         "headers": [],
-        "x": 660,
-        "y": 200,
+        "x": 580,
+        "y": 120,
         "wires": [
             [
-                "function-build-request",
-                "2784bd765319b6e8"
+                "20668b6b28ce156a",
+                "435571ab34da67e2"
             ]
         ]
     },
     {
-        "id": "38391bf3d6d37d39",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "Complete 1",
-        "props": [
-            {
-                "p": "userapp",
-                "v": "nico-home@ttn",
-                "vt": "str"
-            },
-            {
-                "p": "apikey",
-                "v": "NNSXS.TKMCSLTA6P2TDEEC3PQONUXESEVLZMMOYKG2LAQ.UBOMZUZZLQSJMCHAX3TEVGVH45YTMIFJRBD2TEUJPHAJIVS7H6RQ",
-                "vt": "str"
-            },
-            {
-                "p": "name",
-                "v": "castejon",
-                "vt": "str"
-            },
-            {
-                "p": "firstname",
-                "v": "nicolas",
-                "vt": "str"
-            },
-            {
-                "p": "mail",
-                "v": "nicolas.castejon@protonmail.com",
-                "vt": "str"
-            },
-            {
-                "p": "chatId",
-                "v": "XXX",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 130,
-        "y": 200,
-        "wires": [
-            [
-                "3770fe5ea921e6c4"
-            ]
-        ]
-    },
-    {
-        "id": "fc3ed8a4421c3635",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "edit inject",
-        "func": "msg.userapp = msg.userapp.replace(' ', '');\nmsg.apikey = msg.apikey.replace(/\\s+/g, '').replace(' ', '');\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 460,
-        "y": 40,
-        "wires": [
-            [
-                "4d8443436140288c"
-            ]
-        ]
-    },
-    {
-        "id": "3770fe5ea921e6c4",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "edit inject",
-        "func": "msg.name = msg.name.replace(/ /g, '').toLowerCase();\nmsg.firstname = msg.firstname.replace(/ /g, '').toLowerCase();\nmsg.login = msg.name + \".\" + msg.firstname;\n\nmsg.mail = msg.mail.replace(/ /g, '').toLowerCase();\nmsg.userapp = msg.userapp.replace(/ /g, '');\nmsg.apikey = msg.apikey.replace(/\\s+/g, '').replace(/ /g, '');\nmsg.dbname = msg.userapp.replace('@ttn', '').replace(/-/g, '').toLowerCase();\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 280,
-        "y": 200,
-        "wires": [
-            [
-                "8d51c5982d7fc7fa",
-                "9bdc7f968867e52a",
-                "e64461a22d69e5d4"
-            ]
-        ]
-    },
-    {
-        "id": "function-build-request",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Get UserID",
-        "func": "msg.method = \"GET\";\nmsg.url = \"http://grafana:3000/api/users?query=\" + msg.login;\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 260,
-        "wires": [
-            [
-                "http-request-get-orgid"
-            ]
-        ]
-    },
-    {
-        "id": "http-request-get-orgid",
-        "type": "http request",
-        "z": "fa0d81b075c058ed",
-        "name": "HTTP Request",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "basic",
-        "senderr": false,
-        "headers": [],
-        "x": 660,
-        "y": 260,
-        "wires": [
-            [
-                "function-extract-orgid",
-                "e105a6930f2971f3"
-            ]
-        ]
-    },
-    {
-        "id": "function-extract-orgid",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Get OrgID",
-        "func": "msg.method = \"GET\";\nmsg.url = \"http://grafana:3000/api/users/\" + msg.payload[0].id;\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 320,
-        "wires": [
-            [
-                "25d28695e5491c66"
-            ]
-        ]
-    },
-    {
-        "id": "e105a6930f2971f3",
+        "id": "20668b6b28ce156a",
         "type": "debug",
-        "z": "fa0d81b075c058ed",
+        "z": "21af1b700522993f",
         "name": "Afficher UserID",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload[0]",
+        "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 840,
-        "y": 240,
+        "x": 760,
+        "y": 120,
         "wires": []
     },
     {
-        "id": "25d28695e5491c66",
-        "type": "http request",
-        "z": "fa0d81b075c058ed",
-        "name": "HTTP Request",
-        "method": "use",
-        "ret": "obj",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "basic",
-        "senderr": false,
-        "headers": [],
-        "x": 660,
-        "y": 320,
-        "wires": [
-            [
-                "9f5f9fcb01d2229a",
-                "f88ba6c7117ba0a3",
-                "01a589485cd4d7e6"
-            ]
-        ]
-    },
-    {
-        "id": "9f5f9fcb01d2229a",
+        "id": "fda389d3ac296b88",
         "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Create Dashboard",
-        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/dashboards/db\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\") // Utilise les identifiants de l'utilisateur cible\n};\nmsg.orgId = msg.payload.id;\nmsg.payload = {\n    \"dashboard\": {\n        \"id\": null,\n        \"uid\": \"dashboard-org-\" + msg.orgId,\n        \"title\": \"Tableau de bord\",\n        \"tags\": [\"org-\" + msg.orgId],\n        \"timezone\": \"browser\",\n        \"schemaVersion\": 17,\n        \"version\": 1,\n        \"refresh\": \"5m\"\n    },\n    \"folderId\": 0,\n    \"overwrite\": true\n};\nreturn msg;\n",
+        "z": "21af1b700522993f",
+        "name": "rmUserMainOrg",
+        "func": "if (!msg.userId) {\n    node.error(\"userId manquant pour suppression de la Main Org\", msg);\n    return null;\n}\n\nconst mainOrgId = 1; // Main Org\n\nmsg.method = \"DELETE\";\nmsg.url = `http://grafana:3000/api/orgs/${mainOrgId}/users/${msg.userId}`;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    //\"Authorization\": \"Basic \" + Buffer.from(\"admin:admin\").toString(\"base64\")\n};\n\n// DELETE n'a pas besoin de body\nmsg.payload = {};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 380,
+        "x": 400,
+        "y": 360,
         "wires": [
             [
-                "f7d6fbb253f4609b"
+                "ef62c7eb842129c6"
             ]
         ]
     },
     {
-        "id": "f7d6fbb253f4609b",
+        "id": "ef62c7eb842129c6",
         "type": "http request",
-        "z": "fa0d81b075c058ed",
+        "z": "21af1b700522993f",
         "name": "HTTP Request",
         "method": "use",
         "ret": "obj",
@@ -2478,36 +1852,39 @@
         "authType": "basic",
         "senderr": false,
         "headers": [],
-        "x": 660,
-        "y": 380,
+        "x": 580,
+        "y": 360,
         "wires": [
             [
-                "600933c3cf66dc29",
-                "8e5475d11508111a"
+                "18dc5f105d17c3e4",
+                "99465b1757342062"
             ]
         ]
     },
     {
-        "id": "600933c3cf66dc29",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "Créer dashboard",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 850,
-        "y": 360,
-        "wires": []
+        "id": "18dc5f105d17c3e4",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "addDashboard",
+        "func": "// Create Dashboard\n\n// On vérifie juste qu'on a bien un orgId qui traîne encore dans le msg\nif (!msg.orgId) {\n    node.warn(\"orgId manquant : le dashboard sera créé dans l'org active par défaut de l'utilisateur.\");\n}\n\n// Requête de création de dashboard\nmsg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/dashboards/db\";\n\n// Authentification avec l'utilisateur final\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\"),\n    \"X-Grafana-Org-Id\": String(msg.orgId)\n};\n\nmsg.payload = {\n    dashboard: {\n        id: null,\n        uid: \"dashboard-org-\" + (msg.orgId ?? \"no-org\"),\n        title: \"Tableau de bord\",\n        tags: [\"org-\" + (msg.orgId ?? \"no-org\")],\n        timezone: \"browser\",\n        schemaVersion: 17,\n        version: 1,\n        refresh: \"5m\"\n    },\n    folderId: 0,\n    overwrite: true\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 420,
+        "wires": [
+            [
+                "4c225cb5b8a416d2"
+            ]
+        ]
     },
     {
-        "id": "f88ba6c7117ba0a3",
+        "id": "99465b1757342062",
         "type": "debug",
-        "z": "fa0d81b075c058ed",
+        "z": "21af1b700522993f",
         "name": "afficher OrgID",
         "active": true,
         "tosidebar": true,
@@ -2517,14 +1894,162 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 840,
-        "y": 300,
+        "x": 760,
+        "y": 360,
         "wires": []
     },
     {
-        "id": "820cb810960c610a",
+        "id": "4c225cb5b8a416d2",
+        "type": "http request",
+        "z": "21af1b700522993f",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 580,
+        "y": 420,
+        "wires": [
+            [
+                "55979f96de0d5962",
+                "b67e1749bd4663e4"
+            ]
+        ]
+    },
+    {
+        "id": "55979f96de0d5962",
         "type": "debug",
-        "z": "fa0d81b075c058ed",
+        "z": "21af1b700522993f",
+        "name": "Créer dashboard",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b67e1749bd4663e4",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "updatePrefs",
+        "func": "if (!msg.payload || !msg.payload.id || !msg.payload.uid) {\n    node.error(\"Impossible de récupérer l'id/uid du dashboard\", msg);\n    return null;\n}\n\nmsg.dashboardId = msg.payload.id;\nmsg.dashboardUid = msg.payload.uid;\n\n\nmsg.method = \"PUT\";\nmsg.url = \"http://grafana:3000/api/org/preferences\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\"),\n    \"X-Grafana-Org-Id\": String(msg.orgId)\n};\n\nmsg.payload = {\n    homeDashboardUID: msg.dashboardUid,\n    language: \"fr-FR\",        \n    timezone: \"browser\"\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 480,
+        "wires": [
+            [
+                "4a773f6139e2fe4c"
+            ]
+        ]
+    },
+    {
+        "id": "4a773f6139e2fe4c",
+        "type": "http request",
+        "z": "21af1b700522993f",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 580,
+        "y": 480,
+        "wires": [
+            [
+                "4321143f299c01f1",
+                "9e3da998ae984254"
+            ]
+        ]
+    },
+    {
+        "id": "4321143f299c01f1",
+        "type": "debug",
+        "z": "21af1b700522993f",
+        "name": "maj prefs",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "9e3da998ae984254",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "linkDB",
+        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/datasources\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\"),\n    \"X-Grafana-Org-Id\": String(msg.orgId)\n};\n\nlet tenant = msg.tenant;\n\n\nmsg.payload = {\n    \"name\": \"postgres-\" + tenant,\n    \"type\": \"postgres\",\n    \"access\": \"proxy\",\n    \"url\": \"postgres:5432\",\n    \"user\": tenant,\n    \"secureJsonData\": {\n        \"password\": tenant\n    },\n    \"database\": \"mobilab\",\n    \"jsonData\": {\n        \"sslmode\": \"disable\",\n        \"postgresVersion\": 1500,\n        \"timescaledb\": false,\n        \"maxOpenConns\": 100,\n        \"maxIdleConns\": 100,\n        \"connMaxLifetime\": 14400\n    }\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 540,
+        "wires": [
+            [
+                "62ad14d4b2ebe65a"
+            ]
+        ]
+    },
+    {
+        "id": "62ad14d4b2ebe65a",
+        "type": "http request",
+        "z": "21af1b700522993f",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 580,
+        "y": 540,
+        "wires": [
+            [
+                "47335477c1928bb8"
+            ]
+        ]
+    },
+    {
+        "id": "47335477c1928bb8",
+        "type": "debug",
+        "z": "21af1b700522993f",
         "name": "Create database",
         "active": true,
         "tosidebar": true,
@@ -2534,14 +2059,56 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 850,
-        "y": 480,
+        "x": 760,
+        "y": 540,
         "wires": []
     },
     {
-        "id": "2c86bbccbc8b6d5e",
+        "id": "484f5a0cc7ba82ad",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "editInput",
+        "func": "// --- fonctions utilitaires ---\nfunction normalize(str) {\n    return String(str || \"\")\n        .trim()\n        .normalize(\"NFD\")                     // décompose accents\n        .replace(/[\\u0300-\\u036f]/g, \"\")      // supprime accents\n        .toLowerCase()\n        .replace(/\\s+/g, \"\")                  // supprime espaces\n        .replace(/-/g, \"_\");                  // remplace tirets par underscore\n}\n\n// identifiant strict (SQL/Grafana/Postgres): [a-z0-9_]\nfunction cleanIdentifier(str) {\n    return normalize(str)\n        .replace(/[^a-z0-9_]/g, \"\");\n}\n\n// --- Nettoyage noms et login ---\nmsg.name = cleanIdentifier(msg.name);\nmsg.firstname = cleanIdentifier(msg.firstname);\nmsg.login = `${msg.name}.${msg.firstname}`;   // le point est volontaire\n\n// --- Mail ---\nmsg.mail = String(msg.mail || \"\").trim().toLowerCase();\n\n// --- dbname / tenant ---\nmsg.dbname = cleanIdentifier(String(msg.userapp || \"\").replace(\"@ttn\", \"\"));\nmsg.tenant = msg.dbname;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 120,
+        "wires": [
+            [
+                "e098ba925c1f6568",
+                "921375bb775a674c",
+                "5f0665fb9754ddf4"
+            ]
+        ]
+    },
+    {
+        "id": "ede66930ce050e1c",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "addUserToOrg",
+        "func": "if (!msg.payload || typeof msg.payload.orgId === \"undefined\") {\n    node.error(\"orgId manquant dans la réponse de /api/orgs\", msg);\n    return null;\n}\n\nmsg.orgId = msg.payload.orgId;\n\nmsg.method = \"POST\";\nmsg.url = `http://grafana:3000/api/orgs/${msg.orgId}/users`;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    //\"Authorization\": \"Basic \" + Buffer.from(\"admin:admin\").toString(\"base64\")\n};\n\nmsg.payload = {\n    loginOrEmail: msg.login,\n    role: \"Admin\"   // ou \"Viewer\" si tu préfères\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 240,
+        "wires": [
+            [
+                "3a6e5cf934c57ff2"
+            ]
+        ]
+    },
+    {
+        "id": "b20c9f9362a1f581",
         "type": "http request",
-        "z": "fa0d81b075c058ed",
+        "z": "21af1b700522993f",
         "name": "HTTP Request",
         "method": "use",
         "ret": "obj",
@@ -2554,39 +2121,20 @@
         "authType": "basic",
         "senderr": false,
         "headers": [],
-        "x": 660,
-        "y": 500,
+        "x": 580,
+        "y": 180,
         "wires": [
             [
-                "820cb810960c610a"
+                "3d73f2848697b3a2",
+                "ede66930ce050e1c"
             ]
         ]
     },
     {
-        "id": "1f78fcdb31b311b6",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "link db",
-        "func": "msg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/datasources\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\") // Utilise les identifiants de l'utilisateur cible\n};\nmsg.payload = {\n    \"name\": \"InfluxDB\",\n    \"type\": \"influxdb\",\n    \"url\": \"http://influxdb:8086\",\n    \"access\": \"proxy\",\n    \"database\": msg.dbname,\n    \"user\": \"moinards\",\n    \"secureJsonData\": {\n        \"password\": \"4kg=7j1ct\"\n    },\n    \"jsonData\": {\n        \"httpMode\": \"GET\",\n        \"version\": \"InfluxQL\"\n    }\n};\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 430,
-        "y": 500,
-        "wires": [
-            [
-                "2c86bbccbc8b6d5e"
-            ]
-        ]
-    },
-    {
-        "id": "2784bd765319b6e8",
+        "id": "3d73f2848697b3a2",
         "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "Afficher UserID",
+        "z": "21af1b700522993f",
+        "name": "afficher OrgID",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -2595,100 +2143,34 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 840,
+        "x": 760,
         "y": 180,
         "wires": []
     },
     {
-        "id": "b36aa30.3a7276",
-        "type": "http request",
-        "z": "fa0d81b075c058ed",
-        "name": "HTTP Request",
-        "method": "POST",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "basic",
-        "senderr": false,
-        "headers": [],
-        "x": 660,
-        "y": 120,
-        "wires": [
-            [
-                "9c96feca3905e8c5"
-            ]
-        ]
-    },
-    {
-        "id": "64e53111d93ad666",
+        "id": "435571ab34da67e2",
         "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "create db",
-        "func": "var message={};\nmessage.payload = \"http://influxdb:8086/query?q=CREATE%20DATABASE%20\"+ msg.dbname;\nmsg.url = message.payload;\nreturn msg;",
+        "z": "21af1b700522993f",
+        "name": "createOrg",
+        "func": "// On récupère l'id de l'utilisateur créé par l'API admin/users\nmsg.userId = msg.payload.id;\n\n// Création de l'org côté admin\nmsg.method = \"POST\";\nmsg.url = \"http://grafana:3000/api/orgs\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    //\"Authorization\": \"Basic \" + Buffer.from(msg.login+\":\"+msg.login).toString(\"base64\")\n};\n\nmsg.payload = {\n    name: \"org-\" + msg.login\n};\n\nreturn msg;\n",
         "outputs": 1,
-        "timeout": "",
+        "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 440,
-        "y": 120,
+        "x": 380,
+        "y": 180,
         "wires": [
             [
-                "b36aa30.3a7276"
+                "b20c9f9362a1f581"
             ]
         ]
     },
     {
-        "id": "880d59c1b2f9d7b6",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "Create db",
-        "props": [
-            {
-                "p": "dbname",
-                "v": "test2",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 280,
-        "y": 120,
-        "wires": [
-            [
-                "64e53111d93ad666"
-            ]
-        ]
-    },
-    {
-        "id": "9c96feca3905e8c5",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "Réponse API",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 840,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "a34929ae96d2a87c",
+        "id": "3a6e5cf934c57ff2",
         "type": "http request",
-        "z": "fa0d81b075c058ed",
+        "z": "21af1b700522993f",
         "name": "HTTP Request",
         "method": "use",
         "ret": "obj",
@@ -2701,20 +2183,336 @@
         "authType": "basic",
         "senderr": false,
         "headers": [],
-        "x": 660,
-        "y": 440,
+        "x": 580,
+        "y": 240,
         "wires": [
             [
-                "1fe35090363ea74a",
-                "1f78fcdb31b311b6"
+                "9c106de6594e3aa0",
+                "dc53df49ebea8a92"
             ]
         ]
     },
     {
-        "id": "1fe35090363ea74a",
+        "id": "9c106de6594e3aa0",
         "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "maj prefs",
+        "z": "21af1b700522993f",
+        "name": "addUserToOrg",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "dc53df49ebea8a92",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "SetUserOrgID",
+        "func": "if (!msg.userId || !msg.orgId) {\n    node.error(\"userId ou orgId manquant pour le switch d'org\", msg);\n    return null;\n}\n\nmsg.method = \"POST\";\nmsg.url = `http://grafana:3000/api/users/${msg.userId}/using/${msg.orgId}`;\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    //\"Authorization\": \"Basic \" + Buffer.from(\"admin:admin\").toString(\"base64\")\n};\n\nmsg.payload = {};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 300,
+        "wires": [
+            [
+                "da6957a677f0405a"
+            ]
+        ]
+    },
+    {
+        "id": "da6957a677f0405a",
+        "type": "http request",
+        "z": "21af1b700522993f",
+        "name": "HTTP Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "basic",
+        "senderr": false,
+        "headers": [],
+        "x": 580,
+        "y": 300,
+        "wires": [
+            [
+                "fe791d4deedbad77",
+                "fda389d3ac296b88"
+            ]
+        ]
+    },
+    {
+        "id": "fe791d4deedbad77",
+        "type": "debug",
+        "z": "21af1b700522993f",
+        "name": "afficher OrgID",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "8c5882afece1d057",
+        "type": "inject",
+        "z": "21af1b700522993f",
+        "name": "inputV2",
+        "props": [
+            {
+                "p": "userapp",
+                "v": "mobilab-truck@ttn",
+                "vt": "str"
+            },
+            {
+                "p": "name",
+                "v": "moinard",
+                "vt": "str"
+            },
+            {
+                "p": "firstname",
+                "v": "simon",
+                "vt": "str"
+            },
+            {
+                "p": "mail",
+                "v": "testsim23@testsim.com",
+                "vt": "str"
+            },
+            {
+                "p": "chatId",
+                "v": "-4215540322",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 120,
+        "wires": [
+            [
+                "484f5a0cc7ba82ad"
+            ]
+        ]
+    },
+    {
+        "id": "e098ba925c1f6568",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "new DatabaseUser",
+        "func": "const tenant = msg.tenant;\n\n// 1) validation anti-injection : uniquement lettres minuscules, chiffres, underscore\nif (!/^[a-z0-9_]{3,63}$/.test(tenant)) {\n  node.error(\"Tenant invalide. Autorisé: [a-z0-9_], longueur 3..63\", msg);\n  return null;\n}\n\n// 2) Attention : on ne peut pas paramétrer un identifiant SQL ($1) dans CREATE ROLE.\n// Donc on construit du SQL, mais tenant est validé strictement.\nconst sql = `\n-- 0) (optionnel) si tu relances : supprimer proprement\n-- DROP ROLE IF EXISTS ${tenant};\n\n-- 1) créer le user\nCREATE ROLE ${tenant} LOGIN PASSWORD '${tenant}';\n\n-- 2) autoriser uniquement la connexion à mobilab\nGRANT CONNECT ON DATABASE mobilab TO ${tenant};\n\n-- (optionnel mais conseillé) interdire l'accès aux autres DB connues\nREVOKE CONNECT ON DATABASE postgres  FROM ${tenant};\n-- REVOKE CONNECT ON DATABASE template1 FROM ${tenant};\n-- REVOKE CONNECT ON DATABASE template0 FROM ${tenant};\n\n-- 3) droits sur le(s) schéma(s)\nGRANT USAGE ON SCHEMA public TO ${tenant};\n\n-- 4) lecture seule sur toutes les tables EXISTANTES du schema public\nGRANT SELECT ON ALL TABLES IN SCHEMA public TO ${tenant};\n\n-- 5) lecture seule sur toutes les tables FUTURES du schema public\n-- IMPORTANT : à exécuter avec le rôle 'admin'\nALTER DEFAULT PRIVILEGES IN SCHEMA public\nGRANT SELECT ON TABLES TO ${tenant};\n\n-- 6) fixer le tenant automatiquement à la connexion\nALTER ROLE ${tenant} SET app.tenant = '${tenant}';\n\n`;\n\nmsg.query = sql;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 60,
+        "wires": [
+            [
+                "0e6b692abacfbd61"
+            ]
+        ]
+    },
+    {
+        "id": "fed80d147a3ab93a",
+        "type": "debug",
+        "z": "21af1b700522993f",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "ef82d37efa968926",
+        "type": "catch",
+        "z": "21af1b700522993f",
+        "name": "postgre : createDB",
+        "scope": [
+            "0e6b692abacfbd61"
+        ],
+        "uncaught": false,
+        "x": 1050,
+        "y": 60,
+        "wires": [
+            [
+                "7142fd26b7b4b80c"
+            ]
+        ]
+    },
+    {
+        "id": "7142fd26b7b4b80c",
+        "type": "debug",
+        "z": "21af1b700522993f",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1240,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "0e6b692abacfbd61",
+        "type": "postgresql",
+        "z": "21af1b700522993f",
+        "name": "postgre",
+        "query": "",
+        "postgreSQLConfig": "b1b3382c8feafb97",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 600,
+        "y": 60,
+        "wires": [
+            [
+                "fed80d147a3ab93a"
+            ]
+        ]
+    },
+    {
+        "id": "9304fbc2b4298d58",
+        "type": "inject",
+        "z": "21af1b700522993f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 640,
+        "wires": [
+            [
+                "4327fa184110649b"
+            ]
+        ]
+    },
+    {
+        "id": "4327fa184110649b",
+        "type": "exec",
+        "z": "21af1b700522993f",
+        "command": "bash -lc 'find /usr/src/node-red/schema -type f -name \"*.sql\" -print0 | sort -z | xargs -0 cat'",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "get schemaFiles",
+        "x": 400,
+        "y": 640,
+        "wires": [
+            [
+                "db1fa9699f2d9bac"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d95adf08a0c47864",
+        "type": "debug",
+        "z": "21af1b700522993f",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "db1fa9699f2d9bac",
+        "type": "function",
+        "z": "21af1b700522993f",
+        "name": "query",
+        "func": "// Le node \"file in\" met le contenu dans msg.payload\nmsg.query = String(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 620,
+        "wires": [
+            [
+                "9bc51829431f7ad4"
+            ]
+        ]
+    },
+    {
+        "id": "9bc51829431f7ad4",
+        "type": "postgresql",
+        "z": "21af1b700522993f",
+        "name": "postgre",
+        "query": "",
+        "postgreSQLConfig": "b1b3382c8feafb97",
+        "split": false,
+        "rowsPerMsg": 1,
+        "outputs": 1,
+        "x": 680,
+        "y": 620,
+        "wires": [
+            [
+                "d95adf08a0c47864"
+            ]
+        ]
+    },
+    {
+        "id": "921375bb775a674c",
+        "type": "debug",
+        "z": "21af1b700522993f",
+        "name": "debug 11",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -2723,180 +2521,1026 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 820,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "8e5475d11508111a",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Update prefs Dash",
-        "func": "msg.method = \"PUT\";\nmsg.url = \"http://grafana:3000/api/user/preferences\";\nmsg.headers = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": \"Basic \" + Buffer.from(msg.login + \":\" + msg.login).toString(\"base64\") // Utilise les identifiants de l'utilisateur cible\n};\nmsg.payload = {\n    \"homeDashboardId\": msg.payload.id, \n    \"locale\" : \"fr\"\n};\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 470,
-        "y": 440,
-        "wires": [
-            [
-                "a34929ae96d2a87c"
-            ]
-        ]
-    },
-    {
-        "id": "964c4d83fcd87770",
-        "type": "comment",
-        "z": "fa0d81b075c058ed",
-        "name": "",
-        "info": "Voir la taille des databases\n\nsudo du -sh /var/lib/influxdb/data/* | sort -h\n\ninspecter les shards and co\n\nsudo influx_inspect report /var/lib/influxdb/data\n",
         "x": 240,
-        "y": 860,
+        "y": 40,
         "wires": []
     },
     {
-        "id": "fb1a8c87d661b63f",
-        "type": "inject",
-        "z": "fa0d81b075c058ed",
-        "name": "Lister bases",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 130,
-        "y": 980,
+        "id": "1c2c8283797a44fb",
+        "type": "switch",
+        "z": "37026a48a7bdafcf",
+        "name": "callback_query",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "createAppNO",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "createAppYES",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 3,
+        "x": 300,
+        "y": 100,
         "wires": [
             [
-                "bc4c66340d69aabc"
+                "c2c30d99fab4a9fd"
+            ],
+            [
+                "5c2087f4700db89b"
+            ],
+            [
+                "b2fa9c9c1e1bee92"
             ]
         ]
     },
     {
-        "id": "bc4c66340d69aabc",
+        "id": "a4f176657ca38466",
+        "type": "switch",
+        "z": "37026a48a7bdafcf",
+        "name": "type",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "callback_query",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "1c2c8283797a44fb"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c2c30d99fab4a9fd",
         "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "SHOW DATABASES",
-        "func": "msg.topic = \"SHOW DATABASES\";\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 310,
-        "y": 980,
-        "wires": [
-            [
-                "f13797de92e1448d"
-            ]
-        ]
-    },
-    {
-        "id": "0599982de01a9ce3",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "Pour chaque base",
-        "func": "const databases = msg.payload.map(row => row.name).filter(db => db !== '_internal');\nconst msgs = [];\n\nfor (const db of databases) {\n    msgs.push({\n        topic: `SHOW MEASUREMENTS`,\n        database: db,\n        dbname: db\n    });\n}\nreturn [msgs];",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 670,
-        "y": 980,
-        "wires": [
-            [
-                "ec197fe7d8a9b2c7"
-            ]
-        ]
-    },
-    {
-        "id": "0c3e2952c5a1f3b7",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "SELECT dernier point",
-        "func": "if (!msg.payload.length) return null;\n\nconst measurement = msg.payload[0].name;\nconst query = `SELECT * FROM \\\"${measurement}\\\" ORDER BY time DESC LIMIT 1`;\n\nmsg.topic = query;\nmsg.measurement = measurement;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1170,
-        "y": 980,
-        "wires": [
-            [
-                "ba618858f321dafe"
-            ]
-        ]
-    },
-    {
-        "id": "ce39cdb77a5a6a9d",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "Dernier point",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1570,
-        "y": 980,
-        "wires": []
-    },
-    {
-        "id": "9bdc7f968867e52a",
-        "type": "join",
-        "z": "fa0d81b075c058ed",
-        "name": "",
-        "mode": "custom",
-        "build": "merged",
-        "property": "",
-        "propertyType": "full",
-        "key": "payload",
-        "joiner": "\\n",
-        "joinerType": "str",
-        "useparts": false,
-        "accumulate": false,
-        "timeout": "",
-        "count": "2",
-        "reduceRight": false,
-        "reduceExp": "",
-        "reduceInit": "",
-        "reduceInitType": "",
-        "reduceFixup": "",
-        "x": 1200,
-        "y": 140,
-        "wires": [
-            [
-                "4d8443436140288c",
-                "a0fd201cb0c7c98c"
-            ]
-        ]
-    },
-    {
-        "id": "01a589485cd4d7e6",
-        "type": "function",
-        "z": "fa0d81b075c058ed",
-        "name": "function 2",
-        "func": "var message = {\n  \"orgId\": msg.payload.orgId\n  };\nreturn message;",
+        "z": "37026a48a7bdafcf",
+        "name": "Ignore App",
+        "func": "\n// DEBUG pour voir ce qui arrive (tu pourras les virer après)\n//node.warn(\"DEBUG callback payload : \" + JSON.stringify(msg.payload));\n\n// 1) Récupérer le callback_data : payload.data ou payload.content\nlet data = msg.payload.data || msg.payload.content || \"\";\nnode.warn(\"DEBUG callback data : \" + data);\n\n// 3) Parser action|appId\nlet parts  = data.split(\"|\");\nlet action = parts[0] || null;\nlet appId  = parts[1] || null;\n\nif (!action) {\n    node.warn(\"handleCreateAppDecision : action manquante dans callback_data. data=\" + data);\n    return null;\n}\nif (!appId) {\n    node.warn(\"handleCreateAppDecision : appId manquant dans callback_data. data=\" + data);\n    return null;\n}\n\n// 4) Récupérer chatId et messageId\nlet chatId =\n    msg.payload.chatId ||\n    (msg.payload.message && msg.payload.message.chat && msg.payload.message.chat.id);\n\nlet messageId =\n    msg.payload.messageId ||\n    (msg.payload.message && msg.payload.message.message_id);\n\nif (!chatId) {\n    node.warn(\"handleCreateAppDecision : chatId introuvable dans le callback.\");\n    return null;\n}\n\n// 5) Récupérer apps dans le STORE \"file\"\nlet apps = global.get(\"apps\", \"file\");\n\n// 6) Construire un message pour supprimer le message d'origine\nif (messageId) {\n    const msgDelete = {\n        payload: {\n            chatId: chatId,\n            type: \"deleteMessage\",\n            content: messageId\n        }\n    };\n    // On envoie la suppression avant la réponse\n    node.send(msgDelete);\n} else {\n    node.warn(\"handleCreateAppDecision : messageId introuvable, impossible de supprimer le message.\");\n}\n\n\n// Récupérer la trame TTN en pending pour cette app\nlet pendingApps = global.get(\"pendingApps\", \"file\") || {};\nlet pending = pendingApps[appId] || null;\nlet ttn = pending ? pending.ttn : null;\n\nif (!ttn) {\n    node.warn(`handleCreateAppDecision : aucune trame TTN en pending pour app \"${appId}\".`);\n}\n\nif (pending && pendingApps[appId]) {\n    delete pendingApps[appId];\n    global.set(\"pendingApps\", pendingApps, \"file\");\n}\n\n// On ne touche pas à apps, comportement \"comme avant\"\n\nmsg.payload = {\n    chatId: chatId,\n    type: \"message\",\n    content: `❌ L'app \"${appId}\" n'a pas été créée.\\nLes uplinks seront ignorés comme avant.`\n};\n\n// 10) Action inconnue\nnode.warn(`handleCreateAppDecision : action inconnue \"${action}\" dans callback_data (data=\"${data}\").`);\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
-        "y": 200,
+        "x": 490,
+        "y": 60,
         "wires": [
             [
-                "9bdc7f968867e52a",
-                "adfa767cc77f22c9"
+                "8cf9ab8cd301b6b6"
+            ]
+        ],
+        "outputLabels": [
+            "telegram"
+        ]
+    },
+    {
+        "id": "b2fa9c9c1e1bee92",
+        "type": "debug",
+        "z": "37026a48a7bdafcf",
+        "name": "debug 7",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f1deab3ad9a62b2a",
+        "type": "telegram event",
+        "z": "37026a48a7bdafcf",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "event": "callback_query",
+        "autoanswer": false,
+        "x": 55,
+        "y": 100,
+        "wires": [
+            [
+                "a4f176657ca38466"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "7289ebec8fb9e32b",
+        "type": "function",
+        "z": "37026a48a7bdafcf",
+        "name": "admin",
+        "func": "",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "global.set(\"adminChatId\",'-5247752370');",
+        "finalize": "",
+        "libs": [],
+        "x": 90,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5c2087f4700db89b",
+        "type": "function",
+        "z": "37026a48a7bdafcf",
+        "name": "Create App",
+        "func": "// 1) Récupérer le callback_data : payload.data ou payload.content\nlet data = msg.payload.data || msg.payload.content || \"\";\nnode.warn(\"DEBUG callback data : \" + data);\n\n// 2) Parser action|appId\nlet parts  = data.split(\"|\");\nlet action = parts[0] || null;\nlet appId  = parts[1] || null;\n\nif (!action) {\n    node.warn(\"handleCreateAppDecision : action manquante dans callback_data. data=\" + data);\n    return null;\n}\nif (!appId) {\n    node.warn(\"handleCreateAppDecision : appId manquant dans callback_data. data=\" + data);\n    return null;\n}\n\n// 3) Récupérer chatId et messageId\nlet chatId =\n    msg.payload.chatId ||\n    (msg.payload.message && msg.payload.message.chat && msg.payload.message.chat.id);\n\nlet messageId =\n    msg.payload.messageId ||\n    (msg.payload.message && msg.payload.message.message_id);\n\nif (!chatId) {\n    node.warn(\"handleCreateAppDecision : chatId introuvable dans le callback.\");\n    return null;\n}\n\n// 4) Récupérer  apps dans le STORE \"file\"\nlet apps = global.get(\"apps\", \"file\");\n\n// 5) Construire un message pour supprimer le message d'origine\nif (messageId) {\n    const msgDelete = {\n        payload: {\n            chatId: chatId,\n            type: \"deleteMessage\",\n            content: messageId\n        }\n    };\n    // On envoie la suppression avant la réponse\n    node.send(msgDelete);\n} else {\n    node.warn(\"handleCreateAppDecision : messageId introuvable, impossible de supprimer le message.\");\n}\n\n// 6) Récupérer le message en pending pour cette app\nlet pendingApps = global.get(\"pendingApps\", \"file\") || {};\nlet pending = pendingApps[appId] || null;\nlet ttn = pending ? pending.ttn : null;\n\n// 7) Créer l'entrée apps[appId]\nif (!apps[appId]) {\n    apps[appId] = {\n        chatId: null,\n        devices: {}\n    };\n    node.warn(`handleCreateAppDecision : app \"${appId}\" créée dans apps.`);\n} else {\n    node.warn(`handleCreateAppDecision : app \"${appId}\" existe déjà, pas recréée.`);\n}\n\n// 8) Nettoyer le pending pour cette app\nif (pending && pendingApps[appId]) {\n    delete pendingApps[appId];\n    global.set(\"pendingApps\", pendingApps, \"file\");\n}\n\n// 9) puis seulement sauvegarder\nglobal.set(\"apps\", apps, \"file\");\n\n// 10) Préparer la réponse Telegram\nmsg.payload = {\n    chatId: chatId,\n    type: \"message\",\n    content: `✅ L'app \"${appId}\" a été créée dans la console.`\n};\n\n// 11) Préparer le message de réinjection vers Check appID\nlet reinjectMsg = null;\nif (ttn) {\n    reinjectMsg = {\n        payload: \n            ttn\n    };\n}\n\n// Sortie 1 = Telegram, sortie 2 = réinjection TTN\nreturn [msg, reinjectMsg];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 100,
+        "wires": [
+            [
+                "8cf9ab8cd301b6b6"
+            ],
+            [
+                "007ec6ac41703122"
+            ]
+        ],
+        "outputLabels": [
+            "telegram",
+            "check appID"
+        ]
+    },
+    {
+        "id": "007ec6ac41703122",
+        "type": "link out",
+        "z": "37026a48a7bdafcf",
+        "name": "callback",
+        "mode": "link",
+        "links": [
+            "8634491848930d06"
+        ],
+        "x": 660,
+        "y": 100,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "8cf9ab8cd301b6b6",
+        "type": "telegram sender",
+        "z": "37026a48a7bdafcf",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 615,
+        "y": 60,
+        "wires": [
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "2056a1db9eb47d43",
+        "type": "comment",
+        "z": "37026a48a7bdafcf",
+        "name": "UN TRUC QUI CHECK LES LASTSEEN",
+        "info": "vérifier tous les X temps que tous les capteurs ont été vus récemment. \n\nPareil pour la batterie",
+        "x": 200,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "07a5d0ae388b687a",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "Check appID",
+        "func": "// On garde le message TTN dans msg.ttn pour la suite\nmsg.ttn = msg.payload;\n\n// On récupère appId en devId dans le payload\nconst appId = msg?.ttn?.end_device_ids?.application_ids?.application_id;\nconst devId = msg?.ttn?.end_device_ids?.device_id;\n\n// Si pas d'appId → sortie 3\nif (!appId) {\n    return [null, null, msg];   // SORTIE 3\n}\n\n// Si on a un appId, on continue.\nmsg.appId = appId;\nmsg.devId = devId;\n\n// Récupération des variables de contexte \"apps\" dans le STORE \"file\"\nlet apps = global.get(\"apps\", \"file\");\n\nif (!apps || typeof apps !== \"object\") {\n    node.warn(\"Fallback VersionID : flow.get('apps','file') vide ou non-objet, initialisation à {}\");\n    apps = {};\n    // On sauve tout de suite un objet vide pour initialiser le store \"file\"\n    global.set(\"apps\", apps, \"file\");\n}\n\n// Vérifier si l'app existe\nconst appKnown = Object.prototype.hasOwnProperty.call(apps, appId);\n\n// Si app inconnue → sortie 2\nif (!appKnown) {\n    msg.appId = appId;\n    node.warn(`App inconnue : ${appId}`);\n\n    let pendingApps = global.get(\"pendingApps\", \"file\") || {};\n    pendingApps[appId] = {\n        ttn: msg.ttn,\n        savedAt: Date.now()\n    };\n    global.set(\"pendingApps\", pendingApps, \"file\");\n    \n    return [null, msg, null];   // SORTIE 2\n}\n\n// Sinon, l'app est connue.\nreturn [msg, null, null]; // SORTIE 1",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 160,
+        "wires": [
+            [
+                "e8409e9ee5ec763b"
+            ],
+            [
+                "fd11d901ae546d5e"
+            ],
+            [
+                "5c0480d1c7b858ed"
+            ]
+        ],
+        "outputLabels": [
+            "AppID OK",
+            "new AppID",
+            "no AppID ?!"
+        ]
+    },
+    {
+        "id": "87e974d909c1219f",
+        "type": "inject",
+        "z": "2278cf8893f4b3b9",
+        "name": "pilowtech-truck",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"pilowtech-truck\",\"application_ids\":{\"application_id\":\"mobilab-truck\"},\"dev_eui\":\"70B3D57ED006570F\",\"join_eui\":\"A840410000000101\",\"dev_addr\":\"260BBFF4\"},\"correlation_ids\":[\"gs:uplink:01KABZAZ39S61FDZRSHEYJF8R7\"],\"received_at\":\"2025-11-18T17:13:59.351577212Z\",\"uplink_message\":{\"session_key_id\":\"AZm4bIMdB73gKSiYasLGeQ==\",\"f_port\":1,\"f_cnt\":28785,\"frm_payload\":\"UgAP\",\"decoded_payload\":{\"bytes\":[82,0,15]},\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"eui-a84041ffff25542c\",\"eui\":\"A84041FFFF25542C\"},\"time\":\"2025-11-18T17:13:59.067949Z\",\"timestamp\":1953719129,\"rssi\":-91,\"channel_rssi\":-91,\"snr\":11,\"frequency_offset\":\"129\",\"uplink_token\":\"CiIKIAoUZXVpLWE4NDA0MWZmZmYyNTU0MmMSCKhAQf//JVQsENnGzaMHGgsI19LyyAYQmobHRCCop/CV7qgv\",\"channel_index\":2,\"received_at\":\"2025-11-18T17:13:57.949226017Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"868500000\",\"timestamp\":1953719129,\"time\":\"2025-11-18T17:13:59.067949Z\"},\"received_at\":\"2025-11-18T17:13:59.145981768Z\",\"consumed_airtime\":\"0.051456s\",\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"}}}",
+        "payloadType": "json",
+        "x": 260,
+        "y": 280,
+        "wires": [
+            [
+                "07a5d0ae388b687a"
             ]
         ]
     },
     {
-        "id": "e64461a22d69e5d4",
+        "id": "917912550f8a813a",
+        "type": "http in",
+        "z": "2278cf8893f4b3b9",
+        "name": "Webhook TTN",
+        "url": "/ttn/uplink",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 250,
+        "y": 160,
+        "wires": [
+            [
+                "07a5d0ae388b687a",
+                "97b5cd5f1639c11c"
+            ]
+        ]
+    },
+    {
+        "id": "2a12e180b794c57f",
+        "type": "inject",
+        "z": "2278cf8893f4b3b9",
+        "name": "porte 1",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"porte-01\",\"application_ids\":{\"application_id\":\"mobilab-truck\"},\"dev_eui\":\"70B3D57ED0072D6C\",\"join_eui\":\"0000000000000000\",\"dev_addr\":\"260B7E4E\"},\"correlation_ids\":[\"gs:uplink:01K71FCN0MB0BA21P7D3NQ1TSW\"],\"received_at\":\"2025-10-08T08:35:47.556876883Z\",\"uplink_message\":{\"session_key_id\":\"AZl2rHHCAzLVJCH6gefqcg==\",\"f_port\":1,\"f_cnt\":18339,\"frm_payload\":\"AC4ANgHxABgAMiRO\",\"decoded_payload\":{\"LAST_WATER_LEAK_DURATION\":0,\"MOD\":2,\"DOOR_OPEN_STATUS\":1,\"WATER_LEAK_TIMES\":0},\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"lisah-ug65-1\",\"eui\":\"24E124FFFEF7E3D6\"},\"time\":\"2025-10-08T08:35:47.328Z\",\"timestamp\":403505293,\"rssi\":-82,\"channel_rssi\":-82,\"snr\":13.5,\"frequency_offset\":\"230\",\"location\":{\"latitude\":43.61944841808217,\"longitude\":3.857522711001851,\"altitude\":80,\"source\":\"SOURCE_REGISTRY\"},\"uplink_token\":\"ChoKGAoMbGlzYWgtdWc2NS0xEggk4ST//vfj1hCNgbTAARoMCOPEmMcGELDDl6YBIMjNqJbfkekGKgwI48SYxwYQgMSznAE=\",\"channel_index\":3,\"gps_time\":\"2025-10-08T08:35:47.328Z\",\"received_at\":\"2025-10-08T08:35:47.330007620Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"867100000\",\"timestamp\":403505293,\"time\":\"2025-10-08T08:35:47.328Z\"},\"received_at\":\"2025-10-08T08:35:47.349656096Z\",\"consumed_airtime\":\"0.061696s\",\"packet_error_rate\":0.04761905,\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"}}}",
+        "payloadType": "json",
+        "x": 270,
+        "y": 200,
+        "wires": [
+            [
+                "07a5d0ae388b687a"
+            ]
+        ]
+    },
+    {
+        "id": "d53d2b39ffb3cba2",
+        "type": "inject",
+        "z": "2278cf8893f4b3b9",
+        "name": "porte 0",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"porte-01\",\"application_ids\":{\"application_id\":\"mobilab-truck\"},\"dev_eui\":\"70B3D57ED0072D6C\",\"join_eui\":\"0000000000000000\",\"dev_addr\":\"260B7E4E\"},\"correlation_ids\":[\"gs:uplink:01K71FCN0MB0BA21P7D3NQ1TSW\"],\"received_at\":\"2025-10-08T08:35:47.556876883Z\",\"uplink_message\":{\"session_key_id\":\"AZl2rHHCAzLVJCH6gefqcg==\",\"f_port\":1,\"f_cnt\":18339,\"frm_payload\":\"AC4ANgHxABgAMiRO\",\"decoded_payload\":{\"BAT_V\":2.742,\"LAST_WATER_LEAK_DURATION\":0,\"MOD\":2,\"DOOR_OPEN_STATUS\":0,\"WATER_LEAK_TIMES\":0},\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"lisah-ug65-1\",\"eui\":\"24E124FFFEF7E3D6\"},\"time\":\"2025-10-08T08:35:47.328Z\",\"timestamp\":403505293,\"rssi\":-82,\"channel_rssi\":-82,\"snr\":13.5,\"frequency_offset\":\"230\",\"location\":{\"latitude\":43.61944841808217,\"longitude\":3.857522711001851,\"altitude\":80,\"source\":\"SOURCE_REGISTRY\"},\"uplink_token\":\"ChoKGAoMbGlzYWgtdWc2NS0xEggk4ST//vfj1hCNgbTAARoMCOPEmMcGELDDl6YBIMjNqJbfkekGKgwI48SYxwYQgMSznAE=\",\"channel_index\":3,\"gps_time\":\"2025-10-08T08:35:47.328Z\",\"received_at\":\"2025-10-08T08:35:47.330007620Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"867100000\",\"timestamp\":403505293,\"time\":\"2025-10-08T08:35:47.328Z\"},\"received_at\":\"2025-10-08T08:35:47.349656096Z\",\"consumed_airtime\":\"0.061696s\",\"packet_error_rate\":0.04761905,\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"}}}",
+        "payloadType": "json",
+        "x": 270,
+        "y": 240,
+        "wires": [
+            [
+                "07a5d0ae388b687a"
+            ]
+        ]
+    },
+    {
+        "id": "8634491848930d06",
+        "type": "link in",
+        "z": "2278cf8893f4b3b9",
+        "name": "App/Dev created",
+        "links": [
+            "007ec6ac41703122"
+        ],
+        "x": 260,
+        "y": 120,
+        "wires": [
+            [
+                "07a5d0ae388b687a"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "f503dc8e7c75572a",
+        "type": "inject",
+        "z": "2278cf8893f4b3b9",
+        "name": "lht52: port 2",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"lht52-01\",\"application_ids\":{\"application_id\":\"mobilab-truck\"},\"dev_eui\":\"A84041B53189C133\",\"join_eui\":\"A840410000000100\",\"dev_addr\":\"260B0809\"},\"correlation_ids\":[\"gs:uplink:01KC63YXTYPYWXER9SG6C5J9NQ\"],\"received_at\":\"2025-12-11T07:10:44.778199175Z\",\"uplink_message\":{\"session_key_id\":\"AZEIwx1K8goMnyb1xbDK7g==\",\"f_port\":2,\"f_cnt\":36836,\"frm_payload\":\"BQ8DnwUNAWk6bnM=\",\"decoded_payload\":{\"Ext\":1,\"Hum_SHT\":102.77,\"Systimestamp\":1765437043,\"TempC_DS\":13.93,\"TempC_SHT\":1299},\"normalized_payload\":[{\"air\":{\"location\":\"indoor\",\"relativeHumidity\":92.7,\"temperature\":12.95}},{\"air\":{\"location\":\"outdoor\",\"temperature\":12.93}}],\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"eui-a84041ffff25542c\",\"eui\":\"A84041FFFF25542C\"},\"time\":\"2025-12-11T07:10:44.518658Z\",\"timestamp\":1524793051,\"rssi\":-113,\"channel_rssi\":-113,\"snr\":4.8,\"frequency_offset\":\"-45\",\"uplink_token\":\"CiIKIAoUZXVpLWE4NDA0MWZmZmYyNTU0MmMSCKhAQf//JVQsENv9idcFGgwI9NzpyQYQgIenkQIg+I7+pbDhGA==\",\"channel_index\":5,\"received_at\":\"2025-12-11T07:10:44.538328489Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"867500000\",\"timestamp\":1524793051,\"time\":\"2025-12-11T07:10:44.518658Z\"},\"received_at\":\"2025-12-11T07:10:44.575079560Z\",\"consumed_airtime\":\"0.061696s\",\"version_ids\":{\"brand_id\":\"dragino\",\"model_id\":\"lht52\",\"hardware_version\":\"_unknown_hw_version_\",\"firmware_version\":\"1.0\",\"band_id\":\"EU_863_870\"},\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"},\"last_battery_percentage\":{\"f_cnt\":36787,\"value\":39.130436,\"received_at\":\"2025-12-10T15:10:44.744554979Z\"}}}",
+        "payloadType": "json",
+        "x": 230,
+        "y": 320,
+        "wires": [
+            [
+                "07a5d0ae388b687a"
+            ]
+        ]
+    },
+    {
+        "id": "fd11d901ae546d5e",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "new AppID",
+        "func": "// ID du chat Telegram admin (à adapter)\nconst adminChatId = global.get(\"adminChatId\");\n\nconst appId    = msg.appId;\nconst devId = msg.devId || \"(deviceId inconnu)\";\n\n// On prépare le texte du message\nconst text = \n    `Nouvelle app ! \\n` +\n    `App : ${appId}\\n` +\n    `Device : ${devId}\\n\\n` +\n    `Voulez-vous créer cette app dans la console ?`;\n\n// On encode l'action dans callback_data pour le prochain flow\n// Format : createApp|<appId>  ou ignoreApp|<appId>\nmsg.payload = {\n    chatId: adminChatId,\n    type: \"message\",\n    content: text,\n    options: {\n        reply_markup: {\n            inline_keyboard: [\n                [\n                    { text: \"✅ Oui, créer l'app\", callback_data: `createAppYES|${appId}` },\n                    { text: \"❌ Non\",             callback_data: `createAppNO|${appId}` }\n                ]\n            ]\n        }\n    }\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 160,
+        "wires": [
+            [
+                "e75c75b9099fc470"
+            ]
+        ]
+    },
+    {
+        "id": "97b5cd5f1639c11c",
+        "type": "http response",
+        "z": "2278cf8893f4b3b9",
+        "name": "OK (HTTP:200)",
+        "statusCode": "200",
+        "headers": {},
+        "x": 440,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "fd136dca28eb45c7",
+        "type": "link out",
+        "z": "2278cf8893f4b3b9",
+        "name": "Data Pipeline",
+        "mode": "link",
+        "links": [
+            "13a819477edb94ce"
+        ],
+        "x": 850,
+        "y": 40,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "e8409e9ee5ec763b",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "check devID",
+        "func": "const appId = msg.appId;\nconst devId = msg.devId;\n\n// Si pas de devId → sortie 4\nif (!devId) {\n    return [null, null, null, msg];   // SORTIE 4\n}\n\n// Si on a un devId, on continue.\n\n// Récupérer les devices de la variable de contexte app.\n// On cherche si \"apps[appId].devices\" existe. \n// Si oui : on le récupére. Sinon on créé le device vide.\nlet apps = global.get(\"apps\", \"file\");\nconst devices = apps[appId].devices ? apps[appId].devices : {};\n\n// Vérifier si device existe dans cette app\nconst deviceKnown = Object.prototype.hasOwnProperty.call(devices, devId);\n\n// Si le device est connu, on regarde son devType.\nif (deviceKnown) {\n    const dev = devices[devId];\n    const devModel = dev.deviceType.model;\n    msg.deviceContextData = dev;\n\n    if (devModel) {\n        // ✅ DeviceType connu. Déjà vu.\n        msg.devModel = devModel;\n        return [msg, null, null, null];   // SORTIE 1\n    } else {\n        // ⚠️ devType Null.\n        return [null, msg, null, null];   // SORTIE 2\n    }\n}\n// Sinon, device inconnu : variable de contexte à créer\nreturn [null, null, msg, null];       // SORTIE 3",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 100,
+        "wires": [
+            [
+                "fd136dca28eb45c7"
+            ],
+            [
+                "cbcdace17b707489"
+            ],
+            [
+                "b50a48919c22a0ab"
+            ],
+            [
+                "685538ed0c10552d"
+            ]
+        ],
+        "outputLabels": [
+            "devID OK",
+            "no devType",
+            "new device",
+            "No devID ?!"
+        ]
+    },
+    {
+        "id": "5c0480d1c7b858ed",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "No AppID ?!",
+        "func": "// ID du chat Telegram admin (à adapter)\nconst adminChatId = global.get(\"adminChatId\");\n\nconst appId    = msg.appId;\n\n// On prépare le texte du message\nconst text = \n    `-- ERREUR AppID -- \\n`\n    + `Message sans AppID reçu : \\n \\n`\n    + msg.ttn\n    ;\n\n// On crée le message\nmsg.payload = {\n    chatId: adminChatId,\n    type: \"message\",\n    content: text,\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 200,
+        "wires": [
+            [
+                "e75c75b9099fc470"
+            ]
+        ]
+    },
+    {
+        "id": "685538ed0c10552d",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "No devID ?!",
+        "func": "// ID du chat Telegram admin (à adapter)\nconst adminChatId = global.get(\"adminChatId\");\n\nconst appId    = msg.appId;\nconst devId    = msg.devId;\n\n// On prépare le texte du message\nconst text = \n    `-- ERREUR devID -- \\n`\n    + `Message sans devId reçu : \\n`\n    + `AppID : `\n    + appId\n    + `\\n \\n`\n    + msg.ttn\n    ;\n\n// On crée le message\nmsg.payload = {\n    chatId: adminChatId,\n    type: \"message\",\n    content: text,\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 160,
+        "wires": [
+            [
+                "abf00fa99f23fb92"
+            ]
+        ]
+    },
+    {
+        "id": "b50a48919c22a0ab",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "new device",
+        "func": "// Récupérer les données de msg\nconst ttn   = msg.ttn;\nconst appId = msg.appId;\nconst devId = msg.devId;\n\n// Récupérer devEUI et apps\nconst devEUI = ttn?.end_device_ids?.dev_eui || null;\nlet apps = global.get(\"apps\", \"file\");\n\n// Creation du container devices\nif (!apps[appId].devices || typeof apps[appId].devices !== \"object\") {\n    apps[appId].devices = {};\n}\n\n// Création du device avec ta structure minimale\napps[appId].devices[devId] = {\n    deviceEUI: devEUI,\n    deviceName : devId,\n    deviceType: {\n        brand: null,            \n        model: null,            \n        hardwareVersion: null,\n        softwareVersion: null\n    },\n    alertEnabled: true,         \n    meta: {\n        battery: null,          \n        batteryTreshold: null,  \n        lastSeen: null,\n        latitude: null,\n        longitude: null,\n        rssi: null,\n        snr: null\n    },\n    metrics: {\n        // vide\n    },\n    alertState: {\n        alertFrequency: \"1d\",\n        lastNoDataAlert_2d: 0,\n        lastNoDataAlert_1w: 0,\n        lastNoDataAlert_1m: 0\n    }\n};\n\nnode.warn(`Init new device : device \"${devId}\" créé dans app \"${appId}\".`);\n\n// Sauvegarde dans le store \"file\"\n/// Tri des clés avant sauvegarde\n    function sortKeys(obj) {\n        if (!obj || typeof obj !== \"object\") return obj;\n        const sorted = {};\n        Object.keys(obj).sort().forEach(k => {\n            sorted[k] = obj[k];\n        });\n        return sorted;\n    }\n\n\n/// trier tous les devices de cette app\napps[appId].devices = sortKeys(apps[appId].devices);\n\n// sauvegarde\nglobal.set(\"apps\", apps, \"file\");\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 120,
+        "wires": [
+            [
+                "4cc6abf517b0b12c"
+            ]
+        ]
+    },
+    {
+        "id": "cbcdace17b707489",
+        "type": "link out",
+        "z": "2278cf8893f4b3b9",
+        "name": "get deviceType",
+        "mode": "link",
+        "links": [
+            "a7fdaaa26ce514fc"
+        ],
+        "x": 860,
+        "y": 80,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "4cc6abf517b0b12c",
+        "type": "link out",
+        "z": "2278cf8893f4b3b9",
+        "name": "get deviceType",
+        "mode": "link",
+        "links": [
+            "a7fdaaa26ce514fc"
+        ],
+        "x": 1020,
+        "y": 120,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "e75c75b9099fc470",
+        "type": "telegram sender",
+        "z": "2278cf8893f4b3b9",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 725,
+        "y": 180,
+        "wires": [
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "abf00fa99f23fb92",
+        "type": "telegram sender",
+        "z": "2278cf8893f4b3b9",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 955,
+        "y": 160,
+        "wires": [
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "348f94aa746255e2",
+        "type": "comment",
+        "z": "2278cf8893f4b3b9",
+        "name": "CHECK APPID & DEVID",
+        "info": "",
+        "x": 270,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "17851fdaf0f540c4",
+        "type": "inject",
+        "z": "2278cf8893f4b3b9",
+        "name": "lht52: port 5",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"end_device_ids\":{\"device_id\":\"lht52-01\",\"application_ids\":{\"application_id\":\"mobilab-truck\"},\"dev_eui\":\"A84041B53189C133\",\"join_eui\":\"A840410000000100\",\"dev_addr\":\"260B0809\"},\"correlation_ids\":[\"gs:uplink:01KC63YXTYPYWXER9SG6C5J9NQ\"],\"received_at\":\"2025-12-11T07:10:44.778199175Z\",\"uplink_message\":{\"session_key_id\":\"AZEIwx1K8goMnyb1xbDK7g==\",\"f_port\":5,\"f_cnt\":36836,\"frm_payload\":\"BQ8DnwUNAWk6bnM=\",\"decoded_payload\":{\"Bat_mV\":\"2874\"},\"normalized_payload\":[{\"air\":{\"location\":\"indoor\",\"relativeHumidity\":92.7,\"temperature\":12.95}},{\"air\":{\"location\":\"outdoor\",\"temperature\":12.93}}],\"rx_metadata\":[{\"gateway_ids\":{\"gateway_id\":\"eui-a84041ffff25542c\",\"eui\":\"A84041FFFF25542C\"},\"time\":\"2025-12-11T07:10:44.518658Z\",\"timestamp\":1524793051,\"rssi\":-113,\"channel_rssi\":-113,\"snr\":4.8,\"frequency_offset\":\"-45\",\"uplink_token\":\"CiIKIAoUZXVpLWE4NDA0MWZmZmYyNTU0MmMSCKhAQf//JVQsENv9idcFGgwI9NzpyQYQgIenkQIg+I7+pbDhGA==\",\"channel_index\":5,\"received_at\":\"2025-12-11T07:10:44.538328489Z\"}],\"settings\":{\"data_rate\":{\"lora\":{\"bandwidth\":125000,\"spreading_factor\":7,\"coding_rate\":\"4/5\"}},\"frequency\":\"867500000\",\"timestamp\":1524793051,\"time\":\"2025-12-11T07:10:44.518658Z\"},\"received_at\":\"2025-12-11T07:10:44.575079560Z\",\"consumed_airtime\":\"0.061696s\",\"version_ids\":{\"brand_id\":\"dragino\",\"model_id\":\"lht52\",\"hardware_version\":\"_unknown_hw_version_\",\"firmware_version\":\"1.0\",\"band_id\":\"EU_863_870\"},\"network_ids\":{\"net_id\":\"000013\",\"ns_id\":\"EC656E0000000181\",\"tenant_id\":\"ttn\",\"cluster_id\":\"eu1\",\"cluster_address\":\"eu1.cloud.thethings.network\"},\"last_battery_percentage\":{\"f_cnt\":36787,\"value\":39.130436,\"received_at\":\"2025-12-10T15:10:44.744554979Z\"}}}",
+        "payloadType": "json",
+        "x": 230,
+        "y": 360,
+        "wires": [
+            [
+                "07a5d0ae388b687a"
+            ]
+        ]
+    },
+    {
+        "id": "bde5ef0a4b782565",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "devModel in ttn",
+        "func": "// ========= CONFIG =========\nconst FIELD_SYNONYMS = {\n    brand: [\"brand\", \"brand_id\", \"marque\", \"manufacturer\", \"fabricant\"],\n    model: [\"model\", \"model_id\", \"type\", \"modele\"],\n    hardwareVersion: [\"hardwareVersion\", \"hardware_version\", \"hw_version\", \"hwVer\"],\n    softwareVersion: [\"softwareVersion\", \"firmware_version\", \"fw_version\", \"sw_version\"]\n};\n\n// ========= INPUT =========\nconst ttn   = msg.ttn;\nconst appId = msg.appId;\nconst devId = msg.devId;\n\nlet apps = global.get(\"apps\", \"file\");\n\n// ========= UTILS =========\n\n// recherche récursive d’un champ dans tout l’objet\nfunction deepSearch(obj, synonyms) {\n    if (!obj || typeof obj !== \"object\") return null;\n\n    for (const key of Object.keys(obj)) {\n        const value = obj[key];\n\n        // match clé\n        if (synonyms.includes(key)) {\n            if (value !== null && value !== undefined && value !== \"\") {\n                return value;\n            }\n        }\n\n        // descente récursive\n        if (typeof value === \"object\") {\n            const found = deepSearch(value, synonyms);\n            if (found) return found;\n        }\n    }\n    return null;\n}\n\n// ========= EXTRACTION =========\nconst extracted = {\n    brand:           deepSearch(ttn, FIELD_SYNONYMS.brand),\n    model:           deepSearch(ttn, FIELD_SYNONYMS.model),\n    hardwareVersion: deepSearch(ttn, FIELD_SYNONYMS.hardwareVersion),\n    softwareVersion: deepSearch(ttn, FIELD_SYNONYMS.softwareVersion)\n};\n\n// ========= UPDATE CONTEXT =========\n\nconst dev = apps[appId].devices[devId];\n\ndev.deviceType = dev.deviceType || {};\n\nif (extracted.brand)           dev.deviceType.brand           = extracted.brand;\nif (extracted.model)           dev.deviceType.model           = extracted.model;\nif (extracted.hardwareVersion) dev.deviceType.hardwareVersion = extracted.hardwareVersion;\nif (extracted.softwareVersion) dev.deviceType.softwareVersion = extracted.softwareVersion;\n\n// sauvegarde\napps[appId].devices[devId] = dev;\nglobal.set(\"apps\", apps, \"file\");\n\n// ========= SORTIE =========\n\n// Il faut au minimum le model\nif (!extracted.model) {\n    return [null, msg];   // SORTIE 2 → on continue ailleurs\n}\n\n// injecter pour la suite\nmsg.devModel = dev.deviceType.model;\nmsg.deviceContextData = dev;\n\nreturn [msg, null];   // SORTIE 1 → vers update meta",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 520,
+        "wires": [
+            [
+                "bd590850c076718a",
+                "85036e4d6ed833fe"
+            ],
+            [
+                "ce6a93fc2667edcd"
+            ]
+        ],
+        "outputLabels": [
+            "Succes",
+            "notFound"
+        ]
+    },
+    {
+        "id": "bd590850c076718a",
+        "type": "link out",
+        "z": "2278cf8893f4b3b9",
+        "name": "Data Pipeline",
+        "mode": "link",
+        "links": [
+            "13a819477edb94ce"
+        ],
+        "x": 1070,
+        "y": 520,
+        "wires": [],
+        "l": true
+    },
+    {
+        "id": "ce6a93fc2667edcd",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "Dragino : port 5 & 7bytes",
+        "func": "// Détecte un \"Device Status\" Dragino sur FPort=5, payload 7 bytes\n// Si OK : met à jour apps[appId].devices[devId].deviceType (brand/model/softwareVersion) + msg.devModel\n// Sortie 1 si trouvé, sinon sortie 2\n\nconst ttn   = msg.ttn;\nconst appId = msg.appId;\nconst devId = msg.devId;\n\nconst uplink = ttn?.uplink_message;\nconst fport  = uplink?.f_port;\n\nconst DRAGINO_MODEL_MAP = {\n    // 0x09: \"lht52\",\n    // 0x0A: \"lht65\",\n    // 0x0B: \"ldds75\",\n};\n\n// On ne traite que FPORT=5\nif (fport !== 5) {\n    return [null, msg]; // sortie 2\n}\n\n// Récupérer les bytes : priorités\n// 1) decoded_payload.bytes (si on l'a)\n// 2) base64 frm_payload (TTN v3)\nlet bytes = null;\n\nif (Array.isArray(uplink?.decoded_payload?.bytes)) {\n    bytes = uplink.decoded_payload.bytes;\n} else if (typeof uplink?.frm_payload === \"string\" && uplink.frm_payload.length > 0) {\n    try {\n        const buf = Buffer.from(uplink.frm_payload, \"base64\");\n        bytes = Array.from(buf);\n    } catch (e) {\n        bytes = null;\n    }\n}\n\n// Il faut exactement 7 bytes pour ce message \"Device Status\"\nif (!Array.isArray(bytes) || bytes.length !== 7) {\n    return [null, msg]; // sortie 2\n}\n\n// Lecture Dragino\nconst sensorModelCode = bytes[0];\nconst softwareVersion = ((bytes[1] << 8) | bytes[2]) ;                    // byte 1\n\n// Si valeurs absurdes → on laisse tomber\nif (typeof sensorModelCode !== \"number\" || typeof softwareVersion !== \"number\") {\n    return [null, msg]; // sortie 2\n}\n\n// Mappage du modèle Dragino\nconst mappedModel = DRAGINO_MODEL_MAP[sensorModelCode];\n\nif (!mappedModel) {\n    return [null, msg]; // Pas de mapping -> Sortie 2\n}\n\n// Mise à jour du context\nlet apps = global.get(\"apps\", \"file\");\nconst dev = apps[appId].devices[devId];\n\ndev.deviceType.brand = \"dragino\";\ndev.deviceType.model = mappedModel;\ndev.deviceType.softwareVersion = softwareVersion ;\n\n// Sauvegarde\napps[appId].devices[devId] = dev;\nglobal.set(\"apps\", apps, \"file\");\n\n// Pour que ton flow continue comme si le modèle était connu\nmsg.devModel = dev.deviceType.model;\nmsg.devSoftVersion = dev.deviceType.softwareVersion;\nmsg.deviceContextData = dev;\n\nreturn [msg, null]; // sortie 1 -> vers update meta",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 540,
+        "wires": [
+            [
+                "bd590850c076718a",
+                "931706274fef2a7c"
+            ],
+            [
+                "5b7a6b685f2af0f7"
+            ]
+        ],
+        "outputLabels": [
+            "success",
+            "fail"
+        ]
+    },
+    {
+        "id": "5b7a6b685f2af0f7",
+        "type": "function",
+        "z": "2278cf8893f4b3b9",
+        "name": "checkNameID",
+        "func": "const ttn   = msg.ttn;\nconst appId = msg.appId;\nconst devId = msg.devId;\n\nconst DEVICE_NAME_RULES = [\n    { pattern: /sonar/i,     brand: \"mobilab\", model: \"sonar\" },\n    { pattern: /pilowtech/i, brand: \"mobilab\", model: \"pilowtech\" },\n    { pattern: /porte/i,     brand: \"mobilab\", model: \"lds02\" },\n    { pattern: /latex/i,     brand: \"mobilab\", model: \"latex\" },\n];\n\nfor (const rule of DEVICE_NAME_RULES) {\n    if (rule.pattern.test(devId)) {\n\n        let apps = global.get(\"apps\", \"file\");\n        const dev = apps[appId].devices[devId];\n\n        dev.deviceType.brand = rule.brand;\n        dev.deviceType.model = rule.model;\n\n        apps[appId].devices[devId] = dev;\n        global.set(\"apps\", apps, \"file\");\n\n        msg.devModel = rule.model;\n        msg.deviceContextData = dev;\n\n        return [msg, null]; // sortie 1 → update meta\n    }\n}\n\n// Si aucune règle ne match : envoi Telegram \n\nconst adminChatId = global.get(\"adminChatId\");\n\nconst uplink = ttn?.uplink_message;\nconst fport  = uplink?.f_port;\n\nmsg.payload = {\n    chatId: adminChatId,\n    type: \"message\",\n    content:\n        `--- ALERTE ---\\n` +\n        `Aucun modèle trouvé pour ce capteur : \\n` +\n        `App  : ${appId}\\n` +\n        `Device : ${devId}\\n` +\n        `Port : ${fport}\\n\\n` +\n        `uplink_message:\\n${uplink}`\n};\n\nreturn [null, msg]; // sortie 2",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 560,
+        "wires": [
+            [
+                "bd590850c076718a",
+                "319c2f4f255ab103"
+            ],
+            [
+                "a3063011e9e46e18"
+            ]
+        ],
+        "outputLabels": [
+            "Sucess",
+            "Fail"
+        ]
+    },
+    {
+        "id": "a3063011e9e46e18",
+        "type": "telegram sender",
+        "z": "2278cf8893f4b3b9",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1005,
+        "y": 580,
+        "wires": [
+            []
+        ],
+        "l": false
+    },
+    {
+        "id": "a7fdaaa26ce514fc",
+        "type": "link in",
+        "z": "2278cf8893f4b3b9",
+        "name": "get deviceType",
+        "links": [
+            "4cc6abf517b0b12c",
+            "cbcdace17b707489"
+        ],
+        "x": 260,
+        "y": 520,
+        "wires": [
+            [
+                "4594974313b3a7b6",
+                "bde5ef0a4b782565"
+            ]
+        ],
+        "l": true
+    },
+    {
+        "id": "4594974313b3a7b6",
         "type": "debug",
-        "z": "fa0d81b075c058ed",
+        "z": "2278cf8893f4b3b9",
+        "name": "debug 6",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "85036e4d6ed833fe",
+        "type": "debug",
+        "z": "2278cf8893f4b3b9",
+        "name": "debug 8",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "931706274fef2a7c",
+        "type": "debug",
+        "z": "2278cf8893f4b3b9",
+        "name": "debug 9",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "319c2f4f255ab103",
+        "type": "debug",
+        "z": "2278cf8893f4b3b9",
+        "name": "debug 10",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "4d386f43cea83bcc",
+        "type": "comment",
+        "z": "2278cf8893f4b3b9",
+        "name": "GET DEVICE TYPE",
+        "info": "",
+        "x": 270,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "75688c63573a7287",
+        "type": "switch",
+        "z": "53b2a5a1966a825e",
+        "name": "deviceType",
+        "property": "deviceContextData.deviceType.model",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "lht52",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ps-lb",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "sonar",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "pilowtech",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 5,
+        "x": 330,
+        "y": 700,
+        "wires": [
+            [
+                "24303c7bd6c6ddce"
+            ],
+            [],
+            [
+                "256427efbd510d97"
+            ],
+            [],
+            [
+                "f9ef585a896f4f2e"
+            ]
+        ]
+    },
+    {
+        "id": "13a819477edb94ce",
+        "type": "link in",
+        "z": "53b2a5a1966a825e",
+        "name": "link in 2",
+        "links": [
+            "fd136dca28eb45c7",
+            "bd590850c076718a"
+        ],
+        "x": 65,
+        "y": 700,
+        "wires": [
+            [
+                "711da93e693a69bf"
+            ]
+        ]
+    },
+    {
+        "id": "24303c7bd6c6ddce",
+        "type": "function",
+        "z": "53b2a5a1966a825e",
+        "name": "dragino - lht52",
+        "func": "const appId   = msg.appId;\nconst tenant  = msg.tenant;\nconst devId   = msg.devId;\nconst uplink  = msg.ttn.uplink_message;\nconst fPort   = uplink.f_port;\n\nlet apps = global.get(\"apps\", \"file\") ;\nlet dev = apps[appId].devices[devId];\n\n// Nouveau device\nif (dev.meta.batteryTreshold == null) {\n    // On initialise le seuil batterie par défaut\n    dev.meta.batteryTreshold = 2800;\n    }\n\nif (dev.metrics.humidity == null) {\n  dev.metrics.humidity = {\n    value: null,\n    min: 0,\n    max: 100,\n    unity: \"%\",\n    alertOn: false,\n    frequencyAlert: \"1d\",\n    lastAlert: 0\n  };\n}\n\nif (dev.metrics.temperature == null) {\n  dev.metrics.temperature = {\n    value: null,\n    min: 0,\n    max: 40,\n    unity: \"°C\",\n    alertOn: false,\n    frequencyAlert: \"1d\",\n    lastAlert: 0\n  };\n}\n\nif (dev.metrics.temperature_probe == null) {\n  dev.metrics.temperature_probe = {\n    value: null,\n    min: 0,\n    max: 40,\n    unity: \"°C\",\n    alertOn: false,\n    frequencyAlert: \"1d\",\n    lastAlert: 0\n  };\n}\n\n// PORT 2 : maj de dev.metrics\nif (fPort === 2) {\n    const hum   = uplink.decoded_payload?.Hum_SHT ?? null;\n    const temp  = uplink.decoded_payload?.TempC_SHT ?? null;\n    const tempP = uplink.decoded_payload?.TempC_DS ?? null;\n\n    dev.metrics.humidity.value = hum;\n    dev.metrics.temperature.value = temp;\n    dev.metrics.temperature_probe.value = tempP;\n\n  // Prépare pour postgre\n  msg.query = `INSERT INTO public.lht52\n  (time, name, tenant, rssi, snr, humidity, temperature, temperature_probe)\n  VALUES (\n  '${uplink.received_at}',\n  '${msg.devId}',\n  '${tenant}',\n  ${dev.meta.rssi},\n  ${dev.meta.snr},\n  ${hum},\n  ${temp},\n  ${tempP}\n  );\n  `.trim();\n}\n\n// PORT 5 : maj de dev.meta\nif (fPort === 5) {\n    const bat = uplink.decoded_payload?.Bat_mV ?? null;\n    dev.meta.battery = bat;\n\n  // Prépare pour postgre\n  msg.query = `INSERT INTO public.lht52\n  (time, name, tenant, rssi, snr, battery)\n  VALUES (\n  '${uplink.received_at}',\n  '${msg.devId}',\n  '${tenant}',\n  ${dev.meta.rssi},\n  ${dev.meta.snr},\n  ${bat}\n  );\n  `.trim();\n}\n\n// Enregistrer les données\napps[appId].devices[devId] = dev;\nglobal.set(\"apps\", apps, \"file\");\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 680,
+        "wires": [
+            [
+                "8c54eae425beea86",
+                "28237ff523a37175",
+                "7e66249b3f9f1279"
+            ]
+        ]
+    },
+    {
+        "id": "256427efbd510d97",
+        "type": "function",
+        "z": "53b2a5a1966a825e",
+        "name": "2bytes/val",
+        "func": "// Parser SONAR\n//\n// - Lit le device dans apps[appId].devices[deviceId]\n// - Port 1 : distances dans les bytes -> value1, value2, ...\n// - Port 10 : 4 bytes, les 2 derniers = batterie en mV\n// - Pour les metrics sonar : min=0, max=100, unity=null, alertOn=false, lastAlert=0\n// - Pour sonar : batteryTreshold = 2800 (mV) si non défini\n\nconst appId    = msg.appId;\nconst deviceId = msg.devId;\nconst ttn      = msg.ttn;\nconst uplink = ttn.uplink_message;\nconst fPort = uplink.f_port;\n\nlet apps = global.get(\"apps\", \"file\") || {};\nlet dev = apps[appId].devices[deviceId];\n\n\n// Seuil batterie sonar\nif (dev.meta.batteryTreshold == null) {\n    dev.meta.batteryTreshold = 2800;\n}\n\n// ---------------------------------------------------------------\n// 3) Récupération des bytes (pour ports 1 et 10)\n// ---------------------------------------------------------------\nlet bytes = null;\n\n// Priorité : decoded_payload.bytes\nif (Array.isArray(uplink.decoded_payload?.bytes)) {\n    bytes = uplink.decoded_payload.bytes;\n} else if (typeof uplink.frm_payload === \"string\") {\n    try {\n        const buf = Buffer.from(uplink.frm_payload, \"base64\");\n        bytes = Array.from(buf);\n    } catch (e) {\n        node.warn(`Parser SONAR : impossible de décoder frm_payload base64 pour \"${deviceId}\".`);\n        bytes = null;\n    }\n}\n\n// Message de base\nlet message = {\n    deviceId: deviceId,\n    rssi: dev.meta.rssi ?? null,\n    snr: dev.meta.snr ?? null,\n    port: fPort\n};\n\n// ---------------------------------------------------------------\n// 4) Si PORT 1 : valeurs sonar (distance, etc.)\n// ---------------------------------------------------------------\nif (fPort === 1) {\n\n    if (!Array.isArray(bytes) || bytes.length < 2) {\n        node.warn(\n            `Parser SONAR (port 1) : aucun byte exploitable (len=${bytes ? bytes.length : \"null\"}) pour \"${deviceId}\".`\n        );\n        // On renvoie quand même le message minimal\n        apps[appId].devices[deviceId] = dev;\n        flow.set(\"apps\", apps, \"file\");\n        msg.payload = message;\n        return msg;\n    }\n\n    const numPairs = Math.floor(bytes.length / 2);\n    if (numPairs === 0) {\n        node.warn(\n            `Parser SONAR (port 1) : len=${bytes.length} (impair), aucune paire complète pour \"${deviceId}\".`\n        );\n    }\n\n    for (let i = 0; i < numPairs; i++) {\n        const hi = bytes[2 * i];\n        const lo = bytes[2 * i + 1];\n\n        const value = (hi << 8) + lo;   // 16 bits non signé\n        const key = `value${i + 1}`;  // value1, value2, ...\n\n        // Ajout au payload de sortie\n        message[key] = value;\n\n        // S’assurer que la metric existe\n        if (!dev.metrics[key]) {\n            dev.metrics[key] = {\n                value: null,\n                min: 0,\n                max: 100,\n                unity: null,\n                alertOn: false,\n                lastAlert: 0\n            };\n        }\n\n        // Mise à jour de la valeur\n        dev.metrics[key].value = value;\n    }\n\n    if (bytes.length % 2 === 1) {\n        node.warn(\n            `Parser SONAR (port 1) : longueur impaire (${bytes.length}) pour \"${deviceId}\", ` +\n            `dernier byte ignoré.`\n        );\n    }\n}\n\n// ---------------------------------------------------------------\n// 5) Si PORT 10 : batterie (4 bytes, on garde les 2 derniers)\n// ---------------------------------------------------------------\nif (fPort === 10) {\n\n    if (!Array.isArray(bytes) || bytes.length < 4) {\n        node.warn(\n            `Parser SONAR (port 10) : besoin de 4 bytes, len=${bytes ? bytes.length : \"null\"} pour \"${deviceId}\".`\n        );\n    } else {\n        const hi = bytes[2];\n        const lo = bytes[3];\n        const bat = (hi << 8) + lo;   // mV\n\n        message.battery = bat;\n        dev.meta.battery = bat;\n\n        // S’assurer du seuil batterie sonar\n        if (dev.meta.batteryTreshold == null) {\n            dev.meta.batteryTreshold = 2800;\n        }\n    }\n}\n\n// ---------------------------------------------------------------\n// 6) Sauvegarde et sortie\n// ---------------------------------------------------------------\napps[appId].devices[deviceId] = dev;\nglobal.set(\"apps\", apps, \"file\");\n\nmsg.payload = message;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 760,
+        "wires": [
+            [
+                "8c54eae425beea86"
+            ]
+        ]
+    },
+    {
+        "id": "f9ef585a896f4f2e",
+        "type": "debug",
+        "z": "53b2a5a1966a825e",
+        "name": "OTHERWISE",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "7232dc946740f6be",
+        "type": "debug",
+        "z": "53b2a5a1966a825e",
+        "name": "appId 1 / device 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 350,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "8c54eae425beea86",
+        "type": "function",
+        "z": "53b2a5a1966a825e",
+        "name": "analogAlert",
+        "func": "// Gestion des alertes Telegram à partir de l'état en contexte\n\nconst appId = msg.appId;\nconst devId = msg.devId;\nconst ttn = msg.ttn;\n\nlet apps = global.get(\"apps\", \"file\") ;\nlet dev = apps[appId].devices[devId];\nconst chatId = apps[appId].chatId;\n\nif (!chatId) {\n    node.warn(\"Pas de chatId défini pour cette app.\");\n    return null;\n}\n\nif (!dev.alertEnabled) {\n    return null;\n}\n\n// Convertit une fréquence '1d', '2h', '30m', '1w' en msec.\n// Si non valide, on renvoie 1 jour.\n\nfunction parseFrequencyMs(freqStr) {\n    if (!freqStr || typeof freqStr !== 'string') {\n        return 24 * 60 * 60 * 1000; // 1 jour par défaut\n    }\n    const m = freqStr.match(/^(\\d+)([mhdw])$/); // minutes, heures, jours, semaines\n    if (!m) {\n        return 24 * 60 * 60 * 1000;\n    }\n    const value = Number(m[1]);\n    const unit = m[2];\n\n    switch (unit) {\n        case 'm': return value * 60 * 1000;\n        case 'h': return value * 60 * 60 * 1000;\n        case 'd': return value * 24 * 60 * 60 * 1000;\n        case 'w': return value * 7 * 24 * 60 * 60 * 1000;\n        default: return 24 * 60 * 60 * 1000;\n    }\n}\n\n// Rend une version lisible de la fréquence \n// ('1d' -> '1 jour', '2h' -> '2 heures', etc.)\n\nfunction frequencyToHuman(freqStr) {\n    if (!freqStr || typeof freqStr !== 'string') {\n        return \"1 jour\";\n    }\n    const m = freqStr.match(/^(\\d+)([mhdw])$/);\n    if (!m) {\n        return freqStr;\n    }\n    const value = Number(m[1]);\n    const unit = m[2];\n\n    let label = \"\";\n    switch (unit) {\n        case 'm':\n            label = value > 1 ? \"minutes\" : \"minute\";\n            break;\n        case 'h':\n            label = value > 1 ? \"heures\" : \"heure\";\n            break;\n        case 'd':\n            label = value > 1 ? \"jours\" : \"jour\";\n            break;\n        case 'w':\n            label = value > 1 ? \"semaines\" : \"semaine\";\n            break;\n    }\n    return `${value} ${label}`;\n}\n\nconst now = Date.now();\n\n// --- Logique d'alertes ---\nconst metrics = dev.metrics;\nconst deviceName = dev.deviceName ;\nlet alertLines = [];\n\nfor (const [metricName, metric] of Object.entries(metrics)) {\n    if (!metric) continue;\n\n    // Si la metric.alertOn n'est pas active, on passe\n    if (!metric.alertOn) {\n        continue;\n    }\n\n\n    // On regrade ici si on continue ou pas\n    let value = metric.value;\n    let min = metric.min;\n    let max = metric.max;\n    let unity = metric.unity;\n\n    if (value === undefined || min === undefined || max === undefined) {\n        continue;\n    }\n\n    value = Number(value);\n    min = Number(min);\n    max = Number(max);\n\n    if (isNaN(value) || isNaN(min) || isNaN(max)) {\n        continue;\n    }\n\n    // Check anti-Spam\n    // Anti-spam : fréquence par métrique\n    const freqMs = parseFrequencyMs(metric.frequencyAlert || \"1d\");\n    const lastAlert = Number(metric.lastAlert || 0);\n\n    // si on a déjà alerté récemment, on skip cette métrique\n    if (lastAlert !== 0 && (now - lastAlert) < freqMs) {\n        continue;\n    }\n\n    // On regarde d'abord si la valeur est hors des bornes\n    let line = null;\n    let isAlert = false;\n    const freqHuman = frequencyToHuman(metric.frequencyAlert || \"1d\");\n    \n    if (value < min) {\n        line = `🔹​ ${metricName} est à ${value} ${unity}, en dessous du seuil min de ${min} ${unity}`\n            + `\\n (Rappel dans ${freqHuman} si persiste.) \\n\\n`;\n        isAlert = true;\n    } else if (value > max) {\n        line = `🔹​ ${metricName} est à ${value} ${unity}, au dessus du seuil max de ${max} ${unity}`\n            + `\\n (Rappel dans ${freqHuman} si persiste.) \\n\\n`;\n        isAlert = true;\n    }\n\n    if (!isAlert) {\n        continue; // dans la plage, pas d'alerte\n    }\n    // Rajouter \"prochaine message à la ligne\"\n    // on pousse une ligne dans le msg à envoyer\n    alertLines.push(line);\n\n    // On met à jour lastAlert pour cette métrique\n    metric.lastAlert = now;\n}\n\n// Si au moins une métrique est en alerte, on envoie un message Telegram pour ce device\nif (alertLines.length > 0) {\n    const text =\n        `🚨 Alerte sur ${deviceName}* !\\n\\n` +\n        alertLines.join(\"\\n\\n\") +\n       `\\n\\n Vous pouvez modifier les alertes à tout moment en tapant /alertes`;\n    const outMsg = {\n        payload: {\n            chatId: chatId,\n            type: \"message\",\n            content: text\n        },\n        appId: appId,\n        deviceId: devId\n    };\n\n    node.send(outMsg);\n}\n\n// On persiste l'état mis à jour (lastAlert des metrics) dans le store \"file\"\nglobal.set(\"apps\", apps, \"file\");\n\n// Tout est géré par node.send()\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 660,
+        "wires": [
+            [
+                "5a116d10b0fcbe18",
+                "cd0bd319643b8a17"
+            ]
+        ]
+    },
+    {
+        "id": "28237ff523a37175",
+        "type": "debug",
+        "z": "53b2a5a1966a825e",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "5a116d10b0fcbe18",
+        "type": "debug",
+        "z": "53b2a5a1966a825e",
         "name": "debug 3",
         "active": true,
         "tosidebar": true,
@@ -2906,438 +3550,255 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 300,
-        "y": 280,
+        "x": 1040,
+        "y": 660,
         "wires": []
     },
     {
-        "id": "a0fd201cb0c7c98c",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1380,
-        "y": 140,
-        "wires": []
+        "id": "cd0bd319643b8a17",
+        "type": "telegram sender",
+        "z": "53b2a5a1966a825e",
+        "name": "",
+        "bot": "389caaaa5d0b8f80",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 995,
+        "y": 700,
+        "wires": [
+            []
+        ],
+        "l": false
     },
     {
-        "id": "adfa767cc77f22c9",
-        "type": "debug",
-        "z": "fa0d81b075c058ed",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1220,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "f13797de92e1448d",
-        "type": "influxdb in",
-        "z": "fa0d81b075c058ed",
-        "influxdb": "ef1b568734c2ffb5",
-        "name": "Influx",
-        "query": "SHOW DATABASES",
-        "rawOutput": false,
-        "precision": "",
-        "retentionPolicy": "",
-        "org": "",
-        "x": 470,
-        "y": 980,
+        "id": "711da93e693a69bf",
+        "type": "function",
+        "z": "53b2a5a1966a825e",
+        "name": "update meta",
+        "func": "// Update meta from rx_metadata\n// Entrée : msg\n// Sortie : msg.context mis à jour + apps sauvegardé en store \"file\"\n\nconst ttn = msg.ttn;\nconst appId = msg.appId;\nconst devId = msg.devId;\nconst dev = msg.deviceContextData;\nconst devModel = msg.devModel;\nlet apps = global.get(\"apps\", \"file\");\n\n// --- fonctions utilitaires ---\nfunction normalize(str) {\n    return String(str || \"\")\n        .trim()\n        .normalize(\"NFD\")                     // décompose accents\n        .replace(/[\\u0300-\\u036f]/g, \"\")      // supprime accents\n        .toLowerCase()\n        .replace(/\\s+/g, \"\")                  // supprime espaces\n        .replace(/-/g, \"_\");                  // remplace tirets par underscore\n}\n// identifiant strict (SQL/Grafana/Postgres): [a-z0-9_]\nfunction cleanIdentifier(str) {\n    return normalize(str)\n        .replace(/[^a-z0-9_]/g, \"\");\n}\nmsg.tenant = cleanIdentifier(String(msg.appId));\n\nconst rxList = Array.isArray(ttn?.uplink_message?.rx_metadata)\n    ? ttn.uplink_message.rx_metadata\n    : [];\n\n// 1) Max RSSI / Max SNR\nlet rssiMax = null;\nlet snrMax  = null;\n\nfor (const rx of rxList) {\n    if (typeof rx.rssi === \"number\") {\n        if (rssiMax === null || rx.rssi > rssiMax) rssiMax = rx.rssi;\n    }\n    if (typeof rx.snr === \"number\") {\n        if (snrMax === null || rx.snr > snrMax) snrMax = rx.snr;\n    }\n}\n\n// 2) Moyenne lat/lon (si dispo)\nlet latSum = 0;\nlet lonSum = 0;\nlet locCount = 0;\n\nfor (const rx of rxList) {\n    const lat = rx?.location?.latitude;\n    const lon = rx?.location?.longitude;\n    if (typeof lat === \"number\" && typeof lon === \"number\") {\n        latSum += lat;\n        lonSum += lon;\n        locCount++;\n    }\n}\n\nconst latitude  = locCount > 0 ? (latSum / locCount) : null;\nconst longitude = locCount > 0 ? (lonSum / locCount) : null;\n\n// 3) lastSeen\nconst lastSeen =\n    ttn?.uplink_message?.received_at ||\n    ttn?.received_at ||\n    null;\n\n// 4) Écriture dans meta\ndev.meta.rssi = rssiMax;\ndev.meta.snr  = snrMax;\ndev.meta.latitude  = latitude;\ndev.meta.longitude = longitude;\ndev.meta.lastSeen = lastSeen;\n\n// 5) Sauvegarde\napps[appId].devices[devId] = dev;\nglobal.set(\"apps\", apps, \"file\");\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 700,
         "wires": [
             [
-                "0599982de01a9ce3"
+                "75688c63573a7287",
+                "7232dc946740f6be"
             ]
         ]
     },
     {
-        "id": "ec197fe7d8a9b2c7",
-        "type": "influxdb in",
-        "z": "fa0d81b075c058ed",
-        "influxdb": "ef1b568734c2ffb5",
-        "name": "SHOW MEASUREMENTS",
-        "query": "",
-        "rawOutput": false,
-        "precision": "",
-        "retentionPolicy": "",
-        "org": "",
-        "x": 920,
-        "y": 980,
-        "wires": [
-            [
-                "0c3e2952c5a1f3b7"
-            ]
-        ]
-    },
-    {
-        "id": "ba618858f321dafe",
-        "type": "influxdb in",
-        "z": "fa0d81b075c058ed",
-        "influxdb": "ef1b568734c2ffb5",
-        "name": "Requête final",
-        "query": "",
-        "rawOutput": false,
-        "precision": "",
-        "retentionPolicy": "",
-        "org": "",
-        "x": 1380,
-        "y": 980,
-        "wires": [
-            [
-                "ce39cdb77a5a6a9d"
-            ]
-        ]
-    },
-    {
-        "id": "ab6affc838d3de30",
-        "type": "mqtt in",
-        "z": "eb74a94ca0642070",
-        "name": "app",
-        "topic": "v3/mobilab-truck@ttn/devices/+/up",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "9b586b4f8ca3767d",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 90,
-        "y": 140,
-        "wires": [
-            [
-                "1dd9bd11f2d9b4e4",
-                "6039eacaf594e958"
-            ]
-        ]
-    },
-    {
-        "id": "42235acd49c2d0fb",
+        "id": "2c7bd25fc3f5fd52",
         "type": "comment",
-        "z": "eb74a94ca0642070",
-        "name": "API Key",
-        "info": "mobilab-truck APP\nNNSXS.GLSRHW6HARISQJJNHQURWPCVKL7EC5ZGDL7F6KQ.3AQJEQIK2I4CLNXYT3VGIBFXCKOVJJMG3A2NSFWKTRUBQ4AJTU3A",
-        "x": 100,
-        "y": 100,
+        "z": "53b2a5a1966a825e",
+        "name": "DATA PIPELINE",
+        "info": "",
+        "x": 120,
+        "y": 640,
         "wires": []
     },
     {
-        "id": "5841c377a36792b0",
-        "type": "function",
-        "z": "eb74a94ca0642070",
-        "name": "ChatID",
-        "func": "",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "flow.set(\"chatId\",'-4215540322');\nflow.set(\"appId\",'mobilab-truck')\n",
-        "finalize": "",
-        "libs": [],
-        "x": 80,
-        "y": 40,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1dd9bd11f2d9b4e4",
-        "type": "subflow:bd7fdadec2d6549d",
-        "z": "eb74a94ca0642070",
-        "name": "",
-        "x": 260,
-        "y": 140,
-        "wires": [
-            [
-                "6f70974b3ea98f59"
-            ],
-            [
-                "31d360189e4e69d6"
-            ]
-        ]
-    },
-    {
-        "id": "6039eacaf594e958",
-        "type": "debug",
-        "z": "eb74a94ca0642070",
-        "name": "debug 108",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 250,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "6f70974b3ea98f59",
-        "type": "debug",
-        "z": "eb74a94ca0642070",
-        "name": "debug 109",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 450,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "31d360189e4e69d6",
-        "type": "function",
-        "z": "eb74a94ca0642070",
-        "name": "Prepare data",
-        "func": "const payload = msg.payload;\n\nmsg.topic = `INSERT INTO sensor_data (\n    time,\n    device_name,\n    rssi,\n    snr,\n    humidity,\n    temperature,\n    temperature_sonde\n) VALUES (\n    NOW(),\n    '${payload.name}',\n    ${payload.rssi},\n    ${payload.snr},\n    ${payload.humidity},\n    ${payload.temperature},\n    ${payload.temperature_sonde}\n);`;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 220,
-        "wires": [
-            [
-                "ac6b222838b1257d"
-            ]
-        ]
-    },
-    {
-        "id": "fa3de75b30b60871",
-        "type": "debug",
-        "z": "eb74a94ca0642070",
-        "name": "debug postgres",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 810,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "ac6b222838b1257d",
+        "id": "6ec84ecc32dae92a",
         "type": "postgresql",
-        "z": "eb74a94ca0642070",
-        "name": "",
-        "query": "{{topic}}",
-        "postgreSQLConfig": "b1b3382c8feafb97",
-        "split": false,
-        "rowsPerMsg": 1,
-        "outputs": 1,
-        "x": 510,
-        "y": 180,
-        "wires": [
-            [
-                "fa3de75b30b60871"
-            ]
-        ]
-    },
-    {
-        "id": "b8d79fdd5d5fb7c3",
-        "type": "inject",
-        "z": "179a94c74f682310",
-        "name": "lht52-04",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "{\"name\":\"lht52-04\",\"rssi\":-106,\"snr\":10.2,\"humidity\":61.1,\"temperature\":52.72,\"temperature_sonde\":23.37}",
-        "payloadType": "json",
-        "x": 100,
-        "y": 80,
-        "wires": [
-            [
-                "edb4f0ecbb79402c",
-                "84374ade8c8ebaa5"
-            ]
-        ]
-    },
-    {
-        "id": "eff397c550547440",
-        "type": "inject",
-        "z": "179a94c74f682310",
-        "name": "lht52-05",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "{\"name\":\"lht52-05\",\"rssi\":-106,\"snr\":10.2,\"humidity\":61.1,\"temperature\":23.72,\"temperature_sonde\":23.37}",
-        "payloadType": "json",
-        "x": 100,
-        "y": 120,
-        "wires": [
-            [
-                "d1c22b0898df1fba"
-            ]
-        ]
-    },
-    {
-        "id": "dc4b4c310821c481",
-        "type": "function",
-        "z": "179a94c74f682310",
-        "name": "ChatID",
-        "func": "",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "flow.set(\"chatId\",'-4215540322');\nflow.set(\"appId\",'mobilab-truck')\nflow.set(\"orgId\", '154')",
-        "finalize": "",
-        "libs": [],
-        "x": 100,
-        "y": 40,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d1c22b0898df1fba",
-        "type": "function",
-        "z": "179a94c74f682310",
-        "name": "récup le msg filtré via \"console mobilab\"",
-        "func": "var message = {\n  \"name\": \"lht52-04\",\n  \"rssi\": -100,\n  \"snr\": 1,\n  \"value\": 16.48,\n  \"battery\": 2,\n  \"tempC\": 28,\n};\nmsg.payload = message;\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 200,
-        "y": 400,
-        "wires": [
-            [
-                "12e36b0df2806f74"
-            ]
-        ]
-    },
-    {
-        "id": "12e36b0df2806f74",
-        "type": "function",
-        "z": "179a94c74f682310",
-        "name": "Ajout de orgId",
-        "func": "\nmsg.payload.orgId = flow.get(\"orgId\");\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 380,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "edb4f0ecbb79402c",
-        "type": "debug",
-        "z": "179a94c74f682310",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 340,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "84374ade8c8ebaa5",
-        "type": "function",
-        "z": "179a94c74f682310",
-        "name": "Ajout de values",
-        "func": "// Extract all sensor values from the incoming message payload object.\nlet name_val = msg.payload.name;\nlet rssi_val = msg.payload.rssi;\nlet snr_val = msg.payload.snr;\nlet humidity_val = msg.payload.humidity;\nlet temperature_val = msg.payload.temperature;\nlet temp_sonde_val = msg.payload.temperature_sonde;\n\n// Construct the parameterized query and put it in msg.query instead of msg.payload.\nmsg.query = \"INSERT INTO sensor_data (name, rssi, snr, humidity, temperature, temperature_sonde) VALUES ($1, $2, $3, $4, $5, $6)\";\n\n// Create an array of parameters and put it in msg.params.\nmsg.params = [name_val, rssi_val, snr_val, humidity_val, temperature_val, temp_sonde_val];\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 420,
-        "y": 200,
-        "wires": [
-            [
-                "9548d0845cd81dd7",
-                "234d78a9011d5898"
-            ]
-        ]
-    },
-    {
-        "id": "9548d0845cd81dd7",
-        "type": "debug",
-        "z": "179a94c74f682310",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 480,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "234d78a9011d5898",
-        "type": "postgresql",
-        "z": "179a94c74f682310",
-        "name": "iot_data",
+        "z": "53b2a5a1966a825e",
+        "name": "postgre",
         "query": "",
         "postgreSQLConfig": "b1b3382c8feafb97",
         "split": false,
         "rowsPerMsg": 1,
         "outputs": 1,
-        "x": 590,
-        "y": 80,
+        "x": 1220,
+        "y": 560,
         "wires": [
             []
         ]
     },
     {
-        "id": "7ad177fccd4a88f4",
+        "id": "a6452f0e546de337",
+        "type": "link in",
+        "z": "53b2a5a1966a825e",
+        "name": "link in 1",
+        "links": [
+            "7e66249b3f9f1279"
+        ],
+        "x": 1125,
+        "y": 560,
+        "wires": [
+            [
+                "6ec84ecc32dae92a"
+            ]
+        ]
+    },
+    {
+        "id": "7e66249b3f9f1279",
+        "type": "link out",
+        "z": "53b2a5a1966a825e",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "a6452f0e546de337"
+        ],
+        "x": 715,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "8257f75b4e5a910c",
+        "type": "function",
+        "z": "53b2a5a1966a825e",
+        "name": "function 1",
+        "func": "// Input: msg.payload = { appId, devId, metric, alertOn }\n\nconst appId = msg.appId;\nconst devId = msg.devId;\nconst metricName = msg.metric;\nconst alertOn = msg.alertOn;\n\nif (!appId || !devId || !metricName || typeof alertOn !== \"boolean\") {\n  node.warn(\"Payload attendu: {appId, devId, metric, alertOn:boolean}\");\n  return null;\n}\n\nlet apps = flow.get(\"apps\", \"file\");\nif (!apps || !apps[appId] || !apps[appId].devices || !apps[appId].devices[devId]) {\n  node.warn(`Device introuvable: apps[\"${appId}\"].devices[\"${devId}\"]`);\n  return null;\n}\n\nlet dev = apps[appId].devices[devId];\ndev.metrics = dev.metrics || {};\n\nif (!dev.metrics[metricName]) {\n  node.warn(`Metric introuvable: ${metricName} sur ${devId}`);\n  return null;\n}\n\n// set\ndev.metrics[metricName].alertOn = alertOn;\n\n// sauvegarde\napps[appId].devices[devId] = dev;\nflow.set(\"apps\", apps, \"file\");\n\n// feedback utile\nmsg.payload = {\n  ok: true,\n  appId,\n  devId,\n  metric: metricName,\n  alertOn\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7c6b2246fa9945cb",
+        "type": "inject",
+        "z": "53b2a5a1966a825e",
+        "name": "",
+        "props": [
+            {
+                "p": "appId",
+                "v": "mobilab-truck",
+                "vt": "str"
+            },
+            {
+                "p": "devId",
+                "v": "lht52-01",
+                "vt": "str"
+            },
+            {
+                "p": "metric",
+                "v": "humidity",
+                "vt": "str"
+            },
+            {
+                "p": "alertOn",
+                "v": "false",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 890,
+        "y": 820,
+        "wires": [
+            [
+                "8257f75b4e5a910c"
+            ]
+        ]
+    },
+    {
+        "id": "4764dd3f109e9fe8",
+        "type": "inject",
+        "z": "53b2a5a1966a825e",
+        "name": "true",
+        "props": [
+            {
+                "p": "appId",
+                "v": "mobilab-truck",
+                "vt": "str"
+            },
+            {
+                "p": "devId",
+                "v": "lht52-01",
+                "vt": "str"
+            },
+            {
+                "p": "metric",
+                "v": "humidity",
+                "vt": "str"
+            },
+            {
+                "p": "alertOn",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 890,
+        "y": 860,
+        "wires": [
+            [
+                "8257f75b4e5a910c"
+            ]
+        ]
+    },
+    {
+        "id": "1365928e8b682f3c",
+        "type": "inject",
+        "z": "53b2a5a1966a825e",
+        "name": "chatId",
+        "props": [
+            {
+                "p": "appId",
+                "v": "mobilab-truck",
+                "vt": "str"
+            },
+            {
+                "p": "chatId",
+                "v": "-5247752370",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 890,
+        "y": 920,
+        "wires": [
+            [
+                "e78bbfeae8be7547"
+            ]
+        ]
+    },
+    {
+        "id": "e78bbfeae8be7547",
+        "type": "function",
+        "z": "53b2a5a1966a825e",
+        "name": "function 2",
+        "func": "// Input: msg.payload = { appId, devId, metric, alertOn }\n\nconst appId = msg.appId;\nconst chatId = msg.chatId;\nconst metricName = msg.metric;\nconst alertOn = msg.alertOn;\n\nlet apps = flow.get(\"apps\", \"file\");\n\napps[appId].chatId = chatId; \n\n// sauvegarde\n\nflow.set(\"apps\", apps, \"file\");\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1a1add7b1d4306d2",
         "type": "global-config",
         "env": [],
         "modules": {
-            "node-red-contrib-influxdb": "0.7.0",
-            "node-red-contrib-postgresql": "0.14.2",
-            "node-red-contrib-telegrambot": "16.3.2"
+            "node-red-contrib-postgresql": "0.15.4",
+            "node-red-contrib-telegrambot": "16.3.2",
+            "node-red-contrib-influxdb": "0.7.0"
         }
     }
 ]
