@@ -1,7 +1,7 @@
 {
   "id": 1,
   "type": "timeseries",
-  "title": "Compteur d'eau - sw3l-01",
+  "title": "Compteur d'eau - sw3l-0",
   "gridPos": {
     "x": 0,
     "y": 0,
@@ -70,7 +70,7 @@
     {
       "editorMode": "builder",
       "format": "table",
-      "rawSql": "SELECT pulse, $__time(\"time\") FROM sw3l LIMIT 50 ",
+      "rawSql": "SELECT pulse, $__time(\"time\") FROM sw3l WHERE name = 'sw3l-01' LIMIT 50 ",
       "refId": "raw_data",
       "sql": {
         "columns": [
@@ -97,10 +97,33 @@
         "groupBy": [],
         "limit": 50,
         "whereJsonTree": {
-          "children1": [],
+          "children1": [
+            {
+              "type": "rule",
+              "id": "88a9ab99-4567-489a-bcde-f19e6b8276df",
+              "properties": {
+                "fieldSrc": "field",
+                "field": "name",
+                "operator": "equal",
+                "value": [
+                  "sw3l-01"
+                ],
+                "valueSrc": [
+                  "value"
+                ],
+                "valueType": [
+                  "text"
+                ],
+                "valueError": [
+                  null
+                ]
+              }
+            }
+          ],
           "id": "889aaaa9-0123-4456-b89a-b19e6b66652b",
           "type": "group"
-        }
+        },
+        "whereString": "name = 'sw3l-01'"
       },
       "table": "sw3l",
       "hide": true
@@ -118,8 +141,7 @@
     }
   ],
   "datasource": {
-    "type": "grafana-postgresql-datasource",
-    "uid": "efnbfk566qiv4a"
+    "type": "grafana-postgresql-datasource"
   },
   "options": {
     "tooltip": {
