@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.sw3l (
 ALTER TABLE public.sw3l ADD COLUMN IF NOT EXISTS rssi INTEGER;
 ALTER TABLE public.sw3l ADD COLUMN IF NOT EXISTS snr DOUBLE PRECISION;
 ALTER TABLE public.sw3l ADD COLUMN IF NOT EXISTS battery INTEGER;
-ALTER TABLE public.sw3l ADD COLUMN IF NOT EXISTS counter BIGINT;
+ALTER TABLE public.sw3l ADD COLUMN IF NOT EXISTS pulse BIGINT;
 
 -- 3) Timescale hypertable
 SELECT create_hypertable('public.sw3l', 'time', if_not_exists => TRUE, migrate_data => TRUE);
