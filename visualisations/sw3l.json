@@ -1,0 +1,137 @@
+{
+  "id": 1,
+  "type": "timeseries",
+  "title": "Compteur d'eau - sw3l-01",
+  "gridPos": {
+    "x": 0,
+    "y": 0,
+    "h": 8,
+    "w": 12
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "smooth",
+        "barAlignment": 0,
+        "barWidthFactor": 0.6,
+        "lineWidth": 1,
+        "fillOpacity": 22,
+        "gradientMode": "opacity",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "fixed",
+        "fixedColor": "semi-dark-blue"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "blue",
+            "value": null
+          },
+          {
+            "color": "red",
+            "value": 80
+          }
+        ]
+      },
+      "unit": "litre"
+    },
+    "overrides": []
+  },
+  "pluginVersion": "12.1.1",
+  "targets": [
+    {
+      "editorMode": "builder",
+      "format": "table",
+      "rawSql": "SELECT pulse, $__time(\"time\") FROM sw3l LIMIT 50 ",
+      "refId": "raw_data",
+      "sql": {
+        "columns": [
+          {
+            "parameters": [
+              {
+                "name": "pulse",
+                "type": "functionParameter"
+              }
+            ],
+            "type": "function"
+          },
+          {
+            "name": "$__time",
+            "parameters": [
+              {
+                "name": "\"time\"",
+                "type": "functionParameter"
+              }
+            ],
+            "type": "function"
+          }
+        ],
+        "groupBy": [],
+        "limit": 50,
+        "whereJsonTree": {
+          "children1": [],
+          "id": "889aaaa9-0123-4456-b89a-b19e6b66652b",
+          "type": "group"
+        }
+      },
+      "table": "sw3l",
+      "hide": true
+    },
+    {
+      "refId": "litres",
+      "datasource": {
+        "type": "__expr__",
+        "uid": "__expr__",
+        "name": "Expression"
+      },
+      "type": "math",
+      "expression": "$raw_data/450",
+      "hide": false
+    }
+  ],
+  "datasource": {
+    "type": "grafana-postgresql-datasource",
+    "uid": "efnbfk566qiv4a"
+  },
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none",
+      "hideZeros": false
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  }
+}
