@@ -1,0 +1,172 @@
+{
+  "id": 18,
+  "type": "gauge",
+  "title": "Batterie dragino - NOM_DU_CAPTEUR",
+  "description": "La valeur de batterie est donnée en Volts. Une batterie pleine est d'environ 3.5V. Elle se stabilise ensuite à 3V, puis dégringole rapidement. Cette dernière baisse de tension annonce la fin de vie imminente de l'objet connecté, il est alors important de recharger la batterie à ce moment.",
+  "gridPos": {
+    "x": 12,
+    "y": 0,
+    "h": 8,
+    "w": 3
+  },
+  "fieldConfig": {
+    "defaults": {
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "red",
+            "value": null
+          },
+          {
+            "color": "orange",
+            "value": 3
+          },
+          {
+            "color": "#EAB839",
+            "value": 3.3
+          },
+          {
+            "color": "green",
+            "value": 3.5
+          },
+          {
+            "color": "#6ED0E0",
+            "value": 4.2
+          }
+        ]
+      },
+      "color": {
+        "fixedColor": "orange",
+        "mode": "thresholds"
+      },
+      "min": 2,
+      "unit": "mvolt",
+      "max": 4.3
+    },
+    "overrides": []
+  },
+  "transparent": true,
+  "pluginVersion": "12.1.1",
+  "targets": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "ae2ff4ubdzf28f"
+      },
+      "groupBy": [],
+      "measurement": "devices",
+      "orderByTime": "ASC",
+      "policy": "autogen",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "battery"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [
+              " / 1000"
+            ],
+            "type": "math"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "name::field",
+          "operator": "=",
+          "value": "nom_du_capteur"
+        }
+      ],
+      "format": "table",
+      "rawSql": "SELECT $__time(\"time\"), battery FROM sw3l WHERE name = 'NOM_DU_CAPTEUR' LIMIT 50 ",
+      "editorMode": "builder",
+      "sql": {
+        "columns": [
+          {
+            "type": "function",
+            "name": "$__time",
+            "parameters": [
+              {
+                "type": "functionParameter",
+                "name": "\"time\""
+              }
+            ]
+          },
+          {
+            "type": "function",
+            "parameters": [
+              {
+                "type": "functionParameter",
+                "name": "battery"
+              }
+            ]
+          }
+        ],
+        "groupBy": [
+          {
+            "type": "groupBy",
+            "property": {
+              "type": "string"
+            }
+          }
+        ],
+        "limit": 50,
+        "whereJsonTree": {
+          "id": "89aaa9ba-0123-4456-b89a-b19e6b709e19",
+          "type": "group",
+          "children1": [
+            {
+              "type": "rule",
+              "id": "a98aa9b9-cdef-4012-b456-719e6b8e6955",
+              "properties": {
+                "fieldSrc": "field",
+                "field": "name",
+                "operator": "equal",
+                "value": [
+                  "NOM_DU_CAPTEUR"
+                ],
+                "valueSrc": [
+                  "value"
+                ],
+                "valueType": [
+                  "text"
+                ],
+                "valueError": [
+                  null
+                ]
+              }
+            }
+          ]
+        },
+        "whereString": "name = 'NOM_DU_CAPTEUR'"
+      },
+      "table": "sw3l"
+    }
+  ],
+  "datasource": {
+    "uid": "efnbfk566qiv4a",
+    "type": "grafana-postgresql-datasource"
+  },
+  "options": {
+    "reduceOptions": {
+      "values": false,
+      "calcs": [
+        "lastNotNull"
+      ],
+      "fields": ""
+    },
+    "orientation": "auto",
+    "showThresholdLabels": false,
+    "showThresholdMarkers": true,
+    "sizing": "auto",
+    "minVizWidth": 75,
+    "minVizHeight": 75
+  }
+}
