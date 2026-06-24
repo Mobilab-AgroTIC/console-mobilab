@@ -12,7 +12,7 @@ services:
     volumes:
       - node-red-data:/data
       - ./node-red/settings.js:/data/settings.js
-      - ./postgres/tables:/usr/src/node-red/tables:ro
+      - ./postgres/schema:/usr/src/node-red/schema:ro
     depends_on:
       - postgres
 
