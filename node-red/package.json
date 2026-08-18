@@ -1,0 +1,9 @@
+{
+  "name": "console-mobilab-nodered",
+  "version": "1.0.0",
+  "description": "Mobilab custom nodes",
+  "dependencies": {
+    "node-red-contrib-postgresql": "0.15.4",
+    "node-red-contrib-telegrambot": "17.0.5"
+  }
+}

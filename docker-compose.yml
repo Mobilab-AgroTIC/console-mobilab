@@ -1,6 +1,8 @@
 services:
   node-red:
-    image: nodered/node-red:4.1
+    build:
+      context: ./node-red
+      dockerfile: Dockerfile
     environment:
       - TZ=${TIMEZONE}
       - NR_ADMIN_USER=${NR_ADMIN_USER}
@@ -11,6 +13,8 @@ services:
       - console-mobilab-network
     volumes:
       - node-red-data:/data
+      - ./node-red/package.json:/data/package.json
+      - ./node-red/flows.json:/data/flows.json
       - ./node-red/settings.js:/data/settings.js
       - ./postgres/schema:/usr/src/node-red/schema:ro
     depends_on:
