@@ -1,0 +1,163 @@
+{
+  "id": 6,
+  "type": "timeseries",
+  "title": "Sn50v3-01",
+  "gridPos": {
+    "x": 0,
+    "y": 1,
+    "h": 8,
+    "w": 12
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "barAlignment": 0,
+        "barWidthFactor": 0.6,
+        "lineWidth": 1,
+        "fillOpacity": 0,
+        "gradientMode": "none",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "axisBorderShow": false,
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "palette-classic"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "green",
+            "value": null
+          },
+          {
+            "color": "red",
+            "value": 80
+          }
+        ]
+      }
+    },
+    "overrides": []
+  },
+  "pluginVersion": "12.1.1",
+  "targets": [
+    {
+      "editorMode": "code",
+      "format": "table",
+      "rawQuery": true,
+      "rawSql": "SELECT \r\n  $__time(\"time\"), \r\n  adc1, \r\n  adc3 \r\nFROM sn50v3 \r\nWHERE name = 'sn50v3-01' \r\n  AND $__timeFilter(\"time\")\r\n",
+      "refId": "A",
+      "sql": {
+        "columns": [
+          {
+            "name": "$__time",
+            "parameters": [
+              {
+                "name": "\"time\"",
+                "type": "functionParameter"
+              }
+            ],
+            "type": "function"
+          },
+          {
+            "parameters": [
+              {
+                "name": "adc1",
+                "type": "functionParameter"
+              }
+            ],
+            "type": "function"
+          },
+          {
+            "parameters": [
+              {
+                "name": "adc3",
+                "type": "functionParameter"
+              }
+            ],
+            "type": "function"
+          }
+        ],
+        "groupBy": [
+          {
+            "property": {
+              "type": "string"
+            },
+            "type": "groupBy"
+          }
+        ],
+        "limit": 50,
+        "whereJsonTree": {
+          "children1": [
+            {
+              "id": "b99aa8a8-cdef-4012-b456-719ef8d7eda7",
+              "properties": {
+                "field": "name",
+                "fieldSrc": "field",
+                "operator": "equal",
+                "value": [
+                  "sn50v3-3"
+                ],
+                "valueError": [
+                  null
+                ],
+                "valueSrc": [
+                  "value"
+                ],
+                "valueType": [
+                  "text"
+                ]
+              },
+              "type": "rule"
+            }
+          ],
+          "id": "999ba9bb-0123-4456-b89a-b19ef8d5dc7d",
+          "type": "group"
+        },
+        "whereString": "name = 'sn50v3-3'"
+      },
+      "table": "sn50v3"
+    }
+  ],
+  "datasource": {
+    "type": "grafana-postgresql-datasource",
+    "uid": "ffq355hh9igaoa"
+  },
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none",
+      "hideZeros": false
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
+  }
+}
