@@ -1,7 +1,7 @@
 {
   "id": 6,
   "type": "timeseries",
-  "title": "Sn50v3-01",
+  "title": "NOM_DU_CAPTEUR",
   "gridPos": {
     "x": 0,
     "y": 1,
@@ -69,7 +69,7 @@
       "editorMode": "code",
       "format": "table",
       "rawQuery": true,
-      "rawSql": "SELECT \r\n  $__time(\"time\"), \r\n  adc1, \r\n  adc3 \r\nFROM sn50v3 \r\nWHERE name = 'sn50v3-01' \r\n  AND $__timeFilter(\"time\")\r\n",
+      "rawSql": "SELECT \r\n  $__time(\"time\"), \r\n  adc1, \r\n  adc3 \r\nFROM sn50v3 \r\nWHERE name = 'NOM_DU_CAPTEUR' \r\n  AND $__timeFilter(\"time\")\r\n",
       "refId": "A",
       "sql": {
         "columns": [
@@ -120,7 +120,7 @@
                 "fieldSrc": "field",
                 "operator": "equal",
                 "value": [
-                  "sn50v3-3"
+                  "NOM_DU_CAPTEUR"
                 ],
                 "valueError": [
                   null
@@ -138,7 +138,7 @@
           "id": "999ba9bb-0123-4456-b89a-b19ef8d5dc7d",
           "type": "group"
         },
-        "whereString": "name = 'sn50v3-3'"
+        "whereString": "name = 'NOM_DU_CAPTEUR'"
       },
       "table": "sn50v3"
     }
