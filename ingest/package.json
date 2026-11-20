@@ -1,0 +1,16 @@
+{
+  "name": "mobilab-ingest",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Console Mobilab V3 : module chargé par Node-RED (secret, décodage, normalisation, alertes). Spec §7, §8.",
+  "main": "index.js",
+  "license": "GPL-3.0-only",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "pg": "8.13.1",
+    "yaml": "2.6.1"
+  },
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

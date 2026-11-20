@@ -1,0 +1,38 @@
+- nom: "mode 7 (3ADC+1DS18B20), sondes pas encore précisées"
+  f_port: 2
+  hex: "0C1C00EB04D21E09290D80"
+  attendu: {battery_mv: 3100, temperature_probe: 23.5, brut_adc1: 1.234, brut_adc2: 2.345, brut_adc3: 3.456}
+  voies_sans_sonde: [adc1, adc2, adc3]
+  mode_lu: "7"
+- nom: "mode 7 avec une Pilowtech sur l'entrée 1 et rien sur la 3"
+  f_port: 2
+  hex: "0C1C00EB04D21E09290D80"
+  probes: {adc1: {sonde: pilowtech_tension, parametres: {eau: 1.21, air: 2.93}}, adc2: {sonde: tension_brute}, adc3: {sonde: rien}}
+  attendu: {battery_mv: 3100, temperature_probe: 23.5, brut_adc1: 1.234, soil_moisture_adc1: 85.44, brut_adc2: 2.345}
+  absent: [brut_adc3]
+- nom: "mode 11 (Count+SHT31) : TempC1 et ADC1_V sont faux, pas pris"
+  f_port: 2
+  hex: "0C1C00EB04D22C0929000000002A"
+  attendu: {battery_mv: 3100, temperature: 23.5, humidity: 123.4, count: 153681920}
+  absent: [temperature_probe, brut_adc1]
+- nom: "mode 3 (3DS18B20), entrée 1 sans sonde demandée"
+  f_port: 2
+  hex: "0C1C00EB04D20C09290000"
+  attendu: {battery_mv: 3100, temperature_probe: 23.5, temperature_probe2: 234.5, temperature_probe3: 0}
+  absent: [brut_adc1]
+- nom: "mode 6 (3Interrupt) non décrit : seule la pile est gardée"
+  f_port: 2
+  hex: "0C1C00EB04D218000000"
+  attendu: {battery_mv: 3100}
+  absent: [temperature_probe]
+  mode_non_decrit: true
+- nom: "mode 7 forcé sur une trame lue en mode 3"
+  f_port: 2
+  hex: "0C1C00EB04D20C09290D80"
+  mode_force: "7"
+  attendu: {battery_mv: 3100, temperature_probe: 23.5, brut_adc2: 2.345, brut_adc3: 3.456}
+- nom: "port 5"
+  f_port: 5
+  hex: "1C010001FF0C1C"
+  attendu: {battery_mv: 3100}
+  port5: {code: 28, firmware: "1.0.0", bande: EU868}

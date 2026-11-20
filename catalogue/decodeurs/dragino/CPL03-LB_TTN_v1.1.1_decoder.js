@@ -1,0 +1,217 @@
+// Copie exacte du décodeur officiel Dragino, sans aucune modification (spec V3 §7.1, §7.10).
+// Source : https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/CPL03-LB/CPL03-LB_TTN_v1.1.1_decoder.txt
+// Commit 9d45ece5c28b4914904970fbe94bb09299b995c7 du 2026-11-17. Ne pas modifier : une correction se fait dans la normalisation du catalogue.
+
+function decodeUplink(input) {
+  var data = Decoder(input.bytes, input.fPort);
+  if (data === undefined) {
+    return { errors: ["Unsupported fPort: " + input.fPort] };
+  }
+  return { data: data };
+}
+
+function datalog(i,bytes){
+  var aa=(bytes[0+i]&0x08)?"CPL03":"CPL01";
+  var bb=(bytes[0+i]&0x20)?"PART":"SUM";
+  var cc=(bytes[0+i]&0x10)?"YES":"NO"; 
+  var dd=(bytes[0+i]&0x02)?"TRUE":"FALSE"; 
+  var ee=(bytes[0+i]&0x01)?"OPEN":"CLOSE";  
+  var ff=(bytes[0+i]&0x04)>>2;
+  var gg=(bytes[0+i]&0x07);
+  var hh=(bytes[1+i]<<16 | bytes[2+i]<<8 | bytes[3+i]).toString(10);
+  var ii=(bytes[4+i]<<16 | bytes[5+i]<<8 | bytes[6+i]).toString(10);
+  var jj= getMyDate(((bytes[7+i]<<24 | bytes[8+i]<<16 | bytes[9+i]<<8 | bytes[10+i]) >>> 0).toString(10));
+  var string;
+  
+  if(aa=="CPL01")
+    string='['+aa+','+bb+','+cc+','+dd+','+ee+','+ff+','+hh+','+ii+','+jj+']'+',';  
+  else
+    string='['+aa+','+bb+','+cc+','+gg+','+hh+','+ii+','+jj+']'+',';  
+     
+  return string;
+}
+
+function getzf(c_num){ 
+  if(parseInt(c_num) < 10)
+    c_num = '0' + c_num; 
+
+  return c_num; 
+}
+
+function getMyDate(str){ 
+  var c_Date;
+  if(str > 9999999999)
+    c_Date = new Date(parseInt(str));
+  else 
+    c_Date = new Date(parseInt(str) * 1000);
+  
+  var c_Year = c_Date.getFullYear(), 
+  c_Month = c_Date.getMonth()+1, 
+  c_Day = c_Date.getDate(),
+  c_Hour = c_Date.getHours(), 
+  c_Min = c_Date.getMinutes(), 
+  c_Sen = c_Date.getSeconds();
+  var c_Time = c_Year +'-'+ getzf(c_Month) +'-'+ getzf(c_Day) +' '+ getzf(c_Hour) +':'+ getzf(c_Min) +':'+getzf(c_Sen); 
+  
+  return c_Time;
+}
+
+function Decoder(bytes, port) {
+  if(port==0x03)
+  {
+    var pnack= ((bytes[0]>>7)&0x01) ? "True":"False";   
+    for(var i=0;i<bytes.length;i=i+11)
+    {
+      var data= datalog(i,bytes);
+      if(i=='0')
+        data_sum=data;
+      else
+        data_sum+=data;
+    }
+    return{
+	Node_type:"CPL03-LB",
+    DATALOG:data_sum,
+    PNACKMD:pnack,
+    };
+  }
+  else if(port==0x04)
+  {
+    var tdc= bytes[0]<<16 | bytes[1]<<8 | bytes[2];
+    var disalarm= bytes[3]&0x01;
+    var keep_status= bytes[4]&0x01;
+    var keep_time= bytes[5]<<8 | bytes[6];
+    var ttrig_mod1= bytes[7];
+    var ttrig_mod2= bytes[8];
+    var ttrig_mod3= bytes[9];
+    var alarm_tdc= bytes[10];
+   
+    return {
+	Node_type:"CPL03-LB",
+    TDC:tdc,
+    DISALARM:disalarm,
+    KEEP_STATUS:keep_status,
+    KEEP_TIME:keep_time,
+    TTRIG_MOD1:ttrig_mod1,
+    TTRIG_MOD2:ttrig_mod2,
+    TTRIG_MOD3:ttrig_mod3,
+    ALARM_TDC:alarm_tdc
+    };
+  }
+  else if(port==0x05)
+  {
+    var sub_band;
+    var freq_band;
+    var sensor;
+    
+    if(bytes[0]==0x20)
+      sensor= "CPL03-LB";
+      
+    if(bytes[4]==0xff)
+      sub_band="NULL";
+    else
+      sub_band=bytes[4];
+    
+    if(bytes[3]==0x01)
+      freq_band="EU868";
+    else if(bytes[3]==0x02)
+      freq_band="US915";
+    else if(bytes[3]==0x03)
+      freq_band="IN865";
+    else if(bytes[3]==0x04)
+      freq_band="AU915";
+    else if(bytes[3]==0x05)
+      freq_band="KZ865";
+    else if(bytes[3]==0x06)
+      freq_band="RU864";
+    else if(bytes[3]==0x07)
+      freq_band="AS923";
+    else if(bytes[3]==0x08)
+      freq_band="AS923_1";
+    else if(bytes[3]==0x09)
+      freq_band="AS923_2";
+    else if(bytes[3]==0x0A)
+      freq_band="AS923_3";
+    else if(bytes[3]==0x0B)
+      freq_band="CN470";
+    else if(bytes[3]==0x0C)
+      freq_band="EU433";
+    else if(bytes[3]==0x0D)
+      freq_band="KR920";
+    else if(bytes[3]==0x0E)
+      freq_band="MA869";
+      
+    var firm_ver= (bytes[1]&0x0f)+'.'+(bytes[2]>>4&0x0f)+'.'+(bytes[2]&0x0f);
+    var bat= (bytes[5]<<8 | bytes[6])/1000;
+    
+    return {
+    SENSOR_MODEL:sensor,
+    FIRMWARE_VERSION:firm_ver,
+    FREQUENCY_BAND:freq_band,
+    SUB_BAND:sub_band,
+    BAT:bat,
+    };
+  }
+  else if(port==0x07)
+  {
+    var decode={};
+    decode.EXTI_PA8_Trigger= (bytes[0] & 0x02)? "TRUE":"FALSE";  
+    decode.EXTI_PA8_Status= (bytes[0] & 0x01)? "CLOSE":"OPEN"; 
+    decode.EXTI_PA4_Trigger= (bytes[0] & 0x08)? "TRUE":"FALSE";
+    decode.EXTI_PA4_Status= (bytes[0] & 0x04)? "CLOSE":"OPEN"; 
+    decode.EXTI_PB15_Trigger= (bytes[0] & 0x20)? "TRUE":"FALSE";
+    decode.EXTI_PB15_Status= (bytes[0] & 0x10)? "CLOSE":"OPEN";
+	decode.Node_type="CPL03-LB";
+    return decode;
+  }
+  else
+  { 
+    var work_mod=(bytes[0]&0x08)?"CPL03":"CPL01";
+    var count_mod=(bytes[0]&0x20)?"PART":"SUM"; 
+    var tdc_interval=(bytes[0]&0x10)?"YES":"NO";   
+    var ttrig_mod=(bytes[0]&0x04)>>2; 
+    var alarm=(bytes[0]&0x02)?"TRUE":"FALSE"; 
+    var pin_status=(bytes[0]&0x01)?"OPEN":"CLOSE";  
+    var total_pulse=bytes[1]<<16 | bytes[2]<<8 | bytes[3];
+    var last_duration=bytes[4]<<16 | bytes[5]<<8 | bytes[6];   
+    var data_time= getMyDate(((bytes[7]<<24 | bytes[8]<<16 | bytes[9]<<8 | bytes[10]) >>> 0).toString(10));
+    var calculate_flag=(bytes[0]&0x07);
+    var pa8_total_pulse=bytes[1]<<16 | bytes[2]<<8 | bytes[3];
+    var pa4_total_pulse=bytes[4]<<16 | bytes[5]<<8 | bytes[6];
+    var pb15_total_pulse=bytes[7]<<16 | bytes[8]<<8 | bytes[9];
+    var pa8_roc_flag=(bytes[10]&0x01)?"TRUE":"FALSE";
+    var pa4_roc_flag=(bytes[10]&0x02)?"TRUE":"FALSE";
+    var pb15_roc_flag=(bytes[10]&0x04)?"TRUE":"FALSE";
+    
+    if(work_mod=="CPL01")
+    {
+      return {
+	  Node_type:"CPL03-LB",
+      WORKMOD:work_mod,       
+      CMOD:count_mod,  
+      TDC:tdc_interval,        
+      ALARM:alarm,
+      PIN_STATUS:pin_status,
+      TTRIG_MOD:ttrig_mod,
+      TOTAL_PULSE:total_pulse,
+      LAST_DURATION:last_duration,
+      TIME:data_time
+      };
+    }
+    else if(work_mod=="CPL03")
+    {
+      return {
+	  Node_type:"CPL03-LB",
+      WORKMOD:work_mod,
+      CMOD:count_mod,  
+      TDC:tdc_interval,
+      CALCULATE_FLAG:calculate_flag,
+      PA8_TOTAL_PULSE:pa8_total_pulse,
+      PA4_TOTAL_PULSE:pa4_total_pulse,
+      PB15_TOTAL_PULSE:pb15_total_pulse,
+      PA8_ROC:pa8_roc_flag,
+      PA4_ROC:pa4_roc_flag,
+      PB15_ROC:pb15_roc_flag
+      };      
+    }
+  }
+}

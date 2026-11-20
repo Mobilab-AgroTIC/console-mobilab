@@ -1,0 +1,6 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "distance 120 cm, sans sonde de température"
+  f_port: 2
+  hex: "0E107FFF04B00100001900"
+  attendu: {distance_cm: 120, battery_mv: 3600}
+  absent: [temperature_probe]

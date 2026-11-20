@@ -1,0 +1,14 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "mode 0 : température et humidité"
+  f_port: 2
+  hex: "0E106578A2B00000D70258"
+  attendu: {temperature: 21.5, humidity: 60, battery_mv: 3600}
+- nom: "mode 31 : seuils d'alarme, pas une mesure"
+  f_port: 2
+  hex: "0E106578A2B07C00000000"
+  absent: [temperature, humidity]
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "0A010001FF0E10"
+  attendu: {battery_mv: 3600}
+  port5: {code: 10}

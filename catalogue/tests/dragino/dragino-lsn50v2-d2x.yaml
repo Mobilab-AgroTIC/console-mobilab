@@ -1,0 +1,5 @@
+- nom: "une sonde, les deux autres absentes (3276,7)"
+  f_port: 2
+  hex: "0CF000EB00000C7FFF7FFF"
+  attendu: {battery_mv: 3312, temp_white: 23.5}
+  absent: [temp_red, temp_black]

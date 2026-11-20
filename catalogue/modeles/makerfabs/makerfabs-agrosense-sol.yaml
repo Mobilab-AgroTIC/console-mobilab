@@ -1,0 +1,25 @@
+# Makerfabs AgroSense AGLWSM01 : humidité du sol, valeur brute de la sonde (pas de conversion en % publiée).
+# Le décodeur ne regarde pas le port : toutes les trames sont des mesures. Port 1 descendant : intervalle d'envoi.
+cle: makerfabs-agrosense-sol
+prefixe_id: aglwsm               # id du capteur dans TTN : aglwsm-<4 derniers caractères du DevEUI>
+marque: Makerfabs
+modele: AgroSense AGLWSM01
+libelle: Sonde d'humidité du sol Makerfabs AgroSense AGLWSM01
+bouton: AgroSense AGLWSM01
+type: capteur
+detection: {textes: [AGLWSM01, AGLWSM]}
+allumage: "Allumez-le : appui sur le bouton User, la LED clignote."   # notice Makerfabs
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}   # à vérifier
+decodeurs:
+  - fichier: decodeurs/makerfabs/AgroSense_Soil_Moisture_TTN.js
+    source: https://github.com/Makerfabs/Agrosense-Decoder/blob/c2fdc5bb1041ba7a63b1ab576969b2826ce6ab85/AgroSense_Soil%20Moisture_Sensor_LoRaWAN/TTN.js
+ports: {defaut: mesures}
+intervalle_defaut_s: 3600
+batterie: {cle: field1, facteur_mv: 1000, pile: alcaline, elements: 2}   # 2 piles AAA
+mesures:
+  field2: {nom: soil_adc, libelle: Humidité du sol (brute), unite: "", decimales: 0, principale: true, alerte: seuil, hysteresis: 20}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [soil_adc]}
+    - {type: batterie}
+    - {type: radio}

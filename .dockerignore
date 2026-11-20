@@ -1,0 +1,12 @@
+# Contexte de build de l'image console : seulement le code (jamais data/ ni les secrets)
+data
+.env
+.env.*
+.git
+**/node_modules
+console/dist
+node-red
+postgres
+grafana
+specifications
+visualisations

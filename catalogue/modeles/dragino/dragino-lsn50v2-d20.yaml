@@ -1,0 +1,27 @@
+# Dragino LSN50v2-D20 : une seule sonde (rouge), comme en V2.
+cle: dragino-lsn50v2-d20
+prefixe_id: d20               # id du capteur dans TTN : d20-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: LSN50v2-D20
+bouton: LSN50v2-D20
+libelle: Thermomètre 1 sonde Dragino LSN50v2-D20
+type: capteur
+categorie: temperature
+detection: {textes: [LSN50V2-D20]}
+dr: {brand_id: dragino, model_id: lsn50v2-d20, firmware_version: "1.7", band_id: EU_863_870}
+dr_alias: [lsn50v2-d20]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/LSN50v2-D20-Decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/LSN50v2-D20-D22-D23/LSN50v2-D20-Decoder.txt
+ports: {2: mesures}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, facteur_mv: 1000, pile: lithium}   # ER18505 4000 mAh
+mesures:
+  TempC1: {nom: temp_red, libelle: Température sonde, couleur: red, unite: "°C", decimales: 1, principale: true, ignorer: [3276.7],
+           alerte: seuil, hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [temp_red]}
+    - {type: batterie}
+    - {type: radio}

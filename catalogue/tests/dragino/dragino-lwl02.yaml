@@ -1,0 +1,4 @@
+- nom: "fuite"
+  f_port: 10
+  hex: "4BB80200000700002800"
+  attendu: {battery_mv: 3000, leak: 1, leak_count: 7, last_leak_min: 40}

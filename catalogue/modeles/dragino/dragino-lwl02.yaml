@@ -1,0 +1,32 @@
+# Dragino LWL02 : détecteur de fuite d'eau (alerte d'état intégrée, spec V3 §8.1).
+cle: dragino-lwl02
+prefixe_id: lwl02               # id du capteur dans TTN : lwl02-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: LWL02
+libelle: Détecteur de fuite Dragino LWL02
+bouton: LWL02 (fuite)
+type: capteur
+categorie: porte
+ordre: 7
+detection: {textes: [LWL02]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: lwl02, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [lwl02]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/LWL02_lds01_02_payload_ttn_v1.5.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/LWL02/lds01_02_payload_ttn_v1.5.txt
+ports: {10: mesures}
+intervalle_defaut_s: 7200
+batterie: {cle: BAT_V, facteur_mv: 1000, pile: alcaline, elements: 2}   # 2 piles AAA
+mode: {cle: MOD}
+mesures:
+  WATER_LEAK_STATUS: {nom: leak, libelle: Fuite, type: etat, etats: {0: plus de fuite, 1: fuite d'eau}, principale: true,
+                      alerte: etat}
+  WATER_LEAK_TIMES: {nom: leak_count, libelle: Fuites, unite: "", decimales: 0, alerte: aucune}
+  LAST_WATER_LEAK_DURATION: {nom: last_leak_min, libelle: Dernière fuite, unite: min, decimales: 0, alerte: aucune}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [leak]}
+    - {type: batterie}
+    - {type: radio}

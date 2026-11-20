@@ -1,0 +1,40 @@
+# Dragino CPL01 / CPL03-LB : contact sec et compteurs d'impulsions. WORKMOD = CPL01 ou CPL03.
+cle: dragino-cpl03-lb
+prefixe_id: cpl03               # id du capteur dans TTN : cpl03-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: CPL03-LB
+libelle: Contact et compteur Dragino CPL03
+bouton: CPL03
+type: capteur
+categorie: porte
+ordre: 9
+detection: {textes: [CPL03-LB, CPL03, CPL01]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: cpl03-lb, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [cpl03-lb, cpl03-ls, cpl03, cpl01]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/CPL03-LB_TTN_v1.1.1_decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/CPL03-LB/CPL03-LB_TTN_v1.1.1_decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x20, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 7200
+batterie: {cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode: {cle: WORKMOD}
+mesures:
+  PIN_STATUS: {nom: contact_open, libelle: Contact, type: etat, valeurs: {OPEN: 1, CLOSE: 0},
+               etats: {0: fermé, 1: ouvert}, principale: true, alerte: aucune}
+  TOTAL_PULSE: {nom: pulse_total, libelle: Impulsions, unite: "", decimales: 0, alerte: aucune}
+  LAST_DURATION: {nom: last_duration_min, libelle: Dernière durée, unite: min, decimales: 0, alerte: aucune}
+  PA8_TOTAL_PULSE: {nom: pulse_pa8, libelle: Impulsions PA8, unite: "", decimales: 0, principale: true, alerte: aucune}
+  PA4_TOTAL_PULSE: {nom: pulse_pa4, libelle: Impulsions PA4, unite: "", decimales: 0, alerte: aucune}
+  PB15_TOTAL_PULSE: {nom: pulse_pb15, libelle: Impulsions PB15, unite: "", decimales: 0, alerte: aucune}
+modes:
+  CPL01: {libelle: Contact, mesures: [contact_open, pulse_total, last_duration_min]}
+  CPL03: {libelle: 3 compteurs, mesures: [pulse_pa8, pulse_pa4, pulse_pb15]}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [contact_open]}
+    - {type: courbe, mesures: [pulse_total, pulse_pa8, pulse_pa4, pulse_pb15]}
+    - {type: batterie}
+    - {type: radio}

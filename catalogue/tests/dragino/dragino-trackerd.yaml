@@ -1,0 +1,10 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "position, température et humidité"
+  f_port: 2
+  hex: "02E97B250023E45E00000000000000000FA040025800D7"
+  attendu: {latitude: 48.855845, longitude: 2.352222, temperature: 21.5, humidity: 60, battery_mv: 4000}
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "13010001FF0FA040"
+  attendu: {battery_mv: 4000}
+  port5: {code: 19}

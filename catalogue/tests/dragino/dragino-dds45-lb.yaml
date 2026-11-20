@@ -1,0 +1,4 @@
+- nom: "distance 1200 mm et sonde de température"
+  f_port: 2
+  hex: "0D4804B00000C801"
+  attendu: {battery_mv: 3400, distance_cm: 120, temperature_probe: 20}

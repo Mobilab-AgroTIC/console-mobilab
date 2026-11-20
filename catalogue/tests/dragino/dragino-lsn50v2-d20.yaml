@@ -1,0 +1,4 @@
+- nom: "sonde unique"
+  f_port: 2
+  hex: "0CF000EB00000C7FFF7FFF"
+  attendu: {battery_mv: 3312, temp_red: 23.5}

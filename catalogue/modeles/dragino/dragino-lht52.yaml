@@ -1,0 +1,35 @@
+# Dragino LHT52 : thermomètre et hygromètre, sonde externe facultative (spec V3 §7.9).
+cle: dragino-lht52
+prefixe_id: lht52               # id du capteur dans TTN : lht52-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: LHT52
+libelle: Thermomètre Dragino LHT52
+bouton: LHT52
+type: capteur
+categorie: temperature
+ordre: 1
+detection: {textes: [LHT52]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier dans la notice
+dr: {brand_id: dragino, model_id: lht52, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [lht52]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/LHT52_TTN_v1.0.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/LHT52/LHT52_TTN_v1.0.txt
+ports: {2: mesures, 5: statut}     # 3 (historique) et 4 (identifiant de sonde) : trame brute seulement
+port5: {code: 0x09, cle_firmware: Firmware_Version, cle_bande: Freq_Band}
+intervalle_defaut_s: 1200          # à vérifier
+batterie: {cle_statut: Bat_mV, facteur_mv: 1, pile: alcaline, elements: 2}   # 2 piles AAA ; lue au port 5 seulement
+mesures:
+  TempC_SHT: {nom: temperature, libelle: Température, couleur: green, unite: "°C", decimales: 1, principale: true,
+              alerte: seuil, hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  Hum_SHT: {nom: humidity, libelle: Humidité, couleur: blue, unite: "%", decimales: 0, principale: true,
+            alerte: seuil, hysteresis: 3, seuils_proposes: {max: [85, 90, 95]}}
+  TempC_DS: {nom: temperature_probe, libelle: Température sonde, couleur: yellow, unite: "°C", decimales: 1,
+             ignorer: [327.67], alerte: seuil, hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [temperature, temperature_probe]}
+    - {type: courbe, mesures: [humidity]}
+    - {type: batterie}
+    - {type: radio}

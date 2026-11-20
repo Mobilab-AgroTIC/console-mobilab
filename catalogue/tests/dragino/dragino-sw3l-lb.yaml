@@ -1,0 +1,22 @@
+- nom: "compteur cumulé, première trame (pas encore de débit)"
+  f_port: 2
+  hex: "0000001234000000000000"
+  attendu: {volume_l: 10.3556}
+  absent: [flow_l_h]
+- nom: "compteur cumulé, 450 impulsions en 1 h = 1 L/h"
+  f_port: 2
+  hex: "0000001234000000000000"
+  time: "2026-11-17T12:00:00Z"
+  detected: {compteur: {imp: 4210, t: "2026-11-17T11:00:00Z"}}
+  attendu: {volume_l: 10.3556, flow_l_h: 1}
+- nom: "compteur qui recule (pile changée) : pas de débit"
+  f_port: 2
+  hex: "0000001234000000000000"
+  time: "2026-11-17T12:00:00Z"
+  detected: {compteur: {imp: 9000, t: "2026-11-17T11:00:00Z"}}
+  attendu: {volume_l: 10.3556}
+  absent: [flow_l_h]
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "1F010001FF0C1C"
+  attendu: {battery_mv: 3100}

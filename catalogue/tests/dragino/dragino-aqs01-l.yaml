@@ -1,0 +1,9 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "CO2 420 ppm, 21,5 °C, 60 %, 1013,5 hPa"
+  f_port: 2
+  hex: "0E1000D70258279701A400"
+  attendu: {co2: 420, temperature: 21.5, humidity: 60, air_pressure: 1013.5, battery_mv: 3600}
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "37010001FF0E10"
+  attendu: {battery_mv: 3600}

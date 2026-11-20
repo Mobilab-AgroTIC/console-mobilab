@@ -1,0 +1,33 @@
+# Dragino LDS12-LB : distance par laser (lidar, jusqu'à 12 m), sonde de température facultative.
+cle: dragino-lds12-lb
+prefixe_id: lds12               # id du capteur dans TTN : lds12-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: LDS12-LB
+libelle: Capteur de distance laser Dragino LDS12-LB
+bouton: LDS12-LB
+type: capteur
+categorie: niveau
+detection: {textes: [LDS12-LB, LDS12]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: lds12-lb, firmware_version: "1.0.0", band_id: EU_863_870}
+dr_alias: [lds12-lb, lds12-ls]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/LDS12-LB_v1.0_Decoder_TTN.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/LDS12-LB/LDS12-LB_v1.0_Decoder_TTN.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x24, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: Bat, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mesures:
+  Lidar_distance: {nom: distance_cm, libelle: Distance, unite: cm, decimales: 0, principale: true, ignorer: [0],
+                   alerte: seuil, hysteresis: 2}
+  Lidar_signal: {nom: lidar_signal, libelle: Force du signal laser, unite: "", decimales: 0, alerte: aucune}
+  TempC_DS18B20: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, ignorer: [3276.7], alerte: seuil,
+                 hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [distance_cm]}
+    - {type: courbe, mesures: [temperature_probe]}
+    - {type: batterie}
+    - {type: radio}

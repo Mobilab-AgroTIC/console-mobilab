@@ -1,0 +1,178 @@
+// Copie exacte du décodeur officiel Dragino, sans aucune modification (spec V3 §7.1, §7.10).
+// Source : https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/SW3L-LB/SW3L-LB_TTN_decoder.txt
+// Commit 9d45ece5c28b4914904970fbe94bb09299b995c7 du 2026-11-17. Ne pas modifier : une correction se fait dans la normalisation du catalogue.
+
+function decodeUplink(input) {
+  var data = Decoder(input.bytes, input.fPort);
+  if (data === undefined) {
+    return { errors: ["Unsupported fPort: " + input.fPort] };
+  }
+  return { data: data };
+}
+
+function datalog(i,bytes){
+  var aa=(bytes[0+i]&0x01)?"YES":"NO"; 
+  var bb=(bytes[0+i]&0x02)?"TRUE":"FALSE"; 
+  var cc=(bytes[0+i]&0x3C)>>2;
+  var dd=(bytes[1+i]&0x80)?"H":"L"; 
+  var ee=(bytes[1+i]&0x40)?"H":"L"; 
+  var ff= bytes[1+i]&0x3F;
+  var gg=(bytes[3+i]<<24 | bytes[4+i]<<16 | bytes[5+i]<<8 |bytes[6+i])>>>0;
+  var hh;
+  
+  if(cc==0x02)
+     hh= (gg/64).toFixed(1);
+  else if(cc==0x01) 
+    hh= (gg/390).toFixed(1);
+  else
+    hh= (gg/450).toFixed(1);
+    
+  var ii= getMyDate(((bytes[7+i]<<24 | bytes[8+i]<<16 | bytes[9+i]<<8 | bytes[10+i]) >>> 0).toString(10));
+  var string='['+aa+','+bb+','+cc+','+dd+','+ee+','+ff+','+gg+','+hh+','+ii+']'+',';  
+  
+  return string;
+}
+
+function getzf(c_num){ 
+  if(parseInt(c_num) < 10)
+    c_num = '0' + c_num; 
+
+  return c_num; 
+}
+
+function getMyDate(str){ 
+  var c_Date;
+  if(str > 9999999999)
+     c_Date = new Date(parseInt(str));
+  else 
+     c_Date = new Date(parseInt(str) * 1000);
+  
+  var c_Year = c_Date.getFullYear(), 
+  c_Month = c_Date.getMonth()+1, 
+  c_Day = c_Date.getDate(),
+  c_Hour = c_Date.getHours(), 
+  c_Min = c_Date.getMinutes(), 
+  c_Sen = c_Date.getSeconds();
+  var c_Time = c_Year +'-'+ getzf(c_Month) +'-'+ getzf(c_Day) +' '+ getzf(c_Hour) +':'+ getzf(c_Min) +':'+getzf(c_Sen); 
+  
+  return c_Time;
+}
+
+function Decoder(bytes, port) {
+  if(port==0x03)
+  {
+    var pnack= ((bytes[0]>>7)&0x01) ? "True":"False";
+    for(var i=0;i<bytes.length;i=i+11)
+    {
+      var data= datalog(i,bytes);
+      if(i=='0')
+        data_sum=data;
+      else
+        data_sum+=data;
+    }
+    return{
+	Node_type:"SW3L-LB",
+    DATALOG:data_sum,
+    PNACKMD:pnack,
+    };
+  }
+  else if(port==0x04)
+  {
+    var tdc= bytes[0]<<16 | bytes[1]<<8 | bytes[2];
+    var stop_timer= bytes[4];
+    var alarm_timer= bytes[5]<<8 | bytes[6];
+    
+    return {
+	Node_type:"SW3L-LB",
+    TDC:tdc,
+    Stop_Timer:stop_timer,
+    Alarm_Timer:alarm_timer,
+    };
+  }
+  else if(port==0x05)
+  {
+    var sub_band;
+    var freq_band;
+    var sensor;
+    
+    if(bytes[0]==0x1F)
+       sensor= "SW3L-LB";
+      
+    if(bytes[4]==0xff)
+      sub_band="NULL";
+    else
+      sub_band=bytes[4];
+    
+    if(bytes[3]==0x01)
+      freq_band="EU868";
+    else if(bytes[3]==0x02)
+      freq_band="US915";
+    else if(bytes[3]==0x03)
+      freq_band="IN865";
+    else if(bytes[3]==0x04)
+      freq_band="AU915";
+    else if(bytes[3]==0x05)
+      freq_band="KZ865";
+    else if(bytes[3]==0x06)
+      freq_band="RU864";
+    else if(bytes[3]==0x07)
+      freq_band="AS923";
+    else if(bytes[3]==0x08)
+      freq_band="AS923_1";
+    else if(bytes[3]==0x09)
+      freq_band="AS923_2";
+    else if(bytes[3]==0x0A)
+      freq_band="AS923_3";
+    else if(bytes[3]==0x0B)
+      freq_band="CN470";
+    else if(bytes[3]==0x0C)
+      freq_band="EU433";
+    else if(bytes[3]==0x0D)
+      freq_band="KR920";
+    else if(bytes[3]==0x0E)
+      freq_band="MA869";
+      
+    var firm_ver= (bytes[1]&0x0f)+'.'+(bytes[2]>>4&0x0f)+'.'+(bytes[2]&0x0f);
+    var bat= (bytes[5]<<8 | bytes[6])/1000;
+    
+    return {
+    SENSOR_MODEL:sensor,
+    FIRMWARE_VERSION:firm_ver,
+    FREQUENCY_BAND:freq_band,
+    SUB_BAND:sub_band,
+    BAT:bat,
+    };
+  }
+  else
+  { 
+    var decode = {};
+    
+    decode.MOD=bytes[5]&0x3F;
+    decode.PA4_Level=(bytes[5]&0x80)? "H":"L";
+    decode.PB15_Level=(bytes[5]&0x40)? "H":"L";     
+    decode.Calculate_flag=(bytes[0]&0x3C)>>2;
+    decode.Alarm=(bytes[0]&0x02)?"TRUE":"FALSE"; 
+    decode.tdc_interval=(bytes[0]&0x01)?"YES":"NO"; 
+
+    if(decode.Calculate_flag==3)
+      decode.Water_flow_value=parseFloat((((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0)/12).toFixed(1));
+    else if(decode.Calculate_flag==2)
+      decode.Water_flow_value=parseFloat((((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0)/64).toFixed(1));
+    else if(decode.Calculate_flag==1)
+      decode.Water_flow_value=parseFloat((((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0)/390).toFixed(1));
+    else
+      decode.Water_flow_value=parseFloat((((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0)/450).toFixed(1));
+      
+    if(bytes[5]==0x01)
+      decode.Last_pulse=((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0);
+    else
+      decode.Total_pulse=((bytes[1]<<24 | bytes[2]<<16 | bytes[3]<<8 | bytes[4])>>>0);
+      
+    decode.Data_time= getMyDate(((bytes[7]<<24 | bytes[8]<<16 | bytes[9]<<8 | bytes[10]) >>> 0).toString(10));
+    decode.Node_type="SW3L-LB";
+    if(bytes.length==11)
+    {
+      return decode;
+    }
+  }
+}

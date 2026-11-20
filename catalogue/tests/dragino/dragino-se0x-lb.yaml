@@ -1,0 +1,6 @@
+- nom: "sondes 1 et 3, valeurs en texte dans le décodeur"
+  f_port: 2
+  hex: "0C8000FA0A0BB8089801F41388006403E8"
+  attendu: {battery_mv: 3200, temperature_probe: 25, soil1_temp: 22, soil1_moisture: 30, soil1_ec: 500,
+            soil3_temp: 1, soil3_moisture: 50, soil3_ec: 1000}
+  absent: [soil2_moisture, soil4_moisture]

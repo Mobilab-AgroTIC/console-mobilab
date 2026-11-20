@@ -1,0 +1,19 @@
+# Trames réelles (capteurs de Simon, novembre 2026), valeurs vérifiées avec le décodeur officiel.
+- nom: "trame normale avec sonde externe"
+  f_port: 2
+  hex: "04fd03e8059d016afccdf9"
+  attendu: {temperature: 12.77, humidity: 100, temperature_probe: 14.37}
+- nom: "sonde externe absente (0x7FFF)"
+  f_port: 2
+  hex: "09cc02497fff016afccc77"
+  attendu: {temperature: 25.08, humidity: 58.5}
+  absent: [temperature_probe, battery_mv]
+- nom: "trame de la spec (V1)"
+  f_port: 2
+  hex: "05C6025C054C01691DBD6C"
+  attendu: {temperature: 14.78, humidity: 60.4, temperature_probe: 13.56}
+- nom: "port 5, pile en mV"
+  f_port: 5
+  hex: "09010001FF0C3A"
+  attendu: {battery_mv: 3130}
+  port5: {code: 9}

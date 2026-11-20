@@ -1,0 +1,65 @@
+# Dragino SN50v3-LB / -LS : boîtier à sondes, 12 modes lus dans l'octet 6 (bits 2 à 6) de chaque trame.
+cle: dragino-sn50v3-lb
+prefixe_id: sn50v3               # id du capteur dans TTN : sn50v3-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: SN50v3-LB
+libelle: Boîtier à sondes Dragino SN50v3
+bouton: SN50v3
+type: interface
+categorie: autre
+ordre: 2
+detection: {textes: [SN50V3, SN50_V3, SN50-V3]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: sn50v3-lb, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [sn50v3-lb, sn50v3-ls, sn50v3]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/SN50_v3-LB_TTN_decode.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/SN50_v3-LB/SN50_v3-LB_TTN_decode.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x1C, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode:
+  octet: 6
+  masque: 0x7C
+  decalage: 2
+mesures:
+  TempC1: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, principale: true,
+           alerte: seuil, hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  TempC2: {nom: temperature_probe2, libelle: Température sonde 2, unite: "°C", decimales: 1, alerte: seuil, hysteresis: 0.5,
+           seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  TempC3: {nom: temperature_probe3, libelle: Température sonde 3, unite: "°C", decimales: 1, alerte: seuil, hysteresis: 0.5,
+           seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  TempC_SHT: {nom: temperature, libelle: Température, unite: "°C", decimales: 1, principale: true, alerte: seuil,
+              hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  Hum_SHT: {nom: humidity, libelle: Humidité, unite: "%", decimales: 0, principale: true, alerte: seuil, hysteresis: 3,
+            seuils_proposes: {max: [85, 90, 95]}}
+  Illum: {nom: illuminance, libelle: Lumière, unite: lx, decimales: 0, alerte: aucune}
+  Distance_cm: {nom: distance_cm, libelle: Distance, unite: cm, decimales: 0, principale: true, alerte: seuil, hysteresis: 2}
+  Count: {nom: count, libelle: Impulsions, unite: "", decimales: 0, alerte: aucune}
+  Count1: {nom: count1, libelle: Impulsions 1, unite: "", decimales: 0, alerte: aucune}
+  Count2: {nom: count2, libelle: Impulsions 2, unite: "", decimales: 0, alerte: aucune}
+# Voies (entrées où se branche une sonde) : brut_<voie> en volts, et <mesure>_<voie> si la sonde est connue.
+type_voies: {adc1: tension, adc2: tension, adc3: tension}
+modes:
+  "0": {libelle: Température et humidité, code: IIC, mesures: [temperature_probe, temperature, humidity, illuminance],
+        voies: {adc1: ADC1_V}}
+  "1": {libelle: Distance, code: Distance, mesures: [temperature_probe, distance_cm], voies: {adc1: ADC1_V}}
+  "2": {libelle: 3 entrées, code: 3ADC+IIC, mesures: [temperature, humidity, illuminance],
+        voies: {adc1: ADC1_V, adc2: ADC2_V, adc3: ADC3_V}, demander_sondes: true}
+  "3": {libelle: 3 sondes de température, code: 3DS18B20,
+        mesures: [temperature_probe, temperature_probe2, temperature_probe3], voies: {adc1: ADC1_V}}
+  "7": {libelle: 3 entrées et 1 sonde, code: 3ADC+1DS18B20, mesures: [temperature_probe],
+        voies: {adc1: ADC1_V, adc2: ADC2, adc3: ADC3}, demander_sondes: true}
+  "8": {libelle: 3 sondes et 2 compteurs, code: 3DS18B20+2Count,
+        mesures: [temperature_probe, temperature_probe2, temperature_probe3, count1, count2]}
+  "11": {libelle: Compteur et humidité, code: Count+SHT31, mesures: [temperature, humidity, count]}
+# Modes 4 (Weight), 5 (1Count), 6 (3Interrupt), 9 (PWM) et 10 (TMP117) : non décrits, trame gardée brute, admin prévenu.
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [temperature, temperature_probe, temperature_probe2, temperature_probe3]}
+    - {type: courbe, mesures: [humidity, distance_cm, illuminance]}
+    - {type: voies}
+    - {type: batterie}
+    - {type: radio}

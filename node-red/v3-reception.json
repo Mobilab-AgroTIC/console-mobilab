@@ -1,0 +1,427 @@
+[
+    {
+        "id": "c0de5ec0e7b30000",
+        "type": "tab",
+        "label": "V3 · Réception TTN",
+        "disabled": false,
+        "info": "Console V3 (spec §7, §8). Toute la logique est dans le module ingest/ du dépôt, testé (npm test).\nWebhooks TTS : /ttn/v3/uplink, /join, /downlink (en-tête X-Mobilab-Secret).\n/ttn/v3/health et /ttn/v3/redecode : appelés par le service console, avec le même en-tête.\nLa V2 (/ttn/uplink) n'est pas touchée."
+    },
+    {
+        "id": "c0de5ec0e7b30001",
+        "type": "comment",
+        "z": "c0de5ec0e7b30000",
+        "name": "Webhooks TTS → module ingest (réponse 200 dès que la trame brute est écrite)",
+        "info": "",
+        "x": 330,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b30002",
+        "type": "http response",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 760,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b30003",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "ingest · uplink",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst r = await ing.recevoirUplink(msg.payload, msg.req.headers);\nmsg.statusCode = r.statut;\nmsg.payload = \"\";\nnode.send(msg);                                   // réponse à TTS tout de suite (< 5 s)\nif (r.suite) r.suite().catch(e => node.error(`$uplink : ${e.message}`));\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 100,
+        "wires": [
+            [
+                "c0de5ec0e7b30002"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30004",
+        "type": "http in",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "url": "/ttn/v3/uplink",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 100,
+        "wires": [
+            [
+                "c0de5ec0e7b30003"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30005",
+        "type": "http response",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 760,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b30006",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "ingest · join",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst r = await ing.recevoirJoin(msg.payload, msg.req.headers);\nmsg.statusCode = r.statut;\nmsg.payload = \"\";\nnode.send(msg);                                   // réponse à TTS tout de suite (< 5 s)\nif (r.suite) r.suite().catch(e => node.error(`$join : ${e.message}`));\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 160,
+        "wires": [
+            [
+                "c0de5ec0e7b30005"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30007",
+        "type": "http in",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "url": "/ttn/v3/join",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 160,
+        "wires": [
+            [
+                "c0de5ec0e7b30006"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30008",
+        "type": "http response",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 760,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b30009",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "ingest · downlink",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst r = await ing.recevoirDownlink(msg.payload, msg.req.headers);\nmsg.statusCode = r.statut;\nmsg.payload = \"\";\nnode.send(msg);                                   // réponse à TTS tout de suite (< 5 s)\nif (r.suite) r.suite().catch(e => node.error(`$downlink : ${e.message}`));\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 220,
+        "wires": [
+            [
+                "c0de5ec0e7b30008"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b3000a",
+        "type": "http in",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "url": "/ttn/v3/downlink",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 220,
+        "wires": [
+            [
+                "c0de5ec0e7b30009"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b3000b",
+        "type": "comment",
+        "z": "c0de5ec0e7b30000",
+        "name": "Supervision : appelée par le service console seulement (même en-tête secret)",
+        "info": "",
+        "x": 330,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b3000c",
+        "type": "http response",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 760,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b3000d",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "santé",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nif (!require_secret()) return null;\nmsg.payload = ing.sante();\nmsg.statusCode = 200;\nreturn msg;\nfunction require_secret() {\n    const s = env.get(\"TTN_WEBHOOK_SECRET\");\n    if (s && (msg.req.headers[\"x-mobilab-secret\"] || \"\") === s) return true;\n    msg.statusCode = 401; msg.payload = \"\"; node.send(msg); return false;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 360,
+        "wires": [
+            [
+                "c0de5ec0e7b3000c"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b3000e",
+        "type": "http in",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "url": "/ttn/v3/health",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 360,
+        "wires": [
+            [
+                "c0de5ec0e7b3000d"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b3000f",
+        "type": "http response",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 760,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b30010",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "redécodage",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst s = env.get(\"TTN_WEBHOOK_SECRET\");\nif (!s || (msg.req.headers[\"x-mobilab-secret\"] || \"\") !== s) { msg.statusCode = 401; msg.payload = \"\"; return msg; }\nconst { dev_eui, depuis } = msg.payload || {};\nif (!/^[0-9a-f]{16}$/.test(String(dev_eui || \"\"))) { msg.statusCode = 400; msg.payload = \"\"; return msg; }\nmsg.statusCode = 202;\nmsg.payload = \"\";\nnode.send(msg);                                   // 202, puis le travail (spec §7.6)\ning.redecoder(dev_eui, depuis).then(nb => node.log(`redécodage ${dev_eui} : ${nb} trames`)).catch(e => node.error(`redécodage ${dev_eui} : ${e.message}`));\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 420,
+        "wires": [
+            [
+                "c0de5ec0e7b3000f"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30011",
+        "type": "http in",
+        "z": "c0de5ec0e7b30000",
+        "name": "",
+        "url": "/ttn/v3/redecode",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 420,
+        "wires": [
+            [
+                "c0de5ec0e7b30010"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30012",
+        "type": "comment",
+        "z": "c0de5ec0e7b30000",
+        "name": "Tâches périodiques (spec §8.8)",
+        "info": "",
+        "x": 230,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c0de5ec0e7b30013",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "tâches · chaque minute",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.expedier();\n    ing.rechargerCatalogue();\n} catch (e) { node.error(e.message); }\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 550,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30014",
+        "type": "inject",
+        "z": "c0de5ec0e7b30000",
+        "name": "chaque minute",
+        "props": [],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "20",
+        "topic": "",
+        "x": 200,
+        "y": 550,
+        "wires": [
+            [
+                "c0de5ec0e7b30013"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30015",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "tâches · toutes les 5 min",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.chercherMuets();\n    await ing.finsDeCoupure();\n    await ing.rejouerSpool();\n    await ing.expedier();\n} catch (e) { node.error(e.message); }\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 610,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30016",
+        "type": "inject",
+        "z": "c0de5ec0e7b30000",
+        "name": "toutes les 5 min",
+        "props": [],
+        "repeat": "300",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "20",
+        "topic": "",
+        "x": 200,
+        "y": 610,
+        "wires": [
+            [
+                "c0de5ec0e7b30015"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30017",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "tâches · chaque jour à 8 h",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.relances7Jours();\n    await ing.expedier();\n} catch (e) { node.error(e.message); }\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 670,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30018",
+        "type": "inject",
+        "z": "c0de5ec0e7b30000",
+        "name": "chaque jour à 8 h",
+        "props": [],
+        "repeat": "",
+        "crontab": "00 08 * * *",
+        "once": false,
+        "onceDelay": "20",
+        "topic": "",
+        "x": 200,
+        "y": 670,
+        "wires": [
+            [
+                "c0de5ec0e7b30017"
+            ]
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b30019",
+        "type": "function",
+        "z": "c0de5ec0e7b30000",
+        "name": "tâches · chaque nuit à 3 h",
+        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.purgeNocturne();\n} catch (e) { node.error(e.message); }\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 730,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c0de5ec0e7b3001a",
+        "type": "inject",
+        "z": "c0de5ec0e7b30000",
+        "name": "chaque nuit à 3 h",
+        "props": [],
+        "repeat": "",
+        "crontab": "00 03 * * *",
+        "once": false,
+        "onceDelay": "20",
+        "topic": "",
+        "x": 200,
+        "y": 730,
+        "wires": [
+            [
+                "c0de5ec0e7b30019"
+            ]
+        ]
+    }
+]

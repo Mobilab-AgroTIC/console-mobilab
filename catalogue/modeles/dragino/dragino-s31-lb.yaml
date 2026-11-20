@@ -1,0 +1,35 @@
+# Dragino S31-LB / S31B-LB : température et humidité (SHT31 au bout d'un câble, ou intégrée au S31B).
+cle: dragino-s31-lb
+prefixe_id: s31               # id du capteur dans TTN : s31-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: S31-LB
+libelle: Thermomètre et hygromètre Dragino S31-LB, S31B-LB
+bouton: S31-LB, S31B-LB
+type: capteur
+categorie: temperature
+detection: {textes: [S31-LB, S31B-LB, S31]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: s31-lb, firmware_version: "1.8.0", band_id: EU_863_870}
+dr_alias: [s31-lb, s31b-lb, s31-ls, s31b-ls]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/S31-LB_v1.3_TTN_decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/S31-LB%26S31B-LB/S31-LB_v1.3_TTN_decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x0A, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode: {octet: 6, masque: 0x7C, decalage: 2}
+mesures:
+  TempC_SHT31: {nom: temperature, libelle: Température, unite: "°C", decimales: 1, principale: true, alerte: seuil, hysteresis: 0.5,
+               seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  Hum_SHT31: {nom: humidity, libelle: Humidité, unite: "%", decimales: 0, principale: true, alerte: seuil, hysteresis: 3,
+             seuils_proposes: {max: [85, 90, 95]}}
+modes:
+  "0": {libelle: Température et humidité, mesures: [temperature, humidity]}
+  "31": {libelle: Relevé des seuils d'alarme réglés dans le capteur, mesures: []}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [temperature, humidity]}
+    - {type: batterie}
+    - {type: radio}

@@ -1,0 +1,37 @@
+# Dragino PS-LB : pression ou hauteur d'eau. Probe_mod (octets 2 et 3) : type de sonde puis plage (spec V3 §7.6).
+cle: dragino-ps-lb
+prefixe_id: ps               # id du capteur dans TTN : ps-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: PS-LB
+libelle: Capteur de pression Dragino PS-LB
+bouton: PS-LB
+type: interface
+categorie: niveau
+ordre: 11
+detection: {textes: [PS-LB]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: ps-lb, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [ps-lb, ps-ls]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/PS-LB_v1.2.7_decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/PS-LB/PS-LB_v1.2.7_decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x16, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: Bat_V, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode: {cle: Probe_mod, octets: [2, 3]}
+mesures:
+  Water_deep_cm: {nom: water_level_cm, libelle: Hauteur d'eau, unite: cm, decimales: 0, principale: true,
+                  alerte: seuil, hysteresis: 2}
+  Water_pressure_kPa: {nom: water_pressure_kpa, libelle: Pression, unite: kPa, decimales: 1, principale: true,
+                       alerte: seuil, hysteresis: 1}
+  Differential_pressure_Pa: {nom: diff_pressure_pa, libelle: Pression différentielle, unite: Pa, decimales: 0,
+                             principale: true, alerte: seuil, hysteresis: 5}
+  IDC_intput_mA: {nom: brut_courant, libelle: Courant, unite: mA, decimales: 2, alerte: aucune}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [water_level_cm, water_pressure_kpa, diff_pressure_pa]}
+    - {type: courbe, mesures: [brut_courant]}
+    - {type: batterie}
+    - {type: radio}

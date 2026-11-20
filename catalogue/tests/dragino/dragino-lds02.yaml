@@ -1,0 +1,8 @@
+- nom: "porte ouverte"
+  f_port: 10
+  hex: "8BB80100010200000500"
+  attendu: {battery_mv: 3000, door: 1, open_count: 258, last_open_min: 5}
+- nom: "porte fermée"
+  f_port: 10
+  hex: "0BB80100010200000500"
+  attendu: {battery_mv: 3000, door: 0, open_count: 258}

@@ -1,0 +1,9 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "distance 1200 mm et sonde de température"
+  f_port: 2
+  hex: "0E1004B00000C800"
+  attendu: {distance_cm: 120, temperature_probe: 20, battery_mv: 3600}
+- nom: "pas d'écho (0) : pas de distance"
+  f_port: 2
+  hex: "0E1000000000C800"
+  absent: [distance_cm]

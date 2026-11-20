@@ -1,0 +1,28 @@
+# Dragino AIS01-LB : lit l'index d'un compteur (eau, gaz…) par caméra.
+cle: dragino-ais01-lb
+prefixe_id: ais01               # id du capteur dans TTN : ais01-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: AIS01-LB
+libelle: Lecteur de compteur Dragino AIS01-LB
+bouton: AIS01-LB
+type: capteur
+categorie: autre
+detection: {textes: [AIS01-LB, AIS01]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: ais01-lb, firmware_version: "1.0.0", band_id: EU_863_870}
+dr_alias: [ais01-lb, ais01-ls]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/AIS01-LB_TTN_Decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/AIS01/AIS01-LB_TTN_Decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x38, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 3600
+batterie: {cle: BatV, cle_statut: BatV, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mesures:
+  Reading: {nom: meter_index, libelle: Index du compteur, unite: "", decimales: 3, principale: true, alerte: aucune}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [meter_index]}
+    - {type: batterie}
+    - {type: radio}

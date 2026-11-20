@@ -1,0 +1,14 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "valeurs calibrées, sonde de température branchée"
+  f_port: 2
+  hex: "0E1000C811940898012C00"
+  attendu: {soil_moisture: 45, soil_temp: 22, soil_ec: 300, temperature_probe: 20, battery_mv: 3600}
+- nom: "sonde de température absente (7FFF)"
+  f_port: 2
+  hex: "0E107FFF11940898012C00"
+  attendu: {soil_moisture: 45}
+  absent: [temperature_probe]
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "26010001FF0E10"
+  attendu: {battery_mv: 3600}

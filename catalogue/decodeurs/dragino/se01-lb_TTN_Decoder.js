@@ -1,0 +1,185 @@
+// Copie exacte du décodeur officiel Dragino, sans aucune modification (spec V3 §7.1, §7.10).
+// Source : https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/SE01-LB/se01-lb_TTN_Decoder.txt
+// Commit 9d45ece5c28b4914904970fbe94bb09299b995c7 du 2026-11-17. Ne pas modifier : une correction se fait dans la normalisation du catalogue.
+
+function decodeUplink(input) {
+  var data = Decoder(input.bytes, input.fPort);
+  if (data === undefined) {
+    return { errors: ["Unsupported fPort: " + input.fPort] };
+  }
+  return { data: data };
+}
+
+function Str1(str2){
+  var str3 ="";
+  for (var i=0;i<str2.length;i++){
+    if (str2[i]<=0x0f){
+     str2[i]="0"+str2[i].toString(16)+"";
+    }
+  str3+= str2[i].toString(16)+"";}
+  return str3;
+}
+function str_pad(byte){
+    var zero = '00';
+    var hex= byte.toString(16);    
+    var tmp  = 2-hex.length;
+    return zero.substr(0,tmp) + hex + " ";
+}
+
+
+function datalog(i,bytes){
+  var bb= parseFloat(((bytes[0+i]<<24>>16 | bytes[1+i])/100).toFixed(2));
+  var cc= parseFloat(((bytes[2+i]<<24>>16 | bytes[3+i])/100).toFixed(2));
+  var dd= parseFloat((((bytes[4+i]<<8 | bytes[5+i])&0xFFF)/10).toFixed(1));
+  
+  var ee= getMyDate(((bytes[7+i]<<24 | bytes[8+i]<<16 | bytes[9+i]<<8 | bytes[10+i]) >>> 0).toString(10));
+  var string='['+bb+','+cc+','+dd+','+ee+']'+',';  
+  
+  return string;
+}
+
+function getzf(c_num){ 
+  if(parseInt(c_num) < 10)
+    c_num = '0' + c_num; 
+
+  return c_num; 
+}
+
+function getMyDate(str){ 
+  var c_Date;
+  if(str > 9999999999)
+     c_Date = new Date(parseInt(str));
+  else 
+     c_Date = new Date(parseInt(str) * 1000);
+  
+  var c_Year = c_Date.getFullYear(), 
+  c_Month = c_Date.getMonth()+1, 
+  c_Day = c_Date.getDate(),
+  c_Hour = c_Date.getHours(), 
+  c_Min = c_Date.getMinutes(), 
+  c_Sen = c_Date.getSeconds();
+  var c_Time = c_Year +'-'+ getzf(c_Month) +'-'+ getzf(c_Day) +' '+ getzf(c_Hour) +':'+ getzf(c_Min) +':'+getzf(c_Sen); 
+  
+  return c_Time;
+}
+
+
+function Decoder(bytes, port) {
+	
+	var mode=(bytes[6] & 0x7C)>>2;
+	var data = {};
+	var decode = {};
+	var value;
+	var mod;
+	 
+   if(port==0x02)
+     {
+  	
+  var mod=(bytes[10]>>7)&0x01;
+	decode.BatV=((bytes[0]<<8 | bytes[1]) & 0x3FFF)/1000;//Battery,units:V
+
+	var value=bytes[2]<<8 | bytes[3];
+	if(bytes[2] & 0x80)
+	{value |= 0xFFFF0000;}
+  decode.temp_DS18B20=(value/10).toFixed(2);//DS18B20,temperature
+  
+	if(mod===0)
+	{
+  value=bytes[6]<<8 | bytes[7];
+	var temp_SOIL;
+	if((value & 0x8000)>>15 === 0)
+	  decode.temp_SOIL=(value/100).toFixed(2);//temp_SOIL,temperature
+	else if((value & 0x8000)>>15 === 1)
+	
+  	decode.temp_SOIL=((value-0xFFFF)/100).toFixed(2);
+  	decode.water_SOIL=((bytes[4]<<8 | bytes[5])/100).toFixed(2);//water_SOIL,Humidity,units:%
+    decode.conduct_SOIL=bytes[8]<<8 | bytes[9];
+	
+	}
+	else
+	{ 
+    decode.Soil_dielectric_constant=((bytes[4]<<8 | bytes[5])/10).toFixed(1);
+	  decode.Raw_water_SOIL=bytes[6]<<8 | bytes[7];
+	  decode.Raw_conduct_SOIL=bytes[8]<<8 | bytes[9];
+	}
+	decode.s_flag = (bytes[10]>>4)&0x01;
+	decode.i_flag = bytes[10]&0x0F;
+	decode.Mod=mod
+	decode.Node_type="SE01-LB";
+	 return decode;
+     }
+  
+  else if(port==3)  
+  {
+    var pnack= ((bytes[6]>>7)&0x01) ? "True":"False";
+    for(var i=0;i<bytes.length;i=i+11)
+    {
+      var data= datalog(i,bytes);
+      if(i=='0')
+        data_sum=data;
+      else
+        data_sum+=data;
+    }
+    return{
+	
+	Node_type:"SE01-LB",
+    DATALOG:data_sum,
+    PNACKMD:pnack,
+    };    
+  }
+else if(port==0x05)
+  {
+    var sub_band;
+    var freq_band;
+    var sensor;
+    
+    if(bytes[0]==0x26)
+       sensor= "SE01-LB";
+      
+    if(bytes[4]==0xff)
+      sub_band="NULL";
+    else
+      sub_band=bytes[4];
+    
+    if(bytes[3]==0x01)
+      freq_band="EU868";
+    else if(bytes[3]==0x02)
+      freq_band="US915";
+    else if(bytes[3]==0x03)
+      freq_band="IN865";
+    else if(bytes[3]==0x04)
+      freq_band="AU915";
+    else if(bytes[3]==0x05)
+      freq_band="KZ865";
+    else if(bytes[3]==0x06)
+      freq_band="RU864";
+    else if(bytes[3]==0x07)
+      freq_band="AS923";
+    else if(bytes[3]==0x08)
+      freq_band="AS923_1";
+    else if(bytes[3]==0x09)
+      freq_band="AS923_2";
+    else if(bytes[3]==0x0A)
+      freq_band="AS923_3";
+    else if(bytes[3]==0x0B)
+      freq_band="CN470";
+    else if(bytes[3]==0x0C)
+      freq_band="EU433";
+    else if(bytes[3]==0x0D)
+      freq_band="KR920";
+    else if(bytes[3]==0x0E)
+      freq_band="MA869";
+      
+    var firm_ver= (bytes[1]&0x0f)+'.'+(bytes[2]>>4&0x0f)+'.'+(bytes[2]&0x0f);
+     bat= (bytes[5]<<8 | bytes[6])/1000;
+    return {
+    SENSOR_MODEL:sensor,
+    FIRMWARE_VERSION:firm_ver,
+    FREQUENCY_BAND:freq_band,
+    SUB_BAND:sub_band,
+    BAT:bat,
+    };
+
+}
+
+ }

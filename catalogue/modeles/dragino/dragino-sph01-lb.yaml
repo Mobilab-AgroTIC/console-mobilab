@@ -1,0 +1,34 @@
+# Dragino SPH01-LB : pH et température du sol, sonde de température facultative.
+cle: dragino-sph01-lb
+prefixe_id: sph01               # id du capteur dans TTN : sph01-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: SPH01-LB
+libelle: Sonde de pH du sol Dragino SPH01-LB
+bouton: SPH01-LB
+type: capteur
+categorie: autre
+detection: {textes: [SPH01-LB, SPH01]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: sph01-lb, firmware_version: "1.0.0", band_id: EU_863_870}
+dr_alias: [sph01-lb, sph01-ls, lsph01]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/SPH01-LB_TTN_Decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/SPH01-LB/SPH01-LB%20%20TTN_Decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x2C, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: Bat, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mesures:
+  TempC_DS18B20: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, ignorer: [3276.7], alerte: seuil,
+                 hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  PH1_SOIL: {nom: soil_ph, libelle: pH du sol, unite: pH, decimales: 1, principale: true, alerte: seuil, hysteresis: 0.2,
+             seuils_proposes: {min: [5, 5.5, 6], max: [7.5, 8, 8.5]}}
+  TEMP_SOIL: {nom: soil_temp, libelle: Température du sol, unite: "°C", decimales: 1, principale: true, alerte: seuil, hysteresis: 0.5,
+              seuils_proposes: {min: [0, 2, 5], max: [25, 30, 35]}}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [soil_ph]}
+    - {type: courbe, mesures: [soil_temp, temperature_probe]}
+    - {type: batterie}
+    - {type: radio}

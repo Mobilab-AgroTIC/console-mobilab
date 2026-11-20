@@ -1,0 +1,39 @@
+# Dragino SE01-LB : une sonde de sol (humidité, température, conductivité), sonde de température facultative.
+cle: dragino-se01-lb
+prefixe_id: se01               # id du capteur dans TTN : se01-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: SE01-LB
+libelle: Sonde de sol Dragino SE01-LB
+bouton: SE01-LB
+type: capteur
+categorie: autre
+detection: {textes: [SE01-LB, SE01]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: se01-lb, firmware_version: "1.0.0", band_id: EU_863_870}
+dr_alias: [se01-lb, se01-ls, lse01]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/se01-lb_TTN_Decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/SE01-LB/se01-lb_TTN_Decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x26, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode: {cle: Mod}
+mesures:
+  temp_DS18B20: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, ignorer: [3276.7], alerte: seuil,
+                 hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  water_SOIL: {nom: soil_moisture, libelle: Humidité du sol, unite: "%", decimales: 0, principale: true, alerte: seuil, hysteresis: 2,
+               seuils_proposes: {min: [10, 20, 30], max: [60, 70, 80]}}
+  temp_SOIL: {nom: soil_temp, libelle: Température du sol, unite: "°C", decimales: 1, principale: true, alerte: seuil, hysteresis: 0.5,
+              seuils_proposes: {min: [0, 2, 5], max: [25, 30, 35]}}
+  conduct_SOIL: {nom: soil_ec, libelle: Conductivité du sol, unite: µS/cm, decimales: 0, alerte: aucune}
+modes:
+  "0": {libelle: Valeurs calibrées, mesures: [temperature_probe, soil_moisture, soil_temp, soil_ec]}
+  "1": {libelle: Valeurs brutes (trame brute seulement), mesures: [temperature_probe]}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [soil_moisture, soil_temp, temperature_probe]}
+    - {type: courbe, mesures: [soil_ec]}
+    - {type: batterie}
+    - {type: radio}

@@ -1,0 +1,13 @@
+- nom: "mode CPL01, contact ouvert"
+  f_port: 2
+  hex: "010000100000036555AAAA"
+  attendu: {contact_open: 1, pulse_total: 16, last_duration_min: 3}
+- nom: "mode CPL03, trois compteurs"
+  f_port: 2
+  hex: "0800000500000600000700"
+  attendu: {pulse_pa8: 5, pulse_pa4: 6, pulse_pb15: 7}
+  absent: [contact_open]
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "20010001FF0C1C"
+  attendu: {battery_mv: 3100}

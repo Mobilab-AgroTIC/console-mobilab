@@ -1,0 +1,36 @@
+# Dragino AQS01-L : CO2, température, humidité et pression de l'air.
+cle: dragino-aqs01-l
+prefixe_id: aqs01               # id du capteur dans TTN : aqs01-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: AQS01-L
+libelle: Capteur de CO2 Dragino AQS01-L
+bouton: AQS01-L
+type: capteur
+categorie: autre
+detection: {textes: [AQS01-L, AQS01]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: aqs01-l, firmware_version: "1.0.0", band_id: EU_863_870}
+dr_alias: [aqs01-l]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/AQS01-L_v1.3_TTN_decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/AQS01-L/AQS01-L_v1.3_TTN_decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x37, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # à vérifier dans la notice
+mesures:
+  co2: {nom: co2, libelle: CO2, unite: ppm, decimales: 0, principale: true, alerte: seuil, hysteresis: 50,
+        seuils_proposes: {max: [1000, 1500, 2000]}}
+  temperature: {nom: temperature, libelle: Température, unite: "°C", decimales: 1, principale: true, alerte: seuil, hysteresis: 0.5,
+               seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  humidity: {nom: humidity, libelle: Humidité, unite: "%", decimales: 0, principale: true, alerte: seuil, hysteresis: 3,
+             seuils_proposes: {max: [85, 90, 95]}}
+  air_pressure: {nom: air_pressure, libelle: Pression de l'air, unite: hPa, decimales: 0, alerte: aucune}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [co2]}
+    - {type: courbe, mesures: [temperature, humidity]}
+    - {type: courbe, mesures: [air_pressure]}
+    - {type: batterie}
+    - {type: radio}

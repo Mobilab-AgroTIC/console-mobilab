@@ -1,0 +1,10 @@
+- nom: "hauteur d'eau, sonde non réglée (plage 00) : 0 cm et courant brut"
+  f_port: 2
+  hex: "0CE50000000000003C0000"
+  attendu: {battery_mv: 3301, water_level_cm: 0, brut_courant: 0}
+  mode_lu: "0000"
+- nom: "pression (Probe_mod 0101)"
+  f_port: 2
+  hex: "0CE501010000000000000000"
+  attendu: {battery_mv: 3301, water_pressure_kpa: 0}
+  absent: [water_level_cm]

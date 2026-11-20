@@ -1,0 +1,5 @@
+# Trame d'exemple de la notice Makerfabs (§4.3.6) : ADC 1479, pile 3,0 V, intervalle 3600 s.
+- nom: "exemple de la notice"
+  f_port: 2
+  hex: "000805C71E0036EE8069CDCDED00"
+  attendu: {soil_adc: 1479, battery_mv: 3000}

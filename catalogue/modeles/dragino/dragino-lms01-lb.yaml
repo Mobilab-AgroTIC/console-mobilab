@@ -1,0 +1,33 @@
+# Dragino LMS01-LB : humectation et température de la feuille, sonde de température facultative.
+cle: dragino-lms01-lb
+prefixe_id: lms01               # id du capteur dans TTN : lms01-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: LMS01-LB
+libelle: Capteur d'humectation des feuilles Dragino LMS01-LB
+bouton: LMS01-LB
+type: capteur
+categorie: autre
+detection: {textes: [LMS01-LB, LMS01, LLMS01]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: lms01-lb, firmware_version: "1.0.0", band_id: EU_863_870}
+dr_alias: [lms01-lb, lms01-ls, llms01]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/LMS01-LB_TTN_Decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/LMS01-LB/LMS01-LB_TTN_Decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x2D, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: Bat, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mesures:
+  TempC_DS18B20: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, ignorer: [3276.7], alerte: seuil,
+                 hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  Leaf_Moisture: {nom: leaf_wetness, libelle: Humectation des feuilles, unite: "%", decimales: 0, principale: true, alerte: seuil,
+                  hysteresis: 3, seuils_proposes: {max: [50, 70, 90]}}
+  Leaf_Temperature: {nom: leaf_temp, libelle: Température de la feuille, unite: "°C", decimales: 1, principale: true, alerte: seuil,
+                     hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [leaf_wetness, leaf_temp, temperature_probe]}
+    - {type: batterie}
+    - {type: radio}

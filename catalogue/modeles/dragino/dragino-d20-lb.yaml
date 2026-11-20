@@ -1,0 +1,32 @@
+# Dragino D20-LB / D20S-LB : une sonde de température (même décodeur que D22/D23, sonde 1 seule).
+cle: dragino-d20-lb
+prefixe_id: d20               # id du capteur dans TTN : d20-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: D20-LB
+libelle: Thermomètre 1 sonde Dragino D20-LB
+bouton: D20-LB, D20S-LB
+type: capteur
+categorie: temperature
+ordre: 5
+detection: {textes: [D20-LB, D20S-LB, D20]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: d20-lb, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [d20-lb, d20s-lb, d20-ls]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/D23-LB_v1.3_TTN_decode.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/D20-LB%26D20S-LB%26D22-LB%26D23-LB/D23-LB_v1.3_TTN_decode.txt
+ports: {2: mesures, 5: statut}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode: {octet: 6, masque: 0x7C, decalage: 2}
+mesures:
+  TempC1: {nom: temp_red, libelle: Température sonde, couleur: red, unite: "°C", decimales: 1, principale: true, alerte: seuil,
+           hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+modes:
+  "3": {libelle: Sonde de température, mesures: [temp_red]}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [temp_red]}
+    - {type: batterie}
+    - {type: radio}

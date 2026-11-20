@@ -1,0 +1,9 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "pH 7,0, sol à 21,5 °C"
+  f_port: 2
+  hex: "0E1000C802BC00D7000000"
+  attendu: {soil_ph: 7, soil_temp: 21.5, temperature_probe: 20, battery_mv: 3600}
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "2C010001FF0E10"
+  attendu: {battery_mv: 3600}

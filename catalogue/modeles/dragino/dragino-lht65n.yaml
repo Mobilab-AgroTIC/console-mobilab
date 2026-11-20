@@ -1,0 +1,38 @@
+# Dragino LHT65N : température et humidité, sonde externe facultative (température, lumière, compteur selon la sonde).
+cle: dragino-lht65n
+prefixe_id: lht65n               # id du capteur dans TTN : lht65n-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: LHT65N
+libelle: Thermomètre et hygromètre Dragino LHT65N
+bouton: LHT65N
+type: capteur
+categorie: temperature
+detection: {textes: [LHT65N, LHT65]}
+allumage: "Allumez-le : appui long 3 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: lht65n, firmware_version: "1.3.2", band_id: EU_863_870}
+dr_alias: [lht65n, lht65]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/LHT65N-TTN-v1.5.6_decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/LHT65N/LHT65N-TTN-v1.5.6_decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x0B, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # 2400 mAh Li-SOCl2
+mesures:
+  TempC_SHT: {nom: temperature, libelle: Température, unite: "°C", decimales: 1, principale: true, alerte: seuil, hysteresis: 0.5,
+               seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  Hum_SHT: {nom: humidity, libelle: Humidité, unite: "%", decimales: 0, principale: true, alerte: seuil, hysteresis: 3,
+             seuils_proposes: {max: [85, 90, 95]}}
+  TempC_DS: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, ignorer: [327.67], alerte: seuil,
+             hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  TempC_TMP117: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, ignorer: [327.67], alerte: seuil,
+                 hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  ILL_lx: {nom: illuminance, libelle: Lumière, unite: lx, decimales: 0, alerte: aucune}
+  Exit_count: {nom: count, libelle: Impulsions, unite: "", decimales: 0, alerte: aucune}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [temperature, humidity, temperature_probe]}
+    - {type: courbe, mesures: [illuminance, count]}
+    - {type: batterie}
+    - {type: radio}

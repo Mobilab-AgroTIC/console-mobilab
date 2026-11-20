@@ -1,26 +1,20 @@
-# Node-RED data
-node-red-data/
-
-# Grafana data
-grafana-data/
-
-# Postgres data
-postgres-data/
-timescaledb-data/
-
-# Env files
+# Données et secrets de l'installation
+data/
 .env
 .env.local
 .env.*.local
 
+# Node-RED : identifiants chiffrés et sauvegardes automatiques à chaque Deploy
+node-red/flows_cred.json
+node-red/.*.backup
 
-# Logs
+# Fichiers de verrouillage Office, journaux, éditeurs, systèmes
+~$*
 *.log
-
-# VS Code settings (optional)
 .vscode/
-
-
-# OS files
 .DS_Store
 Thumbs.db
+
+# V3 : dépendances et compilation (installées sur le serveur)
+node_modules/
+console/dist/

@@ -1,0 +1,33 @@
+# Dragino LDS02 : ouverture de porte (alerte d'état intégrée, spec V3 §8.1).
+cle: dragino-lds02
+prefixe_id: lds02               # id du capteur dans TTN : lds02-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: LDS02
+libelle: Détecteur d'ouverture Dragino LDS02
+bouton: LDS02 (porte)
+type: capteur
+categorie: porte
+ordre: 6
+detection: {textes: [LDS02, LDS01]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: lds02, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [lds02, lds01]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/LDS02_lds01_02_Decoder_ttn_v1.5.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/LDS02/lds01_02_Decoder_ttn_v1.5.txt
+ports: {10: mesures}
+intervalle_defaut_s: 7200
+batterie: {cle: BAT_V, facteur_mv: 1000, pile: alcaline, elements: 2}   # 2 piles AAA
+mode: {cle: MOD}
+mesures:
+  DOOR_OPEN_STATUS: {nom: door, libelle: Porte, type: etat, etats: {0: fermée, 1: ouverte}, principale: true,
+                     alerte: etat}
+  DOOR_OPEN_TIMES: {nom: open_count, libelle: Ouvertures, unite: "", decimales: 0, alerte: aucune}
+  LAST_DOOR_OPEN_DURATION: {nom: last_open_min, libelle: Dernière ouverture, unite: min, decimales: 0, alerte: aucune}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [door]}
+    - {type: courbe, mesures: [open_count]}
+    - {type: batterie}
+    - {type: radio}

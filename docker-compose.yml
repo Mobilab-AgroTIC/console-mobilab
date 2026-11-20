@@ -1,96 +1,212 @@
-services:
-  node-red:
-    image: nodered/node-red:4.1
-    environment:
-      - TZ=${TIMEZONE}
-      - NR_ADMIN_USER=${NR_ADMIN_USER}
-      - NR_ADMIN_PASS_HASH=${NR_ADMIN_PASS_HASH}
-    ports:
-      - "${NODE_RED_HOST_PORT}:1880"
-    networks:
-      - console-mobilab-network
-    volumes:
-      - node-red-data:/data
-      - ./node-red/settings.js:/data/settings.js
-      # NEW: Mount the schema script so Node-RED can read it
-      - ./postgres/schema.sql:/usr/src/node-red/create_schema.sql #:ro
-    depends_on:
-      - postgres
+# Console Mobilab : réception LoRaWAN (Node-RED), stockage (TimescaleDB), tableaux (Grafana).
+#
+# Installation : copier .env.example en .env, le remplir, puis `docker compose up -d`.
+# Les données vivent dans ./data (hors git).
+#
+# Grafana et Node-RED sont publiés par le Caddy du serveur, à travers le réseau Docker
+# partagé "proxy" (à créer une fois : docker network create proxy). Ce réseau est commun à
+# toutes les stacks : les services y portent des noms uniques (mobilab-*), car un nom
+# générique comme "grafana" y désigne déjà d'autres conteneurs. Postgres reste interne.
+# Les ports publiés ne sont ouverts que sur la machine (127.0.0.1), pour l'administration.
 
-  grafana:
-    image: grafana/grafana-oss:12.1.1
+services:
+  mobilab-nodered:
+    image: nodered/node-red:4.1
+    container_name: mobilab-nodered
+    restart: unless-stopped
+    # Propriétaire de ./data et ./node-red sur le serveur
+    user: "1001:1001"
+    command: ["--settings", "/mobilab/settings.js"]
     environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-      - TZ=${TIMEZONE}
+      TZ: ${TIMEZONE:-Europe/Paris}
+      # L'image passe $FLOWS à Node-RED, qui l'emporte sur flowFile de settings.js
+      FLOWS: /mobilab/flows.json
+      NR_ADMIN_USER: ${NR_ADMIN_USER:?à définir dans .env}
+      NR_ADMIN_PASS_HASH: ${NR_ADMIN_PASS_HASH:?à définir dans .env}
+      NR_CREDENTIAL_SECRET: ${NR_CREDENTIAL_SECRET:?à définir dans .env}
+      # Valeur de l'en-tête X-Mobilab-Secret posé sur les webhooks TTN
+      TTN_WEBHOOK_SECRET: ${TTN_WEBHOOK_SECRET:?à définir dans .env}
+      # V3 (onglet « V3 · Réception TTN », module ingest/) : inactive tant que ces variables sont vides
+      TTN_WEBHOOK_SECRET_PREVIOUS: ${TTN_WEBHOOK_SECRET_PREVIOUS:-}
+      PG_HOST: mobilab-postgres
+      PG_DATABASE: mobilab
+      PG_USER: svc_nodered
+      PG_SVC_NODERED_PASSWORD: ${PG_SVC_NODERED_PASSWORD:-}
+      TELEGRAM_CLIENT_BOT_TOKEN: ${TELEGRAM_CLIENT_BOT_TOKEN:-}
     ports:
-      - "${GRAFANA_HOST_PORT}:3000"
+      - "127.0.0.1:1881:1880"
     volumes:
-      - grafana-data:/var/lib/grafana
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      # Modules installés et contexte des flux
+      - ./data/node-red:/data
+      # Ce dossier du dépôt : settings.js et flows.json (modifié à chaque Deploy)
+      - ./node-red:/mobilab
+      # Schéma SQL, un fichier par capteur, rejoué par le nœud "get schemaFiles"
+      - ./postgres/schema:/usr/src/node-red/schema:ro
+      # V3 : module ingest/ et catalogue (modèles, décodeurs officiels), en lecture seule
+      - ./ingest:/mobilab-ingest:ro
+      - ./catalogue:/mobilab-catalogue:ro
+    # Le contrôle de l'image lit /data/settings.js, qui n'existe pas ici : on interroge
+    # directement l'éditeur sur son port.
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get({host: '127.0.0.1', port: 1880, timeout: 4000}, r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+    networks:
+      - default
+      - proxy
+    depends_on:
+      mobilab-postgres:
+        condition: service_healthy
+
+  mobilab-grafana:
+    image: grafana/grafana-oss:12.1.1
+    container_name: mobilab-grafana
+    restart: unless-stopped
+    user: "1001:1001"
+    environment:
+      TZ: ${TIMEZONE:-Europe/Paris}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:?à définir dans .env}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:?à définir dans .env}
+      GF_SERVER_ROOT_URL: https://grafana.console-mobilab.lapibole.fr/
+      GF_DASHBOARDS_MIN_REFRESH_INTERVAL: 5m
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      # SMTP facultatif (invitations, alertes)
+      GF_SMTP_ENABLED: ${GF_SMTP_ENABLED:-false}
+      GF_SMTP_HOST: ${GF_SMTP_HOST:-}
+      GF_SMTP_USER: ${GF_SMTP_USER:-}
+      GF_SMTP_PASSWORD: ${GF_SMTP_PASSWORD:-}
+      GF_SMTP_FROM_ADDRESS: ${GF_SMTP_FROM_ADDRESS:-}
+      GF_SMTP_FROM_NAME: Console Mobilab
+      GF_SMTP_STARTTLS_POLICY: MandatoryStartTLS
+    ports:
+      - "127.0.0.1:3002:3000"
+    volumes:
+      - ./data/grafana:/var/lib/grafana
       - ./grafana/mobilab_logo.svg:/usr/share/grafana/public/img/grafana_icon.svg:ro
       - ./grafana/mobilab_logo.png:/usr/share/grafana/public/img/fav32.png:ro
     networks:
-      - console-mobilab-network
+      - default
+      - proxy
     depends_on:
-      - postgres
-    restart: unless-stopped
+      mobilab-postgres:
+        condition: service_healthy
 
-  postgres:
+  mobilab-postgres:
     image: timescale/timescaledb:2.22.0-pg16
-    ports:
-      - "${POSTGRES_HOST_PORT}:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - console-mobilab-network
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=postgres
+    container_name: mobilab-postgres
     restart: unless-stopped
-
-  pgadmin:
-    image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER:?à définir dans .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?à définir dans .env}
+      # Base des flux, créée avec TimescaleDB au premier démarrage
+      POSTGRES_DB: mobilab
     ports:
-      - "${PGADMIN_HOST_PORT}:80"
+      - "127.0.0.1:5434:5432"
     volumes:
-      - ./pgadmin/servers.json:/pgadmin4/servers.json
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d mobilab"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------- V3 (spec « console Mobilab V3 »)
+  # Service console : les deux bots Telegram, les jobs (TTN, Grafana, Postgres), la surveillance.
+  # Ne démarre qu'avec le profil v3 : docker compose --profile v3 up -d mobilab-console
+  # Il lui faut deux bots dédiés (BotFather) : jamais le jeton du bot V2, que Node-RED V2 lit déjà.
+  mobilab-console:
+    profiles: ["v3"]
+    build:
+      context: .
+      dockerfile: console/Dockerfile
+    image: mobilab-console:local
+    container_name: mobilab-console
+    restart: unless-stopped
+    environment:
+      TZ: ${TIMEZONE:-Europe/Paris}
+      PGHOST: mobilab-postgres
+      PGDATABASE: mobilab
+      PGUSER: svc_console
+      PGPASSWORD: ${PG_SVC_CONSOLE_PASSWORD:-}
+      SECRETS_KEY: ${SECRETS_KEY:-}
+      TTN_HOST: ${TTN_HOST:-ttn.lapibole.fr}
+      TTN_ORG_ID: ${TTN_ORG_ID:-mobilab}
+      TTN_API_KEY: ${TTN_API_KEY:-}
+      TTN_WEBHOOK_URL: https://nodered.console-mobilab.lapibole.fr/ttn/v3
+      TTN_WEBHOOK_SECRET: ${TTN_WEBHOOK_SECRET:-}
+      TTN_FREQUENCY_PLAN: ${TTN_FREQUENCY_PLAN:-EU_863_870_TTN}
+      GRAFANA_URL: http://mobilab-grafana:3000
+      GRAFANA_PUBLIC_URL: https://grafana.console-mobilab.lapibole.fr
+      GRAFANA_ADMIN_USER: ${GRAFANA_USER:-}
+      GRAFANA_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-}
+      GRAFANA_DB_HOST: mobilab-postgres:5432
+      MOBILAB_STAFF_LOGINS: ${MOBILAB_STAFF_LOGINS:-}
+      TELEGRAM_CLIENT_BOT_TOKEN: ${TELEGRAM_CLIENT_BOT_TOKEN:-}
+      TELEGRAM_ADMIN_BOT_TOKEN: ${TELEGRAM_ADMIN_BOT_TOKEN:-}
+      ADMIN_BOOTSTRAP_IDS: ${ADMIN_BOOTSTRAP_IDS:-}
+      NODE_RED_INTERNAL_URL: http://mobilab-nodered:1880/ttn/v3
+    volumes:
+      - ./catalogue:/app/catalogue:ro
+    # Aucun port publié : long polling vers Telegram, /health sur le réseau interne seulement.
     networks:
-      - console-mobilab-network
+      - default
     depends_on:
-      - postgres
+      mobilab-postgres:
+        condition: service_healthy
 
-  influxdb:
-    image: influxdb:1.8
-    ports:
-      - "8086:8086"
-    volumes:
-      - influxdb-data:/var/lib/influxdb
-      - ./influxdb/influxdb.conf:/etc/influxdb/influxdb.conf
+  # Commande migrate : schéma app, mesures V3, rôles techniques et leurs mots de passe.
+  #   docker compose --profile outils run --rm mobilab-migrate
+  mobilab-migrate:
+    profiles: ["outils"]
+    image: mobilab-console:local
+    build:
+      context: .
+      dockerfile: console/Dockerfile
+    command: ["node", "dist/src/migrate.js"]
+    environment:
+      PGHOST: mobilab-postgres
+      PGDATABASE: mobilab
+      PGUSER: ${POSTGRES_USER:-}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-}
+      PG_SVC_NODERED_PASSWORD: ${PG_SVC_NODERED_PASSWORD:-}
+      PG_SVC_CONSOLE_PASSWORD: ${PG_SVC_CONSOLE_PASSWORD:-}
+      PG_OWNER_PASSWORD: ${PG_OWNER_PASSWORD:-}
     networks:
-      - console-mobilab-network
+      - default
+    depends_on:
+      mobilab-postgres:
+        condition: service_healthy
+
+  # pgAdmin : voir la base visuellement. Seulement sur la machine (127.0.0.1), ouvert par tunnel SSH :
+  #   docker compose --profile outils up -d mobilab-pgadmin
+  #   ssh -L 5050:127.0.0.1:5050 <serveur>   puis http://localhost:5050
+  mobilab-pgadmin:
+    profiles: ["outils"]
+    image: dpage/pgadmin4:8.12
+    container_name: mobilab-pgadmin
     restart: unless-stopped
     environment:
-      - INFLUXDB_ADMIN_ENABLED=true
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin
-      - INFLUXDB_HTTP_AUTH_ENABLED=true
-
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-}
+      PGADMIN_CONFIG_SERVER_MODE: "True"
+      PGADMIN_DISABLE_POSTFIX: "true"
+    ports:
+      - "127.0.0.1:5050:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+    networks:
+      - default
+    depends_on:
+      mobilab-postgres:
+        condition: service_healthy
 
 volumes:
-  node-red-data:
-    name: node-red-data
-  grafana-data:
-    name: grafana-data
-  postgres-data:
-    name: postgres-data
-  influxdb-data:
-    name: influxdb-data
+  pgadmin:
 
 networks:
-  console-mobilab-network:
-    name: console-mobilab-network
+  proxy:
+    external: true

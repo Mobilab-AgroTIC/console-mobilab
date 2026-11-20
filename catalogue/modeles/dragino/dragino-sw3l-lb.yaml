@@ -1,0 +1,42 @@
+# Dragino SW3L-LB : débitmètre à impulsions. Débit et volume calculés à partir du compteur (spec V3 §7.5, §7.9).
+cle: dragino-sw3l-lb
+prefixe_id: sw3l               # id du capteur dans TTN : sw3l-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: SW3L-LB
+libelle: Débitmètre Dragino SW3L
+bouton: SW3L
+type: capteur
+categorie: autre
+ordre: 3
+detection: {textes: [SW3L]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: sw3l-lb, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [sw3l-lb, sw3l-ls, sw3l]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/SW3L-LB_TTN_decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/SW3L-LB/SW3L-LB_TTN_decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x1F, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode: {cle: MOD}
+mesures:
+  flow_l_h: {nom: flow_l_h, libelle: Débit, unite: L/h, decimales: 1, principale: true, alerte: debit, hysteresis: 0}
+  volume_l: {nom: volume_l, libelle: Volume, unite: L, decimales: 0, alerte: aucune}
+# Water_flow_value du décodeur n'est pas utilisé (il divise par 12 en mode 3). Impulsions par litre
+# selon Calculate_flag, repris du décodeur (à vérifier sur le manuel).
+derivees:
+  - type: compteur_impulsions
+    cle_cumul: Total_pulse
+    cle_intervalle: Last_pulse
+    cle_calibre: Calculate_flag
+    impulsions_par_litre: {0: 450, 1: 390, 2: 64, 3: 12}
+    volume: volume_l
+    debit: flow_l_h
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [flow_l_h]}
+    - {type: courbe, mesures: [volume_l]}
+    - {type: batterie}
+    - {type: radio}

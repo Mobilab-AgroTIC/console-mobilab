@@ -1,0 +1,57 @@
+# Dragino SE01/SE02/SE0X-LB : sondes de sol (humidité, température, conductivité). Mode 0 = valeurs calibrées.
+cle: dragino-se0x-lb
+prefixe_id: se0x               # id du capteur dans TTN : se0x-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: SE0X-LB
+libelle: Sondes de sol (1 à 4) Dragino SE0X
+bouton: SE0X (sol)
+type: capteur
+categorie: autre
+ordre: 8
+detection: {textes: [SE01-LB, SE02-LB, SE0X-LB, SE01, SE02]}
+allumage: "Allumez-le : appui long 5 s sur le bouton, la LED verte clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: se01-lb, firmware_version: "1.0", band_id: EU_863_870}
+dr_alias: [se01-lb, se02-lb, se0x-lb, se01-ls, se02-ls]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/SE0X-LB_decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/SE0X-LB/SE0X-LB%20decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0xF9, cle_firmware: FIRMWARE_VERSION, cle_bande: FREQUENCY_BAND}
+intervalle_defaut_s: 1200
+batterie: {cle: BatV, cle_statut: BAT, facteur_mv: 1000, pile: lithium}   # ER26500 8500 mAh
+mode: {cle: Mod}
+mesures:
+  temp_DS18B20: {nom: temperature_probe, libelle: Température sonde, unite: "°C", decimales: 1, alerte: seuil,
+                 hysteresis: 0.5, seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  water_SOIL1: {nom: soil1_moisture, libelle: Humidité du sol 1, unite: "%", decimales: 0, principale: true, alerte: seuil, hysteresis: 2,
+                 seuils_proposes: {min: [10, 20, 30], max: [60, 70, 80]}}
+  temp_SOIL1: {nom: soil1_temp, libelle: Température du sol 1, unite: "°C", decimales: 1, alerte: seuil, hysteresis: 0.5,
+                seuils_proposes: {min: [0, 2, 5], max: [25, 30, 35]}}
+  conduct_SOIL1: {nom: soil1_ec, libelle: Conductivité du sol 1, unite: µS/cm, decimales: 0, alerte: aucune}
+  water_SOIL2: {nom: soil2_moisture, libelle: Humidité du sol 2, unite: "%", decimales: 0, alerte: seuil, hysteresis: 2,
+                 seuils_proposes: {min: [10, 20, 30], max: [60, 70, 80]}}
+  temp_SOIL2: {nom: soil2_temp, libelle: Température du sol 2, unite: "°C", decimales: 1, alerte: seuil, hysteresis: 0.5,
+                seuils_proposes: {min: [0, 2, 5], max: [25, 30, 35]}}
+  conduct_SOIL2: {nom: soil2_ec, libelle: Conductivité du sol 2, unite: µS/cm, decimales: 0, alerte: aucune}
+  water_SOIL3: {nom: soil3_moisture, libelle: Humidité du sol 3, unite: "%", decimales: 0, alerte: seuil, hysteresis: 2,
+                 seuils_proposes: {min: [10, 20, 30], max: [60, 70, 80]}}
+  temp_SOIL3: {nom: soil3_temp, libelle: Température du sol 3, unite: "°C", decimales: 1, alerte: seuil, hysteresis: 0.5,
+                seuils_proposes: {min: [0, 2, 5], max: [25, 30, 35]}}
+  conduct_SOIL3: {nom: soil3_ec, libelle: Conductivité du sol 3, unite: µS/cm, decimales: 0, alerte: aucune}
+  water_SOIL4: {nom: soil4_moisture, libelle: Humidité du sol 4, unite: "%", decimales: 0, alerte: seuil, hysteresis: 2,
+                 seuils_proposes: {min: [10, 20, 30], max: [60, 70, 80]}}
+  temp_SOIL4: {nom: soil4_temp, libelle: Température du sol 4, unite: "°C", decimales: 1, alerte: seuil, hysteresis: 0.5,
+                seuils_proposes: {min: [0, 2, 5], max: [25, 30, 35]}}
+  conduct_SOIL4: {nom: soil4_ec, libelle: Conductivité du sol 4, unite: µS/cm, decimales: 0, alerte: aucune}
+modes:
+  "0": {libelle: Valeurs calibrées, mesures: [temperature_probe, soil1_moisture, soil1_temp, soil1_ec, soil2_moisture,
+        soil2_temp, soil2_ec, soil3_moisture, soil3_temp, soil3_ec, soil4_moisture, soil4_temp, soil4_ec]}
+# Mode 1 : valeurs brutes du capteur, gardées dans la trame brute seulement.
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [soil1_moisture, soil2_moisture, soil3_moisture, soil4_moisture]}
+    - {type: courbe, mesures: [temperature_probe, soil1_temp, soil2_temp, soil3_temp, soil4_temp]}
+    - {type: courbe, mesures: [soil1_ec, soil2_ec, soil3_ec, soil4_ec]}
+    - {type: batterie}
+    - {type: radio}

@@ -1,0 +1,30 @@
+# Piles des capteurs : de la tension lue au pourcentage restant (choix du 19/11/2026).
+#
+# Il n'y a pas de standard : chaque chimie a sa courbe de décharge, et le pourcentage suit la capacité
+# restante, pas la tension. Courbes approximatives (pile au repos, vers 20 °C ; le froid fait baisser
+# la tension) : à ajuster quand on aura vu de vraies piles s'user.
+#
+# courbe : [tension d'UN élément en mV, % restant], de la pile pleine à la pile vide. Entre deux points,
+# ligne droite. Un modèle indique sa pile ainsi : batterie: {..., pile: alcaline, elements: 2}.
+# Le seuil d'alerte en mV en découle : c'est la tension où la courbe passe sous a_changer_pct.
+# aide : une phrase pour la bulle d'aide de la jauge de pile dans Grafana.
+
+a_changer_pct: 20      # « pile à changer » sous ce pourcentage, quelle que soit la pile (alerte et 🪫)
+
+piles:
+  alcaline:
+    libelle: Alcaline 1,5 V (AA, AAA)
+    aide: Sa tension baisse régulièrement en s'usant, le pourcentage est donc assez fidèle.
+    # La tension baisse régulièrement : le pourcentage est assez parlant.
+    # 0 % à 1,15 V par élément : en dessous, l'émission radio fait décrocher le capteur.
+    courbe: [[1550, 100], [1450, 80], [1350, 55], [1300, 40], [1250, 25], [1200, 12], [1150, 0]]
+  lithium:
+    libelle: Lithium 3,6 V non rechargeable (Li-SOCl2 ER26500, ER18505)
+    aide: Sa tension reste presque plate pendant des années puis chute en fin de vie, le pourcentage reste donc longtemps près de 100 %.
+    # Tension plate pendant presque toute la vie de la pile, puis chute rapide : le pourcentage reste
+    # à 100 % pendant des années et ne descend qu'en fin de vie. C'est la limite de cette chimie.
+    courbe: [[3500, 100], [3400, 50], [3300, 20], [3200, 10], [3000, 0]]
+  lipo:
+    libelle: Lithium-ion ou LiPo 3,7 V rechargeable
+    aide: Batterie rechargeable, à recharger quand elle passe sous le seuil.
+    courbe: [[4150, 100], [4000, 80], [3900, 62], [3800, 42], [3750, 30], [3700, 20], [3650, 12], [3500, 3], [3300, 0]]

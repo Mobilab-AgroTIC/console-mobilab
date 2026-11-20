@@ -1,0 +1,31 @@
+# Sondes branchables sur une voie (entrée) d'un boîtier (spec V3 §7.8). Trois conversions seulement :
+# lineaire (y = a·x + b), log (y = −(1/k)·ln((x − bas)/(haut − bas))), table (interpolation entre points).
+# L'ordre de ce fichier donne le rang `i` des boutons ps:<deveui>:<voie>:<i> (spec §4.15) : ajouter à la fin.
+pilowtech_tension:
+  libelle: Pilowtech
+  pour: [tension]
+  mesure: soil_moisture
+  libelle_mesure: Humidité du sol
+  unite: "%"
+  decimales: 0
+  conversion: {type: log, k: 0.05, bas: eau, haut: air}
+  parametres_a_regler: {eau: 1.21, air: 2.93}     # tensions dans l'eau et dans l'air, réglées par Mobilab
+  alerte: seuil
+  hysteresis: 2
+  seuils_proposes: {min: [20, 30, 40], max: [80, 90]}
+pilowtech_points:
+  libelle: Pilowtech (carte Mobilab)
+  pour: [points]
+  mesure: soil_moisture
+  libelle_mesure: Humidité du sol
+  unite: "%"
+  decimales: 0
+  conversion: {type: log, k: 0.05, bas: 0, haut: 4095}   # formule V1 de Grafana : -(1/0.05)*log(x/4095)
+  alerte: seuil
+  hysteresis: 2
+  seuils_proposes: {min: [20, 30, 40], max: [80, 90]}
+tension_brute:
+  libelle: Tension brute
+  pour: [tension, points]
+  brut_seulement: true
+# Watermark : n'entre ici qu'avec une conversion écrite et testée (spec §0, point 4).

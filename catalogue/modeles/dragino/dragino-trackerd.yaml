@@ -1,0 +1,33 @@
+# Dragino TrackerD : position GPS, température et humidité ; batterie rechargeable.
+cle: dragino-trackerd
+prefixe_id: trackerd               # id du capteur dans TTN : trackerd-<4 derniers caractères du DevEUI>
+marque: Dragino
+modele: TrackerD
+libelle: Traceur GPS Dragino TrackerD
+bouton: TrackerD
+type: capteur
+categorie: autre
+detection: {textes: [TrackerD, TRACKERD]}
+allumage: "Allumez-le : appui long sur le bouton jusqu'à ce que la LED clignote."   # à vérifier
+dr: {brand_id: dragino, model_id: trackerd, firmware_version: "1.4.4", band_id: EU_863_870}
+dr_alias: [trackerd, trackerd-ls]
+lorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}
+decodeurs:
+  - fichier: decodeurs/dragino/TrackerD_1.5.4_TrackerD-LS1.0.5_Decoder.js
+    source: https://github.com/dragino/dragino-end-node-decoder/blob/9d45ece5c28b4914904970fbe94bb09299b995c7/TrackerD/TrackerD%20%201.5.4_TrackerD-LS1.0.5%20Decoder.txt
+ports: {2: mesures, 5: statut}
+port5: {code: 0x13, cle_firmware: firmware, cle_bande: band}
+intervalle_defaut_s: 1200
+batterie: {cle: battery, cle_statut: battery, facteur_mv: 1000, pile: lipo}   # Li-ion 1000 mAh rechargeable
+mesures:
+  temperature: {nom: temperature, libelle: Température, unite: "°C", decimales: 1, principale: true, alerte: seuil, hysteresis: 0.5,
+               seuils_proposes: {min: [0, 2, 5], max: [30, 35, 40]}}
+  humidity: {nom: humidity, libelle: Humidité, unite: "%", decimales: 0, principale: true, alerte: seuil, hysteresis: 3,
+             seuils_proposes: {max: [85, 90, 95]}}
+  latitude: {nom: latitude, libelle: Latitude, unite: "°", decimales: 6, ignorer: [0], alerte: aucune}
+  longitude: {nom: longitude, libelle: Longitude, unite: "°", decimales: 6, ignorer: [0], alerte: aucune}
+grafana:
+  panneaux:
+    - {type: courbe, mesures: [temperature, humidity]}
+    - {type: batterie}
+    - {type: radio}

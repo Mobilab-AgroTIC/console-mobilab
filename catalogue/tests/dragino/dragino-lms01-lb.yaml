@@ -1,0 +1,10 @@
+# Trames construites d'après le décodeur officiel (pas encore de trame réelle).
+- nom: "feuille humide à 40 %, sans sonde de température"
+  f_port: 2
+  hex: "0E107FFF019000D7000000"
+  attendu: {leaf_wetness: 40, leaf_temp: 21.5, battery_mv: 3600}
+  absent: [temperature_probe]
+- nom: "port 5, pile"
+  f_port: 5
+  hex: "2D010001FF0E10"
+  attendu: {battery_mv: 3600}
