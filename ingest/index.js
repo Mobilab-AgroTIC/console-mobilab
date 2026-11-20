@@ -11,6 +11,7 @@ const path = require("path");
 const catalogueLib = require("./catalogue");
 const { decoder, decoderSource } = require("./decodeur");
 const trameLib = require("./trame");
+const ficheLib = require("./fiche");
 const { typeFiche } = trameLib;
 const N = require("./normaliser");
 const A = require("./alertes");
@@ -227,66 +228,90 @@ function creer(options) {
         return Boolean(mig.v1_app_id && appId === mig.v1_app_id);
     }
 
+    // ---------------------------------------------------------------- uplink en étapes (Node-RED, spec §7.3)
+    //
+    // Chaque étape lit et complète un même objet « trame » (msg.trame dans Node-RED) : on peut l'afficher,
+    // détourner un capteur, ou le réinjecter à l'étape suivante. traiterUplink() enchaîne les étapes dans
+    // le même ordre que la page Node-RED (fichier de secours, tests).
+    //
+    //   recevoir → identifier → [modèle inconnu] → décoder → [erreur de décodage] → normaliser
+    //            → enregistrer → alertes → expédier
+
+    /** Trame d'origine telle que l'attendent les fonctions internes (octets en Buffer). */
+    function uDe(t) {
+        return { ...t.u, octets: t.u.hex === null || t.u.hex === undefined ? null : Buffer.from(t.u.hex, "hex") };
+    }
+    function modeleDe(t) {
+        const m = t.modele ? cat.modeles.get(t.modele) : null;
+        if (t.modele && !m) throw new Error(`modèle ${t.modele} absent du catalogue`);
+        return m;
+    }
+
     /**
-     * Partie avant la réponse à TTS (< 5 s) : contrôle, recherche, trame brute.
-     * Renvoie { statut, suite? } ; suite() fait le décodage, l'écriture et les alertes.
+     * Étape 1, avant la réponse à TTS (< 5 s) : secret, lecture, capteur connu, trame brute écrite.
+     * Renvoie la trame : statut (réponse HTTP), suite (à traiter ?) et raison (pourquoi on s'arrête).
      */
-    async function recevoirUplink(payload, entetes, dejaControle = false) {
+    async function etapeRecevoir(payload, entetes, dejaControle = false) {
+        const t = { type: "uplink", statut: 200, suite: false, raison: null };
         if (!dejaControle && !secretValide(entetes, [env.TTN_WEBHOOK_SECRET, env.TTN_WEBHOOK_SECRET_PREVIOUS])) {
             etat.rejets++;
-            return { statut: 401 };
+            return { ...t, statut: 401, raison: "secret absent ou faux" };
         }
         let u;
         try { u = lireUplink(payload); } catch (e) {
             etat.rejets++;
             log.warn(`uplink refusé (400) : ${e.message}`);
-            return { statut: 400 };
+            return { ...t, statut: 400, raison: `trame illisible : ${e.message}` };
         }
         etat.recues++;
-        let dev;
+        t.u = { ...u, hex: u.octets ? u.octets.toString("hex") : null };
+        delete t.u.octets;
         try {
             const res = await tx(async c => {
                 const d = await chercherCapteur(c, u.devEui);
                 const trame = trameCourte(u);
                 if (!d) {
                     await anomalie(c, "deveui_inconnu", { devEui: u.devEui, appId: u.appId, trame });
-                    return { fin: true };
+                    return { fin: "capteur inconnu (DevEUI absent de la base)" };
                 }
                 if (!appAcceptee(d, u.appId)) {
                     await anomalie(c, "mauvaise_application", { tenant: d.tenant_slug, devEui: u.devEui, appId: u.appId, trame });
-                    return { fin: true };
+                    return { fin: `application TTN ${u.appId} : ce n'est pas celle de la ferme` };
                 }
                 if (d.ttn_status === "supprime") {
                     await anomalie(c, "capteur_supprime", { tenant: d.tenant_slug, devEui: u.devEui, appId: u.appId, trame });
-                    return { fin: true };
+                    return { fin: "capteur supprimé" };
                 }
                 const ins = await c.query(
                     `INSERT INTO public.uplinks (time, tenant, name, dev_eui, application_id, f_port, f_cnt, frm_payload, rssi, snr, gateways)
                      VALUES ($1, $2, $3, $3, $4, $5, $6, $7, $8, $9, $10::jsonb)
                      ON CONFLICT (dev_eui, time) DO NOTHING RETURNING time`,
                     [u.time, d.tenant_slug, u.devEui, u.appId, u.fPort, u.fCnt, u.octets, u.rssi, u.snr, jsonb(u.passerelles)]);
-                if (!ins.rowCount) return { fin: true, rejouee: true };
-                return { fin: false, dev: d };
+                if (!ins.rowCount) return { fin: "trame déjà reçue (rejouée par TTN)" };
+                return { fin: null, dev: d };
             });
             etat.derniereTrame = new Date().toISOString();
-            if (res.fin) return { statut: 200 };
-            dev = res.dev;
+            if (res.fin) return { ...t, raison: res.fin };
+            t.capteur = res.dev;
         } catch (e) {
             // Postgres injoignable : fichier de secours, réponse 200 quand même (spec §7.3, étape 4).
             log.error(`uplink ${u.devEui} : base injoignable, fichier de secours (${e.code || e.message})`);
             if (!dejaControle) ecrireSpool("uplink", payload);
-            return { statut: 200, spool: true };
+            return { ...t, spool: true, raison: "base injoignable : trame mise au fichier de secours" };
         }
-        if (dev.tenant_status === "en_creation" || !u.octets || u.fPort === null || u.fPort === 0) return { statut: 200 };
-        return { statut: 200, suite: () => traiterUplink(u, dev).catch(e => { etat.erreurs++; etat.derniereErreur = e.message; log.error(`uplink ${u.devEui} : ${e.stack || e.message}`); }) };
+        if (t.capteur.tenant_status === "en_creation") return { ...t, raison: "ferme en cours de création" };
+        if (!u.octets || u.fPort === null || u.fPort === 0) return { ...t, raison: "trame sans données (port 0)" };
+        t.suite = true;
+        return t;
     }
 
-    const identifier = (dev, u) => catalogueLib.identifierModele(cat, dev, u);
-
-    async function traiterUplink(u, dev) {
+    /** Étape 2 : quel modèle ? (déclaré, déjà lu, port 5 Dragino, fiche Mobilab du port 10, version_ids). */
+    function etapeIdentifier(t) {
+        const u = uDe(t);
+        const dev = t.capteur;
         const det = (dev.config && dev.config.detected) || {};
         const patch = { f_cnt: u.fCnt };
-        const { modele, lu } = identifier(dev, u);
+        const { modele, source, lu } = identifier(dev, u);
         const signaux = [];
 
         if (lu && lu.cle !== det.modele_lu) {
@@ -298,10 +323,10 @@ function creer(options) {
             }
         } else if (dev.model_key && !lu && typeFiche(u.fPort, u.octets) !== null) {
             // Fiche Mobilab d'un type absent du catalogue : le capteur n'est pas celui déclaré.
-            const t = typeFiche(u.fPort, u.octets);
+            const tf = typeFiche(u.fPort, u.octets);
             const attendu = ((cat.modeles.get(dev.model_key) || {}).trame || {}).type;
-            if (attendu !== t) {
-                signaux.push(["anomalie", "modele_inconnu", { contredit: true, model_key: dev.model_key, fiche_mobilab: t }]);
+            if (attendu !== tf) {
+                signaux.push(["anomalie", "modele_inconnu", { contredit: true, model_key: dev.model_key, fiche_mobilab: tf }]);
             }
         } else if (dev.model_key && u.fPort === 5 && u.octets.length && !lu && cat.parPort5.size) {
             const code = u.octets[0];
@@ -310,51 +335,90 @@ function creer(options) {
                 signaux.push(["anomalie", "modele_inconnu", { contredit: true, model_key: dev.model_key, port5_code: `0x${code.toString(16).toUpperCase()}` }]);
             }
         }
+        t.modele = modele ? modele.cle : null;
+        t.identifie_par = modele ? source : null;
+        t.patch = patch;
+        t.signaux = signaux;
+        if (!modele) t.raison = "modèle inconnu : le client doit le choisir";
+        return t;
+    }
 
-        if (!modele) {
-            await tx(async c => {
-                await c.query(`UPDATE public.uplinks SET decoded = $3::jsonb WHERE dev_eui = $1 AND time = $2`,
-                    [u.devEui, u.time, jsonb({ erreur: "modèle inconnu" })]);
-                const nouveau = !det.modele_a_choisir_at;
-                if (nouveau) patch.modele_a_choisir_at = new Date().toISOString();
-                await majDetected(c, u.devEui, patch);
-                if (nouveau) {
-                    const p5 = u.fPort === 5 && u.octets.length ? `0x${u.octets[0].toString(16).toUpperCase()}` : null;
-                    const fiche = typeFiche(u.fPort, u.octets);
-                    await signaler(c, "client", "modele_a_choisir", dev.tenant_slug, u.devEui, { created_by: dev.created_by });
-                    await anomalie(c, "modele_inconnu", { tenant: dev.tenant_slug, devEui: u.devEui, appId: u.appId,
-                        details: { port5_code: p5, ...(fiche !== null ? { fiche_mobilab: fiche } : {}) }, trame: trameCourte(u), avertir: "premiere" });
-                }
-                for (const s of signaux) await envoyerSignal(c, s, dev, u);
-            });
-            return;
-        }
+    /** Branche « modèle inconnu » : trame notée, client et admins prévenus une fois. */
+    async function etapeModeleInconnu(t) {
+        const u = uDe(t);
+        const dev = t.capteur;
+        const det = (dev.config && dev.config.detected) || {};
+        await tx(async c => {
+            await c.query(`UPDATE public.uplinks SET decoded = $3::jsonb WHERE dev_eui = $1 AND time = $2`,
+                [u.devEui, u.time, jsonb({ erreur: "modèle inconnu" })]);
+            const nouveau = !det.modele_a_choisir_at;
+            if (nouveau) t.patch.modele_a_choisir_at = new Date().toISOString();
+            await majDetected(c, u.devEui, t.patch);
+            if (nouveau) {
+                const p5 = u.fPort === 5 && u.octets.length ? `0x${u.octets[0].toString(16).toUpperCase()}` : null;
+                const fiche = typeFiche(u.fPort, u.octets);
+                await signaler(c, "client", "modele_a_choisir", dev.tenant_slug, u.devEui, { created_by: dev.created_by });
+                await anomalie(c, "modele_inconnu", { tenant: dev.tenant_slug, devEui: u.devEui, appId: u.appId,
+                    details: { port5_code: p5, ...(fiche !== null ? { fiche_mobilab: fiche } : {}) }, trame: trameCourte(u), avertir: "premiere" });
+            }
+            for (const sig of t.signaux || []) await envoyerSignal(c, sig, dev, u);
+        });
+        t.suite = false;
+        t.raison = "modèle inconnu : le client doit le choisir";
+        return t;
+    }
 
-        // Décodage, avec le mode forcé réécrit dans une copie de la trame (spec §7.6).
-        const octets = N.forcerMode(modele, u.octets, dev.mode_override);
-        const fichier = choisirDecodeur(modele, det.firmware);
-        let decode;
+    /** Étape 3 : décodeur officiel (fichier JS) ou trame Mobilab décrite au catalogue, mode forcé appliqué. */
+    function etapeDecoder(t) {
+        const u = uDe(t);
+        const modele = modeleDe(t);
+        const det = (t.capteur.config && t.capteur.config.detected) || {};
+        const octets = N.forcerMode(modele, u.octets, t.capteur.mode_override);
+        const source = choisirDecodeur(modele, det.firmware);
+        t.decodeur = source.trame ? `trame ${source.trame.format} (catalogue)` : path.basename(source.chemin);
         try {
-            decode = decoderSource(fichier, octets, u.fPort);
+            t.decode = decoderSource(source, octets, u.fPort);
+            t.erreur_decodage = null;
         } catch (e) {
-            await tx(async c => {
-                await c.query(`UPDATE public.uplinks SET decoded = $3::jsonb WHERE dev_eui = $1 AND time = $2`,
-                    [u.devEui, u.time, jsonb({ erreur: String(e.message).slice(0, 200) })]);
-                const role = (modele.ports || {})[u.fPort] || (modele.ports || {}).defaut;
-                if (role === "mesures" || role === "statut") {
-                    await anomalie(c, "decodage", { tenant: dev.tenant_slug, devEui: u.devEui, appId: u.appId,
-                        details: { erreur: String(e.message).slice(0, 200), model_key: modele.cle }, trame: trameCourte(u) });
-                }
-                await majDetected(c, u.devEui, patch);
-                for (const s of signaux) await envoyerSignal(c, s, dev, u);
-            });
-            return;
+            t.decode = null;
+            t.erreur_decodage = String(e.message).slice(0, 200);
+            t.raison = `décodage impossible : ${t.erreur_decodage}`;
         }
+        return t;
+    }
 
-        const norm = N.normaliser(cat, modele, decode, {
+    /** Branche « erreur de décodage » : erreur notée dans la trame brute, anomalie si le port porte des mesures. */
+    async function etapeErreurDecodage(t) {
+        const u = uDe(t);
+        const modele = modeleDe(t);
+        const dev = t.capteur;
+        await tx(async c => {
+            await c.query(`UPDATE public.uplinks SET decoded = $3::jsonb WHERE dev_eui = $1 AND time = $2`,
+                [u.devEui, u.time, jsonb({ erreur: t.erreur_decodage })]);
+            const role = (modele.ports || {})[u.fPort] || (modele.ports || {}).defaut;
+            if (role === "mesures" || role === "statut") {
+                await anomalie(c, "decodage", { tenant: dev.tenant_slug, devEui: u.devEui, appId: u.appId,
+                    details: { erreur: t.erreur_decodage, model_key: modele.cle }, trame: trameCourte(u) });
+            }
+            await majDetected(c, u.devEui, t.patch);
+            for (const sig of t.signaux || []) await envoyerSignal(c, sig, dev, u);
+        });
+        t.suite = false;
+        return t;
+    }
+
+    /** Étape 4 : des clés du décodeur aux mesures du catalogue (unités, facteurs, sondes, pile, mode). */
+    function etapeNormaliser(t) {
+        const u = uDe(t);
+        const modele = modeleDe(t);
+        const dev = t.capteur;
+        const det = (dev.config && dev.config.detected) || {};
+        const norm = N.normaliser(cat, modele, t.decode || {}, {
             fPort: u.fPort, octets: u.octets, probes: dev.probes || {}, modeForce: dev.mode_override || null,
             detected: det, time: u.time,
         });
+        const patch = t.patch || { f_cnt: u.fCnt };
+        const signaux = t.signaux || [];
         Object.assign(patch, norm.detected);
         if (norm.port5) {
             if (norm.port5.firmware !== null) patch.firmware = String(norm.port5.firmware);
@@ -374,9 +438,7 @@ function creer(options) {
             patch.sondes_demandees_mode = norm.modeEffectif;
             signaux.push(["client", "sondes_a_preciser", { voies: norm.voiesSansSonde, mode: norm.modeEffectif, created_by: dev.created_by }]);
         }
-
         const noms = Object.keys(norm.mesures);
-        const valeurs = noms.map(k => norm.mesures[k]);
         const estMesure = norm.role === "mesures" && noms.length > 0;
         let lastValues = null;
         if (estMesure) {
@@ -386,10 +448,21 @@ function creer(options) {
             const fusion = { ...(dev.last_values || {}), ...lastValues };
             lastValues.resume = N.resume(cat, modele, fusion);
         }
+        Object.assign(t, { role: norm.role, mesures: norm.mesures, batterie_mv: norm.batterieMv, mode: norm.modeEffectif,
+            voies_sans_sonde: norm.voiesSansSonde, est_mesure: estMesure, last_values: lastValues, patch, signaux });
+        return t;
+    }
 
-        const premiere = await tx(async c => {
+    /** Étape 5 : tout ce que la trame change en base, en une seule transaction (mesures, état du capteur, messages). */
+    async function etapeEnregistrer(t) {
+        const u = uDe(t);
+        const dev = t.capteur;
+        const mesures = t.mesures || {};
+        const noms = Object.keys(mesures);
+        const valeurs = noms.map(k => mesures[k]);
+        t.premiere = await tx(async c => {
             await c.query(`UPDATE public.uplinks SET decoded = $3::jsonb WHERE dev_eui = $1 AND time = $2`,
-                [u.devEui, u.time, jsonb(decode)]);
+                [u.devEui, u.time, jsonb(t.decode || {})]);
             if (noms.length) {
                 await c.query(
                     `INSERT INTO public.measures (time, tenant, dev_eui, metric, value)
@@ -398,7 +471,7 @@ function creer(options) {
                     [u.time, dev.tenant_slug, u.devEui, noms, valeurs]);
             }
             let premiere = false;
-            if (estMesure) {
+            if (t.est_mesure) {
                 const p = await c.query(`UPDATE app.devices SET last_seen = $2 WHERE dev_eui = $1 AND last_seen IS NULL RETURNING dev_eui`,
                     [u.devEui, u.time]);
                 premiere = p.rowCount > 0;
@@ -408,30 +481,77 @@ function creer(options) {
                         config = jsonb_set(config, '{detected}', coalesce(config->'detected', '{}'::jsonb) || $7::jsonb),
                         ttn_status = CASE WHEN ttn_status IN ('enregistre', 'en_creation') THEN 'connecte' ELSE ttn_status END
                      WHERE dev_eui = $1`,
-                    [u.devEui, u.time, u.rssi, u.snr, norm.batterieMv, jsonb(lastValues), jsonb(patch)]);
+                    [u.devEui, u.time, u.rssi, u.snr, t.batterie_mv, jsonb(t.last_values), jsonb(t.patch || {})]);
             } else {
                 await c.query(
                     `UPDATE app.devices SET battery_mv = coalesce($2, battery_mv),
                         config = jsonb_set(config, '{detected}', coalesce(config->'detected', '{}'::jsonb) || $3::jsonb),
                         ttn_status = CASE WHEN ttn_status IN ('enregistre', 'en_creation') THEN 'connecte' ELSE ttn_status END
                      WHERE dev_eui = $1`,
-                    [u.devEui, norm.batterieMv, jsonb(patch)]);
+                    [u.devEui, t.batterie_mv, jsonb(t.patch || {})]);
             }
             if (premiere) {
-                const attente = norm.voiesSansSonde.length > 0;
+                const attente = (t.voies_sans_sonde || []).length > 0;
                 await signaler(c, "client", "premiere_mesure", dev.tenant_slug, u.devEui,
-                    { resume: lastValues.resume, created_by: dev.created_by, attente_sondes: attente });
+                    { resume: t.last_values.resume, created_by: dev.created_by, attente_sondes: attente });
             }
-            for (const s of signaux) await envoyerSignal(c, s, dev, u);
+            for (const sig of t.signaux || []) await envoyerSignal(c, sig, dev, u);
             return premiere;
         });
-
-        if (STATUTS_ALERTES.has(dev.tenant_status) && (estMesure || norm.batterieMv !== null)) {
-            const nb = await evaluerAlertes(dev, modele, norm.mesures, u.time);
-            if (nb) await expedier().catch(e => log.error(`expéditeur : ${e.message}`));
-        }
-        return premiere;
+        t.alertes_a_evaluer = STATUTS_ALERTES.has(dev.tenant_status) && (Boolean(t.est_mesure) || t.batterie_mv !== null);
+        return t;
     }
+
+    /** Étape 6 : règles d'alerte du capteur ; écrit les alertes à envoyer (combien dans t.alertes). */
+    async function etapeAlertes(t) {
+        t.alertes = await evaluerAlertes(t.capteur, modeleDe(t), t.mesures || {}, t.u.time);
+        return t;
+    }
+
+    /** Les étapes enchaînées dans l'ordre de la page Node-RED. */
+    async function traiter(t) {
+        etapeIdentifier(t);
+        if (!t.modele) { await etapeModeleInconnu(t); return false; }
+        etapeDecoder(t);
+        if (t.erreur_decodage !== null) { await etapeErreurDecodage(t); return false; }
+        etapeNormaliser(t);
+        await etapeEnregistrer(t);
+        if (t.alertes_a_evaluer) {
+            await etapeAlertes(t);
+            if (t.alertes) await expedier().catch(e => log.error(`expéditeur : ${e.message}`));
+        }
+        return t.premiere;
+    }
+
+    /** Erreur imprévue dans une étape : comptée pour la santé, journalisée. */
+    function noterErreur(t, e) {
+        etat.erreurs++;
+        etat.derniereErreur = e.message || String(e);
+        const qui = (t && t.u && t.u.devEui) || "?";
+        log.error(`uplink ${qui} : ${e.stack || e.message || e}`);
+    }
+
+    /**
+     * Partie avant la réponse à TTS (< 5 s), puis suite() pour le reste (fichier de secours, tests).
+     * Renvoie { statut, suite? }.
+     */
+    async function recevoirUplink(payload, entetes, dejaControle = false) {
+        const t = await etapeRecevoir(payload, entetes, dejaControle);
+        const r = { statut: t.statut };
+        if (t.spool) r.spool = true;
+        if (t.suite) r.suite = () => traiter(t).catch(e => noterErreur(t, e));
+        return r;
+    }
+
+    /** Compatibilité (tests) : traite une trame déjà lue pour un capteur déjà cherché. */
+    async function traiterUplink(u, dev) {
+        const t = { type: "uplink", statut: 200, suite: true, raison: null, capteur: dev,
+            u: { ...u, hex: u.octets ? Buffer.from(u.octets).toString("hex") : null } };
+        delete t.u.octets;
+        return traiter(t);
+    }
+
+    const identifier = (dev, u) => catalogueLib.identifierModele(cat, dev, u);
 
     async function envoyerSignal(c, [type, kind, details], dev, u) {
         if (type === "anomalie") {
@@ -964,6 +1084,42 @@ function creer(options) {
         });
     }
 
+    // ---------------------------------------------------------------- catalogue depuis Node-RED
+
+    /** Décode une trame d'essai pour un modèle du catalogue, sans rien écrire en base. */
+    function essayerTrame({ modele, f_port, hex, mode_force } = {}) {
+        const m = cat.modeles.get(String(modele || ""));
+        if (!m) throw new Error(`modèle « ${modele} » absent du catalogue (voir « Lister le catalogue »)`);
+        const brut = Buffer.from(String(hex || "").replace(/\s/g, ""), "hex");
+        if (!brut.length) throw new Error("hex : la trame en hexadécimal, par exemple 04fd03e8059d016afccdf9");
+        const fPort = Number(f_port);
+        const octets = N.forcerMode(m, brut, mode_force || null);
+        const source = choisirDecodeur(m, null);
+        const decode = decoderSource(source, octets, fPort);
+        const norm = N.normaliser(cat, m, decode, { fPort, octets: brut, probes: {}, modeForce: mode_force || null,
+            detected: {}, time: new Date().toISOString() });
+        const valeurs = Object.fromEntries(Object.entries(norm.mesures).map(([k, v]) => [k, { v }]));
+        return { modele: m.cle, decodeur: source.trame ? `trame ${source.trame.format} (catalogue)` : path.basename(source.chemin),
+            port: norm.role || "ignoré", mode: norm.modeEffectif, mesures: norm.mesures, resume: N.resume(cat, m, valeurs), decode };
+    }
+
+    /** Les modèles du catalogue, par marque, pour les voir depuis Node-RED. */
+    function listerCatalogue() {
+        const parMarque = {};
+        for (const m of cat.modeles.values()) {
+            (parMarque[m.marque] = parMarque[m.marque] || []).push({ cle: m.cle, modele: m.modele, categorie: m.categorie || "autre",
+                mesures: Object.values(m.mesures).map(d => d.nom).filter((x, i, l) => l.indexOf(x) === i) });
+        }
+        return { version: cat.version, modeles: cat.modeles.size, marques: parMarque };
+    }
+
+    /** Essaie (et publie si demandé) une fiche de capteur ; recharge le catalogue après une publication. */
+    function ficheCapteur(entree) {
+        const r = ficheLib.ficheCapteur(options.catalogueDir, entree);
+        if (r.publie) rechargerCatalogue();
+        return r;
+    }
+
     // ---------------------------------------------------------------- santé (spec §5.12)
 
     function sante() {
@@ -988,7 +1144,14 @@ function creer(options) {
     return {
         get catalogue() { return cat; },
         rechargerCatalogue, recevoirUplink, recevoirJoin, recevoirDownlink, redecoder, sante,
+        essayerTrame, listerCatalogue, ficheCapteur,
         chercherMuets, finsDeCoupure, relances7Jours, purgeNocturne, expedier, rejouerSpool,
+        // Les étapes d'une trame, une par bloc « Mobilab » de la page Node-RED (voir noeud-red.js).
+        etapes: {
+            recevoir: etapeRecevoir, identifier: etapeIdentifier, modeleInconnu: etapeModeleInconnu, decoder: etapeDecoder,
+            erreurDecodage: etapeErreurDecodage, normaliser: etapeNormaliser, enregistrer: etapeEnregistrer, alertes: etapeAlertes,
+            noterErreur, traiter,
+        },
         _interne: { evaluerAlertes, traiterUplink, lireUplink, telegram },
     };
 }

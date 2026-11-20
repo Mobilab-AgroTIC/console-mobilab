@@ -8,6 +8,8 @@
 module.exports = {
     flowFile: '/mobilab/flows.json',
     flowFilePretty: true,
+    // Bloc « Mobilab » de la palette (étapes de la réception V3) : node-red/noeuds/ du dépôt
+    nodesDir: '/mobilab/noeuds',
     credentialSecret: process.env.NR_CREDENTIAL_SECRET,
 
     adminAuth: {

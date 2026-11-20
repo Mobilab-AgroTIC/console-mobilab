@@ -264,4 +264,4 @@ function identifierModele(cat, dev, u) {
     return { modele, source, lu };
 }
 
-module.exports = { charger, modeleParVersionIds, identifierModele, ErreurCatalogue, NOM_MESURE, pourcentagePile, pourcentageBrut };
+module.exports = { charger, modeleParVersionIds, identifierModele, dossierMarque, ErreurCatalogue, NOM_MESURE, pourcentagePile, pourcentageBrut };

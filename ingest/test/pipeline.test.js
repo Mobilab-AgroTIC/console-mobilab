@@ -166,5 +166,39 @@ test("chemin complet d'une trame et alertes", { skip: !actif && "base de test mo
         assert.equal((await q(`SELECT count(*)::int AS n FROM public.uplinks WHERE dev_eui = $1 AND time = '2026-11-17T14:00:00Z'`, [DEV])).rows[0].n, 1);
     });
 
+    await t.test("étapes une par une, comme la page Node-RED (message copié entre deux blocs)", async () => {
+        const NR = require("../noeud-red");
+        const copie = m => ({ ...structuredClone({ ...m, req: undefined }), req: m.req });   // comme RED.util.cloneMessage
+        let msg = { payload: uplink("04fd03e8059d016afccdf9", "2026-11-17T15:00:00Z"), req: { headers: H } };
+        const statuts = [];
+        for (const etape of ["recevoir_uplink", "identifier", "decoder", "normaliser", "enregistrer", "alertes"]) {
+            const r = await NR.executer(ing, etape, msg, { env });
+            statuts.push(r.statut.fill);
+            msg = copie(msg);
+        }
+        assert.equal(msg.statusCode, 200);
+        assert.deepEqual(statuts, ["green", "green", "green", "green", "green", "green"]);
+        assert.equal(msg.trame.modele, "dragino-lht52");
+        assert.equal(msg.trame.last_values.resume, "12,8 °C · 100 %");
+        const m = await q(`SELECT count(*)::int AS n FROM public.measures WHERE dev_eui = $1 AND time = '2026-11-17T15:00:00Z'`, [DEV]);
+        assert.equal(m.rows[0].n, 3);
+        // Trame rejouée par TTN : la réception s'arrête, avec sa raison
+        const rejouee = { payload: uplink("04fd03e8059d016afccdf9", "2026-11-17T15:00:00Z"), req: { headers: H } };
+        await NR.executer(ing, "recevoir_uplink", rejouee, { env });
+        assert.equal(rejouee.trame.suite, false);
+        assert.match(rejouee.trame.raison, /déjà reçue/);
+        // Erreur de décodage : la branche dédiée note l'erreur
+        const casse = { payload: uplink("04fd03e8059d016afccdf9", "2026-11-17T15:20:00Z", 7), req: { headers: H } };
+        for (const etape of ["recevoir_uplink", "identifier", "decoder"]) await NR.executer(ing, etape, casse, { env });
+        assert.ok(casse.trame.erreur_decodage);
+        await NR.executer(ing, "erreur_decodage", casse, { env });
+        const d = await q(`SELECT decoded->>'erreur' AS e FROM public.uplinks WHERE dev_eui = $1 AND time = '2026-11-17T15:20:00Z'`, [DEV]);
+        assert.ok(d.rows[0].e);
+        // Sans le bon secret : 401, rien n'est écrit
+        const intrus = { payload: uplink("04fd03e8059d016afccdf9", "2026-11-17T15:40:00Z"), req: { headers: {} } };
+        await NR.executer(ing, "recevoir_uplink", intrus, { env });
+        assert.equal(intrus.statusCode, 401);
+    });
+
     await pool.end();
 });

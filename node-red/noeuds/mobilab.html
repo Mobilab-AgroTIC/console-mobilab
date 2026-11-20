@@ -1,0 +1,64 @@
+<script type="text/javascript">
+(function () {
+    let ETAPES = [];
+    const trouver = cle => ETAPES.find(e => e.cle === cle);
+    $.getJSON("mobilab/etapes", d => { ETAPES = d || []; RED.view.redraw(true); });
+
+    RED.nodes.registerType("mobilab", {
+        category: "Mobilab",
+        color: "#C7E9C0",
+        defaults: {
+            name: { value: "" },
+            etape: { value: "decoder", required: true },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "font-awesome/fa-leaf",
+        paletteLabel: "Mobilab",
+        label: function () { return this.name || (trouver(this.etape) || {}).libelle || this.etape || "Mobilab"; },
+        labelStyle: function () { return this.name ? "node_label_italic" : ""; },
+        oneditprepare: function () {
+            const liste = $("#node-input-etape");
+            liste.empty();
+            let groupe = null, og = null;
+            for (const e of ETAPES) {
+                if (e.groupe !== groupe) { groupe = e.groupe; og = $("<optgroup>").attr("label", groupe).appendTo(liste); }
+                $("<option>").val(e.cle).text(e.libelle).appendTo(og);
+            }
+            if (!ETAPES.length) $("<option>").val(this.etape).text(this.etape).appendTo(liste);
+            liste.val(this.etape);
+            const aide = () => $("#mobilab-aide").text((trouver(liste.val()) || {}).aide || "");
+            liste.on("change", aide);
+            aide();
+        },
+    });
+})();
+</script>
+
+<script type="text/html" data-template-name="mobilab">
+    <div class="form-row">
+        <label for="node-input-etape"><i class="fa fa-leaf"></i> Étape</label>
+        <select id="node-input-etape" style="width: 70%;"></select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Nom</label>
+        <input type="text" id="node-input-name" placeholder="nom de l'étape">
+    </div>
+    <div class="form-tips" id="mobilab-aide" style="white-space: pre-wrap;"></div>
+</script>
+
+<script type="text/html" data-help-name="mobilab">
+    <p>Une étape de la réception Mobilab V3 : recevoir une trame, la décoder, l'enregistrer, évaluer les alertes,
+    essayer une fiche de capteur…</p>
+    <h3>Comment ça marche</h3>
+    <p>Choisissez l'étape dans la liste : son aide s'affiche en dessous. La trame voyage d'une étape à l'autre dans
+    <code>msg.trame</code> : branchez un nœud <i>debug</i> sur <code>msg.trame</code> pour la voir.</p>
+    <p>Les décisions (capteur connu ? modèle connu ? décodée ?) sont des aiguillages <i>switch</i> sur
+    <code>msg.trame</code> : on peut les modifier, détourner un capteur vers un autre traitement, ou réinjecter une
+    trame corrigée à l'étape suivante.</p>
+    <p>Sous le bloc s'affiche le dernier résultat : vert = passé, jaune = à regarder, gris = rien à faire, rouge = erreur
+    (rattrapée par le nœud <i>catch</i> de la page).</p>
+    <h3>Où est le code</h3>
+    <p>Dans le dépôt, <code>ingest/</code> (étapes, testées) et <code>catalogue/</code> (une fiche par modèle). Les
+    fiches s'ajoutent depuis la page « V3 · Catalogue ».</p>
+</script>

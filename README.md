@@ -66,9 +66,25 @@ et ses tables ; la V3 reçoit sur `/ttn/v3/*` et écrit dans `public.measures` (
 |---|---|
 | `db/migrations/` | Schéma `app`, `public.measures`, rôles `svc_nodered`, `svc_console`, `clients`, RLS `tenant = current_user` |
 | `catalogue/` | Un YAML par modèle, décodeurs Dragino officiels copiés sans modification, trames de test |
-| `ingest/` | Module chargé par Node-RED (`node-red/ingest-v3.js`) : secret, décodage, normalisation, alertes |
+| `ingest/` | Module chargé par Node-RED (`node-red/ingest-v3.js`) : les étapes d'une trame (recevoir, identifier, décoder, normaliser, enregistrer, alertes), les tâches, la page Catalogue |
 | `console/` | Service TypeScript : bot client, bot admin, jobs TTN, Grafana et Postgres, surveillance |
-| `node-red/v3-reception.json` | Onglet Node-RED à importer (`/ttn/v3/uplink`, `/join`, `/downlink`, `/health`, `/redecode`) |
+| `node-red/noeuds/` | Le bloc « Mobilab » de la palette : une étape du module, choisie dans une liste (aide dans sa fenêtre) |
+
+### Node-RED, chef d'orchestre
+
+Node-RED est la base du flux : ses pages V3 (dans `node-red/flows.json`, modifié à chaque Deploy) montrent et
+décident du chemin des trames. Les étapes sont des blocs « Mobilab » ; les décisions sont des aiguillages *switch*
+sur `msg.trame`, que l'on peut modifier, détourner ou recâbler dans l'éditeur, sans toucher au code.
+
+| Page | Contenu |
+|---|---|
+| V3 · Trames des capteurs | `/ttn/v3/uplink` : ① réception (réponse à TTN) → ② capteur mis de côté ? modèle connu ? → ③ décodage → ④ mesures en base → ⑤ alertes ; `/join`, `/downlink` ; erreurs |
+| V3 · Tâches | Envoi des alertes, catalogue, capteurs muets, rappels, fichier de secours, purge |
+| V3 · Supervision | `/ttn/v3/health` et `/ttn/v3/redecode` pour la console ; redécoder un capteur à la main |
+| V3 · Catalogue | Essayer une trame sur un modèle ; ajouter ou modifier un capteur (fiche, décodeur, trames d'essai) : essayé dans une copie du catalogue, publié seulement si tout passe |
+
+Sous chaque bloc s'affiche son dernier résultat ; un nœud debug sur `msg.trame` montre la trame entière. Les trames du
+fichier de secours sont rejouées avec les mêmes étapes, par la tâche dédiée (sans passer par la page).
 
 Mise en route, dans l'ordre :
 
@@ -79,7 +95,7 @@ Mise en route, dans l'ordre :
 2. Dépendances du module ingest (une fois) :
    `docker run --rm -u 1001:1001 -e HOME=/tmp -v $PWD/ingest:/w -w /w node:20-alpine npm ci --omit=dev`
 3. Base : `docker compose --profile outils run --rm mobilab-migrate`
-4. Node-RED : `docker compose up -d mobilab-nodered`, puis importer `node-red/v3-reception.json` dans l'éditeur.
+4. Node-RED : `docker compose up -d mobilab-nodered` (les pages V3 sont dans `node-red/flows.json`).
 5. Service : `docker compose --profile v3 up -d --build mobilab-console`
 
 Tests (conteneurs jetables, jamais la base de prod) : `ingest/test/` (`node --test`), `console/test/` (`vitest`).

@@ -42,9 +42,10 @@ services:
       - ./node-red:/mobilab
       # Schéma SQL, un fichier par capteur, rejoué par le nœud "get schemaFiles"
       - ./postgres/schema:/usr/src/node-red/schema:ro
-      # V3 : module ingest/ et catalogue (modèles, décodeurs officiels), en lecture seule
+      # V3 : module ingest/ en lecture seule ; catalogue en écriture pour la page « V3 · Catalogue »
+      # (une fiche n'y est écrite qu'une fois essayée dans une copie, et sur « Publier »)
       - ./ingest:/mobilab-ingest:ro
-      - ./catalogue:/mobilab-catalogue:ro
+      - ./catalogue:/mobilab-catalogue
     # Le contrôle de l'image lit /data/settings.js, qui n'existe pas ici : on interroge
     # directement l'éditeur sur son port.
     healthcheck:

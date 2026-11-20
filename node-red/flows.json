@@ -1,5 +1,1840 @@
 [
     {
+        "id": "d75c50260f960186",
+        "type": "tab",
+        "label": "V3 · Trames des capteurs",
+        "disabled": false,
+        "info": "Chemin d'une trame, de TTN à la base et aux alertes.\n\n- Les blocs verts **Mobilab** sont les étapes (choisies dans une liste, aide dans leur fenêtre) ; sous chacun, son dernier résultat.\n- Les losanges sont les aiguillages : ce sont eux qui décident de la suite, et on peut les modifier.\n- La trame voyage dans `msg.trame` : activez un nœud debug (bouton à sa droite) pour la voir passer.\n- Pour mettre un capteur de côté, détourner une trame ou la corriger, voir le commentaire « Intervenir sur un capteur ».",
+        "env": []
+    },
+    {
+        "id": "f4a5bfb93798a2aa",
+        "type": "group",
+        "z": "d75c50260f960186",
+        "name": "① Réception : réponse à TTN en moins de 5 s",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#d6e9f8",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "aeb02dcbbf675c95",
+            "9909817a0c7c6211",
+            "afc0fe0b5b9291bc",
+            "5726f74182ad61cf",
+            "2d3604e1993d9882"
+        ],
+        "x": 3,
+        "y": 58,
+        "w": 748,
+        "h": 242
+    },
+    {
+        "id": "3bc4cb811aac5d81",
+        "type": "group",
+        "z": "d75c50260f960186",
+        "name": "② Quel capteur, quel modèle ?",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#fbf3d0",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "f95ea4de0f355f98",
+            "28d2a6484192b02a",
+            "824bb5079a48c4a8",
+            "502f854fc7ce6e63",
+            "3fa34b2519039c28",
+            "ea3ace01875b7258"
+        ],
+        "x": 703,
+        "y": 128,
+        "w": 752,
+        "h": 242
+    },
+    {
+        "id": "1e70f5072bc84354",
+        "type": "group",
+        "z": "d75c50260f960186",
+        "name": "③ Décodage",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#e2f0d9",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "cb2d9af428e6c43d",
+            "f74e536061875024",
+            "dfdf747ccfc5988c",
+            "6708ece654870e2b"
+        ],
+        "x": 1446,
+        "y": 128,
+        "w": 450,
+        "h": 242
+    },
+    {
+        "id": "40dc254761e55210",
+        "type": "group",
+        "z": "d75c50260f960186",
+        "name": "④ Mesures en base",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#e8e0f3",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "6e978a914613e645",
+            "09c8cb1e5a384d54",
+            "042d3afdccc11f1a"
+        ],
+        "x": 1849,
+        "y": 128,
+        "w": 501,
+        "h": 172
+    },
+    {
+        "id": "460decc3f5f332d9",
+        "type": "group",
+        "z": "d75c50260f960186",
+        "name": "⑤ Alertes",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#f8dcd6",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "91bf8772b990950c",
+            "e4cc471e2c379a9e",
+            "42a54d3add50cbb5",
+            "e5c3b25a527c4ddb"
+        ],
+        "x": 2320,
+        "y": 128,
+        "w": 961,
+        "h": 92
+    },
+    {
+        "id": "48f9709acd6c17e6",
+        "type": "group",
+        "z": "d75c50260f960186",
+        "name": "Connexions et suivi des commandes",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#eeeeee",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "caaf4ee3cae52420",
+            "ed01c5b9fc231335",
+            "ff978a57122fc27a",
+            "bfe9f2179c312f42",
+            "e467d66e6b4d8251",
+            "c2a9a43029ef470e"
+        ],
+        "x": 5,
+        "y": 468,
+        "w": 752,
+        "h": 162
+    },
+    {
+        "id": "a04695545dee07da",
+        "type": "group",
+        "z": "d75c50260f960186",
+        "name": "Erreurs imprévues (une étape a planté)",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#f6d0d0",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "cd8e647793c77b00",
+            "0a7e12a691e10fb4",
+            "dbdd8f3bed87943b"
+        ],
+        "x": 844,
+        "y": 468,
+        "w": 636,
+        "h": 92
+    },
+    {
+        "type": "http in",
+        "name": "",
+        "url": "/ttn/v3/uplink",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "id": "aeb02dcbbf675c95",
+        "z": "d75c50260f960186",
+        "x": 140,
+        "y": 180,
+        "wires": [
+            [
+                "9909817a0c7c6211"
+            ]
+        ],
+        "g": "f4a5bfb93798a2aa"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "recevoir_uplink",
+        "id": "9909817a0c7c6211",
+        "z": "d75c50260f960186",
+        "x": 370,
+        "y": 180,
+        "wires": [
+            [
+                "afc0fe0b5b9291bc",
+                "5726f74182ad61cf"
+            ]
+        ],
+        "g": "f4a5bfb93798a2aa"
+    },
+    {
+        "type": "http response",
+        "name": "réponse à TTN",
+        "statusCode": "",
+        "headers": {},
+        "id": "afc0fe0b5b9291bc",
+        "z": "d75c50260f960186",
+        "x": 590,
+        "y": 110,
+        "wires": [],
+        "g": "f4a5bfb93798a2aa"
+    },
+    {
+        "type": "switch",
+        "name": "à traiter ?",
+        "property": "trame.suite",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "outputLabels": [
+            "oui",
+            "non : msg.trame.raison"
+        ],
+        "id": "5726f74182ad61cf",
+        "z": "d75c50260f960186",
+        "x": 580,
+        "y": 180,
+        "wires": [
+            [
+                "f95ea4de0f355f98"
+            ],
+            [
+                "2d3604e1993d9882"
+            ]
+        ],
+        "g": "f4a5bfb93798a2aa"
+    },
+    {
+        "type": "debug",
+        "name": "trame arrêtée (raison)",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "trame",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "2d3604e1993d9882",
+        "z": "d75c50260f960186",
+        "x": 610,
+        "y": 260,
+        "wires": [],
+        "g": "f4a5bfb93798a2aa"
+    },
+    {
+        "type": "switch",
+        "name": "capteur mis de côté ?",
+        "property": "trame.u.devEui",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "regex",
+                "v": "^$",
+                "vt": "str",
+                "case": true
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "outputLabels": [
+            "mis de côté",
+            "à traiter"
+        ],
+        "id": "f95ea4de0f355f98",
+        "z": "d75c50260f960186",
+        "x": 840,
+        "y": 180,
+        "wires": [
+            [
+                "28d2a6484192b02a"
+            ],
+            [
+                "824bb5079a48c4a8"
+            ]
+        ],
+        "g": "3bc4cb811aac5d81"
+    },
+    {
+        "type": "debug",
+        "name": "capteur mis de côté",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "trame",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "28d2a6484192b02a",
+        "z": "d75c50260f960186",
+        "x": 860,
+        "y": 260,
+        "wires": [],
+        "g": "3bc4cb811aac5d81"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "identifier",
+        "id": "824bb5079a48c4a8",
+        "z": "d75c50260f960186",
+        "x": 1080,
+        "y": 180,
+        "wires": [
+            [
+                "502f854fc7ce6e63"
+            ]
+        ],
+        "g": "3bc4cb811aac5d81"
+    },
+    {
+        "type": "switch",
+        "name": "modèle connu ?",
+        "property": "trame.modele",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "outputLabels": [
+            "oui",
+            "non"
+        ],
+        "id": "502f854fc7ce6e63",
+        "z": "d75c50260f960186",
+        "x": 1290,
+        "y": 180,
+        "wires": [
+            [
+                "cb2d9af428e6c43d"
+            ],
+            [
+                "3fa34b2519039c28"
+            ]
+        ],
+        "g": "3bc4cb811aac5d81"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "modele_inconnu",
+        "id": "3fa34b2519039c28",
+        "z": "d75c50260f960186",
+        "x": 1310,
+        "y": 260,
+        "wires": [
+            [
+                "ea3ace01875b7258"
+            ]
+        ],
+        "g": "3bc4cb811aac5d81"
+    },
+    {
+        "type": "debug",
+        "name": "modèle inconnu",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "trame",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "ea3ace01875b7258",
+        "z": "d75c50260f960186",
+        "x": 1310,
+        "y": 330,
+        "wires": [],
+        "g": "3bc4cb811aac5d81"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "decoder",
+        "id": "cb2d9af428e6c43d",
+        "z": "d75c50260f960186",
+        "x": 1530,
+        "y": 180,
+        "wires": [
+            [
+                "f74e536061875024"
+            ]
+        ],
+        "g": "1e70f5072bc84354"
+    },
+    {
+        "type": "switch",
+        "name": "décodée ?",
+        "property": "trame.erreur_decodage",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "outputLabels": [
+            "oui",
+            "non : msg.trame.erreur_decodage"
+        ],
+        "id": "f74e536061875024",
+        "z": "d75c50260f960186",
+        "x": 1710,
+        "y": 180,
+        "wires": [
+            [
+                "6e978a914613e645"
+            ],
+            [
+                "dfdf747ccfc5988c"
+            ]
+        ],
+        "g": "1e70f5072bc84354"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "erreur_decodage",
+        "id": "dfdf747ccfc5988c",
+        "z": "d75c50260f960186",
+        "x": 1740,
+        "y": 260,
+        "wires": [
+            [
+                "6708ece654870e2b"
+            ]
+        ],
+        "g": "1e70f5072bc84354"
+    },
+    {
+        "type": "debug",
+        "name": "erreur de décodage",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "trame",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "6708ece654870e2b",
+        "z": "d75c50260f960186",
+        "x": 1740,
+        "y": 330,
+        "wires": [],
+        "g": "1e70f5072bc84354"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "normaliser",
+        "id": "6e978a914613e645",
+        "z": "d75c50260f960186",
+        "x": 1990,
+        "y": 180,
+        "wires": [
+            [
+                "09c8cb1e5a384d54"
+            ]
+        ],
+        "g": "40dc254761e55210"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "enregistrer",
+        "id": "09c8cb1e5a384d54",
+        "z": "d75c50260f960186",
+        "x": 2220,
+        "y": 180,
+        "wires": [
+            [
+                "042d3afdccc11f1a",
+                "91bf8772b990950c"
+            ]
+        ],
+        "g": "40dc254761e55210"
+    },
+    {
+        "type": "debug",
+        "name": "trame enregistrée",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "trame",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "042d3afdccc11f1a",
+        "z": "d75c50260f960186",
+        "x": 2220,
+        "y": 260,
+        "wires": [],
+        "g": "40dc254761e55210"
+    },
+    {
+        "type": "switch",
+        "name": "alertes à évaluer ?",
+        "property": "trame.alertes_a_evaluer",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 1,
+        "outputLabels": [
+            "oui (ferme active, mesures ou pile)"
+        ],
+        "id": "91bf8772b990950c",
+        "z": "d75c50260f960186",
+        "x": 2450,
+        "y": 180,
+        "wires": [
+            [
+                "e4cc471e2c379a9e"
+            ]
+        ],
+        "g": "460decc3f5f332d9"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "alertes",
+        "id": "e4cc471e2c379a9e",
+        "z": "d75c50260f960186",
+        "x": 2670,
+        "y": 180,
+        "wires": [
+            [
+                "42a54d3add50cbb5"
+            ]
+        ],
+        "g": "460decc3f5f332d9"
+    },
+    {
+        "type": "switch",
+        "name": "alertes à envoyer ?",
+        "property": "trame.alertes",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 1,
+        "outputLabels": [
+            "oui"
+        ],
+        "id": "42a54d3add50cbb5",
+        "z": "d75c50260f960186",
+        "x": 2880,
+        "y": 180,
+        "wires": [
+            [
+                "e5c3b25a527c4ddb"
+            ]
+        ],
+        "g": "460decc3f5f332d9"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "expedier",
+        "id": "e5c3b25a527c4ddb",
+        "z": "d75c50260f960186",
+        "x": 3110,
+        "y": 180,
+        "wires": [],
+        "g": "460decc3f5f332d9"
+    },
+    {
+        "type": "comment",
+        "name": "Une trame, de TTN aux alertes",
+        "info": "Chemin d'une trame, de TTN à la base et aux alertes.\n\n- Les blocs verts **Mobilab** sont les étapes (choisies dans une liste, aide dans leur fenêtre) ; sous chacun, son dernier résultat.\n- Les losanges sont les aiguillages : ce sont eux qui décident de la suite, et on peut les modifier.\n- La trame voyage dans `msg.trame` : activez un nœud debug (bouton à sa droite) pour la voir passer.\n- Pour mettre un capteur de côté, détourner une trame ou la corriger, voir le commentaire « Intervenir sur un capteur ».",
+        "id": "c4958e1c9898cbc4",
+        "z": "d75c50260f960186",
+        "x": 230,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "type": "comment",
+        "name": "Intervenir sur un capteur",
+        "info": "**Mettre un capteur de côté** (il envoie n'importe quoi, il bloque) : dans l'aiguillage « capteur mis de côté ? », remplacez `^$` par `^(a84041xxxxxxxxxx|a84041yyyyyyyyyy)$` (ses DevEUI, en minuscules). Ses trames restent enregistrées brutes (étape ①) mais ne vont pas plus loin.\n\n**Traiter un capteur à part** : ajoutez une règle dans un aiguillage et branchez sa sortie sur vos propres nœuds, puis réinjectez `msg.trame` dans l'étape suivante (par exemple dans « Normaliser » avec `msg.trame.decode` corrigé).\n\n**Une fiche de capteur à corriger** : page « V3 · Catalogue », puis « Redécoder un capteur » (page « V3 · Supervision ») pour refaire ses anciennes trames.\n\nLes trames du fichier de secours (panne de la base) sont rejouées par la tâche « Rejouer le fichier de secours », avec les mêmes étapes, sans passer par cette page.",
+        "id": "7cab8f8b738b7f48",
+        "z": "d75c50260f960186",
+        "x": 860,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "type": "http in",
+        "name": "",
+        "url": "/ttn/v3/join",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "id": "caaf4ee3cae52420",
+        "z": "d75c50260f960186",
+        "x": 140,
+        "y": 520,
+        "wires": [
+            [
+                "ed01c5b9fc231335"
+            ]
+        ],
+        "g": "48f9709acd6c17e6"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "recevoir_join",
+        "id": "ed01c5b9fc231335",
+        "z": "d75c50260f960186",
+        "x": 400,
+        "y": 520,
+        "wires": [
+            [
+                "ff978a57122fc27a"
+            ]
+        ],
+        "g": "48f9709acd6c17e6"
+    },
+    {
+        "type": "http response",
+        "name": "réponse à TTN",
+        "statusCode": "",
+        "headers": {},
+        "id": "ff978a57122fc27a",
+        "z": "d75c50260f960186",
+        "x": 650,
+        "y": 520,
+        "wires": [],
+        "g": "48f9709acd6c17e6"
+    },
+    {
+        "type": "http in",
+        "name": "",
+        "url": "/ttn/v3/downlink",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "id": "bfe9f2179c312f42",
+        "z": "d75c50260f960186",
+        "x": 150,
+        "y": 590,
+        "wires": [
+            [
+                "e467d66e6b4d8251"
+            ]
+        ],
+        "g": "48f9709acd6c17e6"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "recevoir_downlink",
+        "id": "e467d66e6b4d8251",
+        "z": "d75c50260f960186",
+        "x": 410,
+        "y": 590,
+        "wires": [
+            [
+                "c2a9a43029ef470e"
+            ]
+        ],
+        "g": "48f9709acd6c17e6"
+    },
+    {
+        "type": "http response",
+        "name": "réponse à TTN",
+        "statusCode": "",
+        "headers": {},
+        "id": "c2a9a43029ef470e",
+        "z": "d75c50260f960186",
+        "x": 650,
+        "y": 590,
+        "wires": [],
+        "g": "48f9709acd6c17e6"
+    },
+    {
+        "type": "catch",
+        "name": "erreurs de la page",
+        "scope": null,
+        "uncaught": false,
+        "id": "cd8e647793c77b00",
+        "z": "d75c50260f960186",
+        "x": 970,
+        "y": 520,
+        "wires": [
+            [
+                "0a7e12a691e10fb4"
+            ]
+        ],
+        "g": "a04695545dee07da"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "noter_erreur",
+        "id": "0a7e12a691e10fb4",
+        "z": "d75c50260f960186",
+        "x": 1190,
+        "y": 520,
+        "wires": [
+            [
+                "dbdd8f3bed87943b"
+            ]
+        ],
+        "g": "a04695545dee07da"
+    },
+    {
+        "type": "debug",
+        "name": "erreur",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "error",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "dbdd8f3bed87943b",
+        "z": "d75c50260f960186",
+        "x": 1400,
+        "y": 520,
+        "wires": [],
+        "g": "a04695545dee07da"
+    },
+    {
+        "id": "f0fdfb13f123235f",
+        "type": "tab",
+        "label": "V3 · Tâches",
+        "disabled": false,
+        "info": "Tâches périodiques de la réception : envoi des alertes en attente, capteurs muets, rappels, fichier de secours, catalogue.\n\nChaque bloc passe la main au suivant ; sous chacun, son dernier résultat (gris = rien à faire).",
+        "env": []
+    },
+    {
+        "id": "4cad065b6d85f09f",
+        "type": "group",
+        "z": "f0fdfb13f123235f",
+        "name": "Chaque minute",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#e2f0d9",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "ac5503a07b97be3c",
+            "55e15f57b8993099",
+            "0d87a8275bec7bc8"
+        ],
+        "x": 33,
+        "y": 58,
+        "w": 748,
+        "h": 92
+    },
+    {
+        "id": "a6f6af9ac9e7575c",
+        "type": "group",
+        "z": "f0fdfb13f123235f",
+        "name": "Toutes les 5 min",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#e2f0d9",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "9e28bf490f8f2c6e",
+            "45378af363c80780",
+            "834aee5b045ea19c",
+            "30f2466e31336cd6",
+            "90c67076351d1a39"
+        ],
+        "x": 22,
+        "y": 158,
+        "w": 1310,
+        "h": 92
+    },
+    {
+        "id": "80eef72b31820d7d",
+        "type": "group",
+        "z": "f0fdfb13f123235f",
+        "name": "Chaque jour à 8 h",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#e2f0d9",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "549d1eab246638ab",
+            "fe4e5de66483e208",
+            "591b1a37b6b46f90"
+        ],
+        "x": 18,
+        "y": 258,
+        "w": 794,
+        "h": 92
+    },
+    {
+        "id": "0cd92c40a676bca8",
+        "type": "group",
+        "z": "f0fdfb13f123235f",
+        "name": "Chaque nuit à 3 h",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#e2f0d9",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "2d0d263ddfd38782",
+            "6b02438ac846f477"
+        ],
+        "x": 18,
+        "y": 358,
+        "w": 522,
+        "h": 92
+    },
+    {
+        "type": "comment",
+        "name": "Tâches périodiques",
+        "info": "Tâches périodiques de la réception : envoi des alertes en attente, capteurs muets, rappels, fichier de secours, catalogue.\n\nChaque bloc passe la main au suivant ; sous chacun, son dernier résultat (gris = rien à faire).",
+        "id": "ae85337ec5e03e5a",
+        "z": "f0fdfb13f123235f",
+        "x": 170,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "type": "inject",
+        "name": "chaque minute",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "ac5503a07b97be3c",
+        "z": "f0fdfb13f123235f",
+        "x": 140,
+        "y": 110,
+        "wires": [
+            [
+                "55e15f57b8993099"
+            ]
+        ],
+        "g": "4cad065b6d85f09f"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "expedier",
+        "id": "55e15f57b8993099",
+        "z": "f0fdfb13f123235f",
+        "x": 380,
+        "y": 110,
+        "wires": [
+            [
+                "0d87a8275bec7bc8"
+            ]
+        ],
+        "g": "4cad065b6d85f09f"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "recharger_catalogue",
+        "id": "0d87a8275bec7bc8",
+        "z": "f0fdfb13f123235f",
+        "x": 640,
+        "y": 110,
+        "wires": [],
+        "g": "4cad065b6d85f09f"
+    },
+    {
+        "type": "inject",
+        "name": "toutes les 5 min",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "300",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "9e28bf490f8f2c6e",
+        "z": "f0fdfb13f123235f",
+        "x": 140,
+        "y": 210,
+        "wires": [
+            [
+                "45378af363c80780"
+            ]
+        ],
+        "g": "a6f6af9ac9e7575c"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "chercher_muets",
+        "id": "45378af363c80780",
+        "z": "f0fdfb13f123235f",
+        "x": 380,
+        "y": 210,
+        "wires": [
+            [
+                "834aee5b045ea19c"
+            ]
+        ],
+        "g": "a6f6af9ac9e7575c"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "fins_de_coupure",
+        "id": "834aee5b045ea19c",
+        "z": "f0fdfb13f123235f",
+        "x": 640,
+        "y": 210,
+        "wires": [
+            [
+                "30f2466e31336cd6"
+            ]
+        ],
+        "g": "a6f6af9ac9e7575c"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "rejouer_spool",
+        "id": "30f2466e31336cd6",
+        "z": "f0fdfb13f123235f",
+        "x": 900,
+        "y": 210,
+        "wires": [
+            [
+                "90c67076351d1a39"
+            ]
+        ],
+        "g": "a6f6af9ac9e7575c"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "expedier",
+        "id": "90c67076351d1a39",
+        "z": "f0fdfb13f123235f",
+        "x": 1160,
+        "y": 210,
+        "wires": [],
+        "g": "a6f6af9ac9e7575c"
+    },
+    {
+        "type": "inject",
+        "name": "chaque jour à 8 h",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 08 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "549d1eab246638ab",
+        "z": "f0fdfb13f123235f",
+        "x": 140,
+        "y": 310,
+        "wires": [
+            [
+                "fe4e5de66483e208"
+            ]
+        ],
+        "g": "80eef72b31820d7d"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "relances_7_jours",
+        "id": "fe4e5de66483e208",
+        "z": "f0fdfb13f123235f",
+        "x": 380,
+        "y": 310,
+        "wires": [
+            [
+                "591b1a37b6b46f90"
+            ]
+        ],
+        "g": "80eef72b31820d7d"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "expedier",
+        "id": "591b1a37b6b46f90",
+        "z": "f0fdfb13f123235f",
+        "x": 640,
+        "y": 310,
+        "wires": [],
+        "g": "80eef72b31820d7d"
+    },
+    {
+        "type": "inject",
+        "name": "chaque nuit à 3 h",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 03 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "2d0d263ddfd38782",
+        "z": "f0fdfb13f123235f",
+        "x": 140,
+        "y": 410,
+        "wires": [
+            [
+                "6b02438ac846f477"
+            ]
+        ],
+        "g": "0cd92c40a676bca8"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "purge_nocturne",
+        "id": "6b02438ac846f477",
+        "z": "f0fdfb13f123235f",
+        "x": 380,
+        "y": 410,
+        "wires": [],
+        "g": "0cd92c40a676bca8"
+    },
+    {
+        "type": "catch",
+        "name": "erreurs des tâches",
+        "scope": null,
+        "uncaught": false,
+        "id": "05ce504abc3129bf",
+        "z": "f0fdfb13f123235f",
+        "x": 160,
+        "y": 530,
+        "wires": [
+            [
+                "bf71cb8c50a5f631"
+            ]
+        ]
+    },
+    {
+        "type": "debug",
+        "name": "erreur",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "error",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "bf71cb8c50a5f631",
+        "z": "f0fdfb13f123235f",
+        "x": 380,
+        "y": 530,
+        "wires": []
+    },
+    {
+        "id": "38ab4052cd929d8f",
+        "type": "tab",
+        "label": "V3 · Supervision",
+        "disabled": false,
+        "info": "Pour la console : santé de la réception (/ttn/v3/health) et redécodage d'un capteur (/ttn/v3/redecode), protégés par l'en-tête secret. Le redécodage se lance aussi d'ici, après avoir corrigé une fiche.",
+        "env": []
+    },
+    {
+        "id": "f9beee58ff66f8e6",
+        "type": "group",
+        "z": "38ab4052cd929d8f",
+        "name": "Appelé par la console",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#d6e9f8",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "074f5bf2365b7fde",
+            "f17d5700d2e63ee9",
+            "c2993f3fcdf93848",
+            "8411bbb453ddcb8b",
+            "c7ec6cf0d15acdb3",
+            "d4ae81520eb96c55"
+        ],
+        "x": 15,
+        "y": 68,
+        "w": 702,
+        "h": 162
+    },
+    {
+        "id": "51fa7b846a87748a",
+        "type": "group",
+        "z": "38ab4052cd929d8f",
+        "name": "À la main",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#fbf3d0",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "970b385269d48aa5",
+            "d7475445bca2a1f1",
+            "e8f8053f7df03983",
+            "f29de85d9ee0104a",
+            "a48247f5aed25cbf",
+            "dff711d36d7d33b8"
+        ],
+        "x": 4,
+        "y": 238,
+        "w": 784,
+        "h": 162
+    },
+    {
+        "type": "comment",
+        "name": "Supervision",
+        "info": "Pour la console : santé de la réception (/ttn/v3/health) et redécodage d'un capteur (/ttn/v3/redecode), protégés par l'en-tête secret. Le redécodage se lance aussi d'ici, après avoir corrigé une fiche.",
+        "id": "ba4db8848610b820",
+        "z": "38ab4052cd929d8f",
+        "x": 150,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "type": "http in",
+        "name": "",
+        "url": "/ttn/v3/health",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "id": "074f5bf2365b7fde",
+        "z": "38ab4052cd929d8f",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "f17d5700d2e63ee9"
+            ]
+        ],
+        "g": "f9beee58ff66f8e6"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "sante",
+        "id": "f17d5700d2e63ee9",
+        "z": "38ab4052cd929d8f",
+        "x": 390,
+        "y": 120,
+        "wires": [
+            [
+                "c2993f3fcdf93848"
+            ]
+        ],
+        "g": "f9beee58ff66f8e6"
+    },
+    {
+        "type": "http response",
+        "name": "réponse",
+        "statusCode": "",
+        "headers": {},
+        "id": "c2993f3fcdf93848",
+        "z": "38ab4052cd929d8f",
+        "x": 600,
+        "y": 120,
+        "wires": [],
+        "g": "f9beee58ff66f8e6"
+    },
+    {
+        "type": "http in",
+        "name": "",
+        "url": "/ttn/v3/redecode",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "id": "8411bbb453ddcb8b",
+        "z": "38ab4052cd929d8f",
+        "x": 160,
+        "y": 190,
+        "wires": [
+            [
+                "c7ec6cf0d15acdb3"
+            ]
+        ],
+        "g": "f9beee58ff66f8e6"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "redecoder",
+        "id": "c7ec6cf0d15acdb3",
+        "z": "38ab4052cd929d8f",
+        "x": 400,
+        "y": 190,
+        "wires": [
+            [
+                "d4ae81520eb96c55"
+            ]
+        ],
+        "g": "f9beee58ff66f8e6"
+    },
+    {
+        "type": "http response",
+        "name": "réponse (202)",
+        "statusCode": "",
+        "headers": {},
+        "id": "d4ae81520eb96c55",
+        "z": "38ab4052cd929d8f",
+        "x": 610,
+        "y": 190,
+        "wires": [],
+        "g": "f9beee58ff66f8e6"
+    },
+    {
+        "type": "inject",
+        "name": "Redécoder (DevEUI et date à mettre ici)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"dev_eui\":\"a84041xxxxxxxxxx\",\"depuis\":\"2026-11-01\"}",
+        "payloadType": "json",
+        "id": "970b385269d48aa5",
+        "z": "38ab4052cd929d8f",
+        "x": 210,
+        "y": 290,
+        "wires": [
+            [
+                "d7475445bca2a1f1"
+            ]
+        ],
+        "g": "51fa7b846a87748a"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "redecoder",
+        "id": "d7475445bca2a1f1",
+        "z": "38ab4052cd929d8f",
+        "x": 500,
+        "y": 290,
+        "wires": [
+            [
+                "e8f8053f7df03983"
+            ]
+        ],
+        "g": "51fa7b846a87748a"
+    },
+    {
+        "type": "debug",
+        "name": "résultat",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "e8f8053f7df03983",
+        "z": "38ab4052cd929d8f",
+        "x": 700,
+        "y": 290,
+        "wires": [],
+        "g": "51fa7b846a87748a"
+    },
+    {
+        "type": "inject",
+        "name": "Voir la santé",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "f29de85d9ee0104a",
+        "z": "38ab4052cd929d8f",
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "a48247f5aed25cbf"
+            ]
+        ],
+        "g": "51fa7b846a87748a"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "sante",
+        "id": "a48247f5aed25cbf",
+        "z": "38ab4052cd929d8f",
+        "x": 390,
+        "y": 360,
+        "wires": [
+            [
+                "dff711d36d7d33b8"
+            ]
+        ],
+        "g": "51fa7b846a87748a"
+    },
+    {
+        "type": "debug",
+        "name": "santé",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "dff711d36d7d33b8",
+        "z": "38ab4052cd929d8f",
+        "x": 600,
+        "y": 360,
+        "wires": [],
+        "g": "51fa7b846a87748a"
+    },
+    {
+        "type": "catch",
+        "name": "erreurs",
+        "scope": null,
+        "uncaught": false,
+        "id": "e1ff4ff611aca70c",
+        "z": "38ab4052cd929d8f",
+        "x": 140,
+        "y": 450,
+        "wires": [
+            [
+                "81a23a5040c36bd2"
+            ]
+        ]
+    },
+    {
+        "type": "debug",
+        "name": "erreur",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "error",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "81a23a5040c36bd2",
+        "z": "38ab4052cd929d8f",
+        "x": 340,
+        "y": 450,
+        "wires": []
+    },
+    {
+        "id": "48aa7ae06b27855f",
+        "type": "tab",
+        "label": "V3 · Catalogue",
+        "disabled": false,
+        "info": "Les capteurs que la V3 sait lire : une fiche par modèle (catalogue/modeles/<marque>/), avec son décodeur et ses trames d'essai.\n\n**Ajouter ou modifier un capteur** : remplissez les trois blocs (fiche, décodeur s'il y en a un, trames d'essai), cliquez « ① Essayer » et lisez le compte rendu dans la barre debug. Quand tout passe, « ② Publier » l'écrit au catalogue : la console et Node-RED le prennent en compte dans la minute (bot, tableaux Grafana, alertes).\n\nUne fiche n'est jamais écrite si elle ne passe pas : elle est d'abord essayée dans une copie du catalogue.",
+        "env": []
+    },
+    {
+        "id": "5a7570d9bd921de2",
+        "type": "group",
+        "z": "48aa7ae06b27855f",
+        "name": "Essayer une trame sur un modèle (sans rien écrire)",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#d6e9f8",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "d0662a511eb02e8e",
+            "d8beb61461f3e86f",
+            "37d8653ed4638c69",
+            "407fafb77871399d",
+            "eed5478231f35f4c",
+            "4362b4913d0a0431"
+        ],
+        "x": 20,
+        "y": 68,
+        "w": 772,
+        "h": 152
+    },
+    {
+        "id": "a9c8fccccee38000",
+        "type": "group",
+        "z": "48aa7ae06b27855f",
+        "name": "Ajouter ou modifier un capteur",
+        "style": {
+            "label": true,
+            "label-position": "nw",
+            "stroke": "#7f7f7f",
+            "fill": "#e2f0d9",
+            "fill-opacity": "0.35",
+            "color": "#000000"
+        },
+        "nodes": [
+            "7946a69532d23625",
+            "d50b6efaaefd2494",
+            "d55525d13b825488",
+            "1026d9c8c2149b58",
+            "ced7256bf5b86f7a",
+            "d52fb306f12ca841",
+            "dbc7039ba74ef661"
+        ],
+        "x": 38,
+        "y": 238,
+        "w": 1495,
+        "h": 152
+    },
+    {
+        "type": "comment",
+        "name": "Catalogue des capteurs",
+        "info": "Les capteurs que la V3 sait lire : une fiche par modèle (catalogue/modeles/<marque>/), avec son décodeur et ses trames d'essai.\n\n**Ajouter ou modifier un capteur** : remplissez les trois blocs (fiche, décodeur s'il y en a un, trames d'essai), cliquez « ① Essayer » et lisez le compte rendu dans la barre debug. Quand tout passe, « ② Publier » l'écrit au catalogue : la console et Node-RED le prennent en compte dans la minute (bot, tableaux Grafana, alertes).\n\nUne fiche n'est jamais écrite si elle ne passe pas : elle est d'abord essayée dans une copie du catalogue.",
+        "id": "e51935a2ddf9900c",
+        "z": "48aa7ae06b27855f",
+        "x": 170,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "type": "inject",
+        "name": "Essayer (modèle, port et trame ici)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"modele\":\"dragino-lht52\",\"f_port\":2,\"hex\":\"04fd03e8059d016afccdf9\"}",
+        "payloadType": "json",
+        "id": "d0662a511eb02e8e",
+        "z": "48aa7ae06b27855f",
+        "x": 210,
+        "y": 120,
+        "wires": [
+            [
+                "d8beb61461f3e86f"
+            ]
+        ],
+        "g": "5a7570d9bd921de2"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "essayer_trame",
+        "id": "d8beb61461f3e86f",
+        "z": "48aa7ae06b27855f",
+        "x": 490,
+        "y": 120,
+        "wires": [
+            [
+                "37d8653ed4638c69"
+            ]
+        ],
+        "g": "5a7570d9bd921de2"
+    },
+    {
+        "type": "debug",
+        "name": "résultat",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "37d8653ed4638c69",
+        "z": "48aa7ae06b27855f",
+        "x": 700,
+        "y": 120,
+        "wires": [],
+        "g": "5a7570d9bd921de2"
+    },
+    {
+        "type": "inject",
+        "name": "Lister le catalogue",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "407fafb77871399d",
+        "z": "48aa7ae06b27855f",
+        "x": 170,
+        "y": 180,
+        "wires": [
+            [
+                "eed5478231f35f4c"
+            ]
+        ],
+        "g": "5a7570d9bd921de2"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "lister_catalogue",
+        "id": "eed5478231f35f4c",
+        "z": "48aa7ae06b27855f",
+        "x": 450,
+        "y": 180,
+        "wires": [
+            [
+                "4362b4913d0a0431"
+            ]
+        ],
+        "g": "5a7570d9bd921de2"
+    },
+    {
+        "type": "debug",
+        "name": "catalogue",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "4362b4913d0a0431",
+        "z": "48aa7ae06b27855f",
+        "x": 700,
+        "y": 180,
+        "wires": [],
+        "g": "5a7570d9bd921de2"
+    },
+    {
+        "type": "inject",
+        "name": "① Essayer",
+        "props": [
+            {
+                "p": "publier",
+                "v": "false",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "7946a69532d23625",
+        "z": "48aa7ae06b27855f",
+        "x": 130,
+        "y": 290,
+        "wires": [
+            [
+                "d55525d13b825488"
+            ]
+        ],
+        "g": "a9c8fccccee38000"
+    },
+    {
+        "type": "inject",
+        "name": "② Publier",
+        "props": [
+            {
+                "p": "publier",
+                "v": "true",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "id": "d50b6efaaefd2494",
+        "z": "48aa7ae06b27855f",
+        "x": 130,
+        "y": 350,
+        "wires": [
+            [
+                "d55525d13b825488"
+            ]
+        ],
+        "g": "a9c8fccccee38000"
+    },
+    {
+        "type": "template",
+        "name": "Fiche du capteur (YAML)",
+        "field": "fiche",
+        "fieldType": "msg",
+        "format": "yaml",
+        "syntax": "plain",
+        "template": "# Fiche d'un capteur : remplacez cet exemple, cliquez « ① Essayer », puis « ② Publier ».\n# La clé ne doit plus jamais changer : elle est enregistrée avec chaque capteur.\ncle: exemple-station               # marque-modèle, en minuscules (ex. dragino-s31-lb, mobilab-pilowtech)\nprefixe_id: station                # id du capteur dans TTN : station-<4 derniers caractères du DevEUI>\nmarque: Mobilab                    # la fiche est rangée dans catalogue/modeles/mobilab/\nmodele: Station\nlibelle: Station météo Mobilab Station   # l'usage, puis la marque, puis le modèle\nbouton: Station                    # ce que montre le bot\ntype: capteur                      # capteur, interface ou actionneur\ncategorie: autre                   # temperature, niveau, porte ou autre (choix du type dans le bot)\nlorawan: {mac: MAC_V1_0_3, phy: PHY_V1_0_3_REV_A, classe: A}\nintervalle_defaut_s: 1200          # secondes entre deux mesures\n# Montage Mobilab : la trame est décrite ici (catalogue/trame-mobilab.md), sans décodeur.\n# Capteur du commerce : à la place de « trame », mettre\n#   decodeurs: [{fichier: decodeurs/<marque>/<nom>.js}]\n#   ports: {2: mesures, 5: statut}\n# et coller le décodeur officiel dans le bloc « Décodeur JS ».\ntrame:\n  format: mobilab\n  type: 250                        # octet 1 de la fiche du port 10 (AA FA …) : un numéro par montage\n  champs:\n    - {cle: temperature, octets: 2}            # dixièmes de °C, signé\n    - {cle: humidite, octets: 2, signe: false} # dixièmes de %\nbatterie: {pile: lithium}          # alcaline (avec elements: 2), lithium ou lipo : voir piles.yaml\nmesures:\n  temperature: {nom: temperature, libelle: Température, unite: \"°C\", decimales: 1, facteur: 0.1,\n                principale: true, alerte: seuil, hysteresis: 0.5}\n  humidite: {nom: humidity, libelle: Humidité, unite: \"%\", decimales: 0, facteur: 0.1,\n             principale: true, alerte: seuil, hysteresis: 3}\ngrafana:\n  panneaux:\n    - {type: courbe, mesures: [temperature, humidity]}\n    - {type: batterie}\n    - {type: radio}\n",
+        "output": "str",
+        "info": "La fiche du modèle. Champs et exemples : les fiches de catalogue/modeles/ et catalogue/trame-mobilab.md.",
+        "id": "d55525d13b825488",
+        "z": "48aa7ae06b27855f",
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "1026d9c8c2149b58"
+            ]
+        ],
+        "g": "a9c8fccccee38000"
+    },
+    {
+        "type": "template",
+        "name": "Décodeur JS (vide pour un montage Mobilab)",
+        "field": "decodeur",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "plain",
+        "template": "",
+        "output": "str",
+        "info": "Pour un capteur du commerce : collez ici le décodeur officiel (TTN) du fabricant, sans le modifier, et indiquez son fichier dans la fiche (decodeurs: - fichier: decodeurs/<marque>/<nom>.js). Laissez vide pour un montage Mobilab.",
+        "id": "1026d9c8c2149b58",
+        "z": "48aa7ae06b27855f",
+        "x": 680,
+        "y": 320,
+        "wires": [
+            [
+                "ced7256bf5b86f7a"
+            ]
+        ],
+        "g": "a9c8fccccee38000"
+    },
+    {
+        "type": "template",
+        "name": "Trames d'essai (YAML)",
+        "field": "essais",
+        "fieldType": "msg",
+        "format": "yaml",
+        "syntax": "plain",
+        "template": "# Trames d'essai : la trame en hexadécimal et ce qu'on doit en tirer. Au moins une.\n- nom: \"mesures : 21,5 °C et 60 %\"\n  f_port: 11\n  hex: \"0E10 00D7 0258\"\n  attendu: {temperature: 21.5, humidity: 60, battery_mv: 3600}\n- nom: \"fiche du port 10\"\n  f_port: 10\n  hex: \"AA FA 01 0E10\"\n  attendu: {battery_mv: 3600}\n",
+        "output": "str",
+        "info": "Une ou plusieurs trames réelles ou construites, avec les mesures attendues. Elles sont rangées avec la fiche (catalogue/tests/) et revérifiées par les tests du dépôt.",
+        "id": "ced7256bf5b86f7a",
+        "z": "48aa7ae06b27855f",
+        "x": 970,
+        "y": 320,
+        "wires": [
+            [
+                "d52fb306f12ca841"
+            ]
+        ],
+        "g": "a9c8fccccee38000"
+    },
+    {
+        "type": "mobilab",
+        "name": "",
+        "etape": "fiche_capteur",
+        "id": "d52fb306f12ca841",
+        "z": "48aa7ae06b27855f",
+        "x": 1220,
+        "y": 320,
+        "wires": [
+            [
+                "dbc7039ba74ef661"
+            ]
+        ],
+        "g": "a9c8fccccee38000"
+    },
+    {
+        "type": "debug",
+        "name": "compte rendu",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "dbc7039ba74ef661",
+        "z": "48aa7ae06b27855f",
+        "x": 1430,
+        "y": 320,
+        "wires": [],
+        "g": "a9c8fccccee38000"
+    },
+    {
+        "type": "catch",
+        "name": "erreurs",
+        "scope": null,
+        "uncaught": false,
+        "id": "18eaae2b201eaf8b",
+        "z": "48aa7ae06b27855f",
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "1c837c435047d84d"
+            ]
+        ]
+    },
+    {
+        "type": "debug",
+        "name": "erreur",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "error",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "id": "1c837c435047d84d",
+        "z": "48aa7ae06b27855f",
+        "x": 340,
+        "y": 440,
+        "wires": []
+    },
+    {
         "id": "f6f2187d.f17ca8",
         "type": "tab",
         "label": "System Setup",
@@ -3290,431 +5125,6 @@
         "y": 240,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30000",
-        "type": "tab",
-        "label": "V3 · Réception TTN",
-        "disabled": false,
-        "info": "Console V3 (spec §7, §8). Toute la logique est dans le module ingest/ du dépôt, testé (npm test).\nWebhooks TTS : /ttn/v3/uplink, /join, /downlink (en-tête X-Mobilab-Secret).\n/ttn/v3/health et /ttn/v3/redecode : appelés par le service console, avec le même en-tête.\nLa V2 (/ttn/uplink) n'est pas touchée."
-    },
-    {
-        "id": "c0de5ec0e7b30001",
-        "type": "comment",
-        "z": "c0de5ec0e7b30000",
-        "name": "Webhooks TTS → module ingest (réponse 200 dès que la trame brute est écrite)",
-        "info": "",
-        "x": 330,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b30002",
-        "type": "http response",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 760,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b30003",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "ingest · uplink",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst r = await ing.recevoirUplink(msg.payload, msg.req.headers);\nmsg.statusCode = r.statut;\nmsg.payload = \"\";\nnode.send(msg);                                   // réponse à TTS tout de suite (< 5 s)\nif (r.suite) r.suite().catch(e => node.error(`$uplink : ${e.message}`));\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 100,
-        "wires": [
-            [
-                "c0de5ec0e7b30002"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30004",
-        "type": "http in",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "url": "/ttn/v3/uplink",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 200,
-        "y": 100,
-        "wires": [
-            [
-                "c0de5ec0e7b30003"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30005",
-        "type": "http response",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 760,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b30006",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "ingest · join",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst r = await ing.recevoirJoin(msg.payload, msg.req.headers);\nmsg.statusCode = r.statut;\nmsg.payload = \"\";\nnode.send(msg);                                   // réponse à TTS tout de suite (< 5 s)\nif (r.suite) r.suite().catch(e => node.error(`$join : ${e.message}`));\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 160,
-        "wires": [
-            [
-                "c0de5ec0e7b30005"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30007",
-        "type": "http in",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "url": "/ttn/v3/join",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 200,
-        "y": 160,
-        "wires": [
-            [
-                "c0de5ec0e7b30006"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30008",
-        "type": "http response",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 760,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b30009",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "ingest · downlink",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst r = await ing.recevoirDownlink(msg.payload, msg.req.headers);\nmsg.statusCode = r.statut;\nmsg.payload = \"\";\nnode.send(msg);                                   // réponse à TTS tout de suite (< 5 s)\nif (r.suite) r.suite().catch(e => node.error(`$downlink : ${e.message}`));\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 220,
-        "wires": [
-            [
-                "c0de5ec0e7b30008"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b3000a",
-        "type": "http in",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "url": "/ttn/v3/downlink",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 200,
-        "y": 220,
-        "wires": [
-            [
-                "c0de5ec0e7b30009"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b3000b",
-        "type": "comment",
-        "z": "c0de5ec0e7b30000",
-        "name": "Supervision : appelée par le service console seulement (même en-tête secret)",
-        "info": "",
-        "x": 330,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b3000c",
-        "type": "http response",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 760,
-        "y": 360,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b3000d",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "santé",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nif (!require_secret()) return null;\nmsg.payload = ing.sante();\nmsg.statusCode = 200;\nreturn msg;\nfunction require_secret() {\n    const s = env.get(\"TTN_WEBHOOK_SECRET\");\n    if (s && (msg.req.headers[\"x-mobilab-secret\"] || \"\") === s) return true;\n    msg.statusCode = 401; msg.payload = \"\"; node.send(msg); return false;\n}",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 360,
-        "wires": [
-            [
-                "c0de5ec0e7b3000c"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b3000e",
-        "type": "http in",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "url": "/ttn/v3/health",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 200,
-        "y": 360,
-        "wires": [
-            [
-                "c0de5ec0e7b3000d"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b3000f",
-        "type": "http response",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 760,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b30010",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "redécodage",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) { msg.statusCode = 503; msg.payload = \"\"; return msg; }   // V3 pas encore configurée\nconst s = env.get(\"TTN_WEBHOOK_SECRET\");\nif (!s || (msg.req.headers[\"x-mobilab-secret\"] || \"\") !== s) { msg.statusCode = 401; msg.payload = \"\"; return msg; }\nconst { dev_eui, depuis } = msg.payload || {};\nif (!/^[0-9a-f]{16}$/.test(String(dev_eui || \"\"))) { msg.statusCode = 400; msg.payload = \"\"; return msg; }\nmsg.statusCode = 202;\nmsg.payload = \"\";\nnode.send(msg);                                   // 202, puis le travail (spec §7.6)\ning.redecoder(dev_eui, depuis).then(nb => node.log(`redécodage ${dev_eui} : ${nb} trames`)).catch(e => node.error(`redécodage ${dev_eui} : ${e.message}`));\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 420,
-        "wires": [
-            [
-                "c0de5ec0e7b3000f"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30011",
-        "type": "http in",
-        "z": "c0de5ec0e7b30000",
-        "name": "",
-        "url": "/ttn/v3/redecode",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 200,
-        "y": 420,
-        "wires": [
-            [
-                "c0de5ec0e7b30010"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30012",
-        "type": "comment",
-        "z": "c0de5ec0e7b30000",
-        "name": "Tâches périodiques (spec §8.8)",
-        "info": "",
-        "x": 230,
-        "y": 500,
-        "wires": []
-    },
-    {
-        "id": "c0de5ec0e7b30013",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "tâches · chaque minute",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.expedier();\n    ing.rechargerCatalogue();\n} catch (e) { node.error(e.message); }\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 550,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30014",
-        "type": "inject",
-        "z": "c0de5ec0e7b30000",
-        "name": "chaque minute",
-        "props": [],
-        "repeat": "60",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "20",
-        "topic": "",
-        "x": 200,
-        "y": 550,
-        "wires": [
-            [
-                "c0de5ec0e7b30013"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30015",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "tâches · toutes les 5 min",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.chercherMuets();\n    await ing.finsDeCoupure();\n    await ing.rejouerSpool();\n    await ing.expedier();\n} catch (e) { node.error(e.message); }\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 610,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30016",
-        "type": "inject",
-        "z": "c0de5ec0e7b30000",
-        "name": "toutes les 5 min",
-        "props": [],
-        "repeat": "300",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "20",
-        "topic": "",
-        "x": 200,
-        "y": 610,
-        "wires": [
-            [
-                "c0de5ec0e7b30015"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30017",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "tâches · chaque jour à 8 h",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.relances7Jours();\n    await ing.expedier();\n} catch (e) { node.error(e.message); }\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 670,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30018",
-        "type": "inject",
-        "z": "c0de5ec0e7b30000",
-        "name": "chaque jour à 8 h",
-        "props": [],
-        "repeat": "",
-        "crontab": "00 08 * * *",
-        "once": false,
-        "onceDelay": "20",
-        "topic": "",
-        "x": 200,
-        "y": 670,
-        "wires": [
-            [
-                "c0de5ec0e7b30017"
-            ]
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b30019",
-        "type": "function",
-        "z": "c0de5ec0e7b30000",
-        "name": "tâches · chaque nuit à 3 h",
-        "func": "const ing = global.get(\"ingest\");\nif (!ing) return null;\ntry {\n    await ing.purgeNocturne();\n} catch (e) { node.error(e.message); }\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 480,
-        "y": 730,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c0de5ec0e7b3001a",
-        "type": "inject",
-        "z": "c0de5ec0e7b30000",
-        "name": "chaque nuit à 3 h",
-        "props": [],
-        "repeat": "",
-        "crontab": "00 03 * * *",
-        "once": false,
-        "onceDelay": "20",
-        "topic": "",
-        "x": 200,
-        "y": 730,
-        "wires": [
-            [
-                "c0de5ec0e7b30019"
-            ]
         ]
     }
 ]
