@@ -78,8 +78,6 @@ function choisirDecodeur(modele, firmware) {
 
 function jsonb(v) { return JSON.stringify(v === undefined ? null : v); }
 
-/** Alerte « pas de nouvelles » : au-delà de 2,5 intervalles d'envoi, et au moins 10 min (voir chercherMuets). */
-const SILENCE = { intervalles: 2.5, plancher_s: 600 };
 
 // ------------------------------------------------------------------ module
 
@@ -461,11 +459,11 @@ function creer(options) {
 
     async function lireRegles(c, devEui) {
         const r = await c.query(
-            `SELECT r.id, r.kind, r.metric, r.min, r.max, r.for_minutes, r.params,
+            `SELECT r.id, r.kind, r.metric, r.min, r.max, r.for_minutes, r.params, r.enabled,
                     coalesce(s.state, 'ok') AS state, s.since, s.pending_since, s.last_notified_at, s.muted_until,
                     s.rule_id IS NULL AS sans_etat
              FROM app.alert_rules r LEFT JOIN app.alert_state s ON s.rule_id = r.id
-             WHERE r.dev_eui = $1 AND r.enabled`, [devEui]);
+             WHERE r.dev_eui = $1 AND (r.enabled OR (r.kind = 'silence' AND s.state = 'alarm'))`, [devEui]);
         for (const x of r.rows.filter(x => x.sans_etat)) {
             await c.query(`INSERT INTO app.alert_state (rule_id) VALUES ($1) ON CONFLICT DO NOTHING`, [x.id]);
         }
@@ -520,7 +518,7 @@ function creer(options) {
                          RETURNING (o.last_notified_at IS NOT NULL AND o.last_notified_at >= o.ancien) AS notifie`,
                         [r.id, time, d.valeur]);
                     if (!x.rowCount || !x.rows[0].notifie) continue;
-                    if (r.kind === "silence") retoursSilence.push(item);
+                    if (r.kind === "silence") { if (r.enabled) retoursSilence.push(item); }   // en pause : pas de message
                     else if (r.kind === "battery") pilesRetour.push(item);
                     else retours.push(item);
                 }
@@ -545,8 +543,7 @@ function creer(options) {
     }
 
     /** Toutes les 5 min : capteurs devenus muets (spec §8.8), panne réseau probable (§8.11).
-     *  Muet = deux messages manqués d'affilée (2,5 intervalles : un message perdu ne compte pas), et jamais avant
-     *  10 min, pour qu'une antenne coupée 2 min ne fasse pas sonner un capteur qui envoie chaque minute. */
+     *  Muet = deux messages manqués d'affilée, jamais avant 10 min (A.SILENCE, même calcul que A.delaiSilence). */
     async function chercherMuets() {
         return tx(async c => {
             const r = await c.query(
@@ -559,7 +556,7 @@ function creer(options) {
                    AND t.status IN ('en_attente_activation', 'actif')
                    AND d.last_seen < now() - make_interval(secs => coalesce((r.params->>'delai_min')::int * 60,
                          greatest($1::float8 * greatest(coalesce(d.intervalle_s, 0), coalesce((d.config->'detected'->>'intervalle_s')::int, 1200)), $2::int)))`,
-                [SILENCE.intervalles, SILENCE.plancher_s]);
+                [A.SILENCE.intervalles, A.SILENCE.plancher_s]);
             const muets = [];
             for (const x of r.rows) {
                 const u = await c.query(`UPDATE app.alert_state SET state = 'alarm', since = now(), pending_since = NULL, reminded_at = NULL
@@ -856,6 +853,12 @@ function creer(options) {
             [notif.id, unOk ? "envoye" : "echec", jsonb(resultats), unOk ? null : "aucun envoi réussi", jsonb(d)]);
         if (unOk && notif.rule_ids && notif.rule_ids.length) {
             await c.query(`UPDATE app.alert_state SET last_notified_at = now() WHERE rule_id = ANY($1::bigint[])`, [notif.rule_ids]);
+        }
+        // « Pas de nouvelles » : une seule alerte, puis en pause jusqu'au bouton « Réactiver » (choix du 27/11).
+        const silences = (d.items || []).filter(i => i.kind === "silence").map(i => i.rule_id);
+        if (unOk && notif.transition !== "retour" && silences.length) {
+            await c.query(`UPDATE app.alert_rules SET enabled = false, params = params || jsonb_build_object('en_pause_depuis', now())
+                           WHERE id = ANY($1::bigint[]) AND kind = 'silence' AND enabled`, [silences]);
         }
     }
 

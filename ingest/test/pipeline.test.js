@@ -152,6 +152,35 @@ test("chemin complet d'une trame et alertes", { skip: !actif && "base de test mo
         await q(`UPDATE app.devices SET intervalle_s = NULL WHERE dev_eui = $1`, [DEV]);
     });
 
+    await t.test("pas de nouvelles : une seule alerte, avec « Réactiver cette alerte », puis en pause", async () => {
+        const regle = (await q(`SELECT id FROM app.alert_rules WHERE dev_eui = $1 AND kind = 'silence'`, [DEV])).rows[0].id;
+        await q(`UPDATE app.devices SET last_seen = now() - interval '3 hours' WHERE dev_eui = $1`, [DEV]);
+        assert.equal(await ing.chercherMuets(), 1);
+        await q(`UPDATE app.notifications SET envoyer_apres = now() WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
+        const avant = envois.length;
+        await ing.expedier();
+        const msg = envois.slice(avant).filter(e => e.methode === "sendMessage");
+        assert.ok(msg.length >= 1);
+        assert.match(msg[0].corps.text, /^📡 <b>Serre nord<\/b> : pas de nouvelles depuis 3 h\.\n🔕 Alerte en pause/);
+        const id = (await q(`SELECT id FROM app.notifications WHERE $1 = ANY(rule_ids) AND statut = 'envoye' ORDER BY id DESC LIMIT 1`, [regle])).rows[0].id;
+        assert.deepEqual(msg[0].corps.reply_markup.inline_keyboard,
+            [[{ text: "🔔 Réactiver cette alerte", callback_data: `rs:${id}` }], [{ text: "Voir le capteur", callback_data: `dv:${DEV}` }]]);
+        assert.deepEqual((await q(`SELECT enabled, params ? 'en_pause_depuis' AS pause FROM app.alert_rules WHERE id = $1`, [regle])).rows[0],
+            { enabled: false, pause: true });
+        // En pause : l'état suit le capteur, mais ni « de nouveau en ligne » ni nouvelle alerte
+        const r = await ing.recevoirUplink(uplink("04fd03e8059d016afccdf9", new Date().toISOString()), H);
+        await r.suite();
+        assert.equal((await q(`SELECT state FROM app.alert_state WHERE rule_id = $1`, [regle])).rows[0].state, "ok");
+        assert.equal((await q(`SELECT count(*)::int AS n FROM app.notifications WHERE $1 = ANY(rule_ids) AND transition = 'retour'`, [regle])).rows[0].n, 0);
+        await q(`UPDATE app.devices SET last_seen = now() - interval '5 hours' WHERE dev_eui = $1`, [DEV]);
+        assert.equal(await ing.chercherMuets(), 0);
+        // Réactivée (bouton du bot) : la prochaine absence est de nouveau signalée
+        await q(`UPDATE app.alert_rules SET enabled = true, params = params - 'en_pause_depuis' WHERE id = $1`, [regle]);
+        assert.equal(await ing.chercherMuets(), 1);
+        await q(`UPDATE app.alert_state SET state = 'ok' WHERE rule_id = $1`, [regle]);
+        await q(`UPDATE app.notifications SET statut = 'ecarte' WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
+    });
+
     await t.test("join : connecté ; downlink : commande suivie", async () => {
         await q(`UPDATE app.devices SET ttn_status = 'enregistre' WHERE dev_eui = $1`, [DEV]);
         const j = await ing.recevoirJoin({ end_device_ids: { dev_eui: DEV, application_ids: { application_id: APP } }, join_accept: { received_at: "2026-11-17T12:00:00Z" } }, H);

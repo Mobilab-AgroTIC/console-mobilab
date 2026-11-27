@@ -37,7 +37,8 @@ type Ingest = {
             heure(d: Date | string): string; jour(d: Date | string): string; duree(ms: number): string;
             echapper(s: string): string };
   alertes: { rediger(T: unknown, cat: Catalogue, notif: unknown, ctx: unknown): string;
-             boutons(T: unknown, notif: unknown, o?: unknown): unknown };
+             boutons(T: unknown, notif: unknown, o?: unknown): unknown;
+             delaiSilence(o: { intervalle_s?: number | null; mesure_s?: number | null; delai_min?: number | null }): number };
 };
 
 let ingest: Ingest | null = null;

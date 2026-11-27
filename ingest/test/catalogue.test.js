@@ -75,6 +75,21 @@ test("intervalle d'envoi : catalogue, puis celui réglé par downlink, puis la m
     assert.equal(det.intervalle_s, 86400);
 });
 
+test("« pas de nouvelles » : deux messages manqués, jamais avant 10 min ; une seule alerte avec « Réactiver »", () => {
+    const A = require("../alertes");
+    assert.equal(A.delaiSilence({}), 3000);                                   // 20 min mesurées par défaut : 50 min
+    assert.equal(A.delaiSilence({ intervalle_s: 60, mesure_s: 60 }), 600);    // capteur d'une minute : 10 min
+    assert.equal(A.delaiSilence({ intervalle_s: 86400, mesure_s: 1200 }), 216000);
+    assert.equal(A.delaiSilence({ mesure_s: 600, delai_min: 180 }), 10800);   // délai fixé par un admin
+    const T = require("../textes-alertes.json");
+    const n = { id: 7, dev_eui: "a84041000181b2c3", transition: "alarme", details: { items: [{ rule_id: 3, kind: "silence" }], duree: "3 h" } };
+    assert.deepEqual(A.boutons(T, n), [[{ text: "🔔 Réactiver cette alerte", callback_data: "rs:7" }], [{ text: "Voir le capteur", callback_data: "dv:a84041000181b2c3" }]]);
+    assert.deepEqual(A.boutons(T, n, { conseiller: true }), [[{ text: "Voir le capteur", callback_data: "dv:a84041000181b2c3" }]]);
+    const txt = A.rediger(T, cat, n, { nomCapteur: () => "Serre", modele: () => null });
+    assert.equal(txt, "📡 <b>Serre</b> : pas de nouvelles depuis 3 h.\n" + T.silence_pause);
+    assert.equal(A.rediger(T, cat, { ...n, transition: "retour" }, { nomCapteur: () => "Serre", modele: () => null }), "✅ <b>Serre</b> : de nouveau en ligne.");
+});
+
 test("résumé à la française des mesures principales", () => {
     const m = cat.modeles.get("dragino-lht52");
     assert.equal(N.resume(cat, m, { temperature: { v: 14.78 }, humidity: { v: 60.4 } }), "14,8 °C · 60 %");

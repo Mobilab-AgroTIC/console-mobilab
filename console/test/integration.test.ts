@@ -505,6 +505,45 @@ describe.skipIf(!IT)("intégration : ferme, capteur, bots, Grafana réel", () =>
     expect((await q(`SELECT 1 FROM app.commands WHERE dev_eui = $1 AND action = 'intervalle:600'`, [dev])).length).toBe(0);
   }, 60000);
 
+  it("pas de nouvelles : gérée dans les réglages ; « Réactiver cette alerte » depuis le message", async () => {
+    const dev = "a84041f21c5b3d2e";
+    const bot = creerBotClient(s);
+    fauxTelegram(bot.api);
+    const dernierEcran = () => telegram.filter(x => x.methode === "editMessageText").pop()!.corps;
+    const regle = await un(`SELECT id, enabled FROM app.alert_rules WHERE dev_eui = $1 AND kind = 'silence'`, [dev]);
+    expect(regle.enabled).toBe(true);
+    // Réglé sur 1 h (test précédent) : deux messages manqués, soit 2 h 30
+    await bot.handleUpdate(bouton(5555, `st:${dev}`));
+    expect(dernierEcran().text).toMatch(/📡 Alerte « pas de nouvelles » : <b>oui<\/b>, après 2 h 30 min sans message \(une seule fois\)\./);
+    expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "🔕 Couper « pas de nouvelles »", callback_data: `ai:${dev}:s:r` });
+    await bot.handleUpdate(bouton(5555, `ai:${dev}:s:r`));
+    expect((await un(`SELECT enabled FROM app.alert_rules WHERE id = $1`, [regle.id])).enabled).toBe(false);
+    expect(dernierEcran().text).toMatch(/réglages\n\n📡 Alerte « pas de nouvelles » : non\./);
+    expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "🔔 Activer « pas de nouvelles »", callback_data: `ai:${dev}:s:r` });
+    await bot.handleUpdate(bouton(5555, `ai:${dev}:s:r`));
+    expect((await un(`SELECT enabled FROM app.alert_rules WHERE id = $1`, [regle.id])).enabled).toBe(true);
+    // Alerte envoyée par Node-RED : la règle est en pause, le message porte « Réactiver cette alerte »
+    await q(`UPDATE app.alert_rules SET enabled = false, params = params || jsonb_build_object('en_pause_depuis', now()) WHERE id = $1`, [regle.id]);
+    const n = await un(`INSERT INTO app.notifications (audience, expediteur, kind, tenant_slug, dev_eui, rule_ids, transition, details, statut, destinataires)
+                        VALUES ('client', 'nodered', 'alerte', $1, $2, ARRAY[$3]::bigint[], 'alarme', $4, 'envoye', $5) RETURNING id`,
+      [slug, dev, regle.id, JSON.stringify({ items: [{ rule_id: regle.id, kind: "silence" }] }), JSON.stringify([{ chat_id: 5555, message_id: 1, resultat: "ok" }])]);
+    await bot.handleUpdate(bouton(5555, `st:${dev}`));
+    expect(dernierEcran().text).toMatch(/📡 Alerte « pas de nouvelles » : <b>en pause<\/b> \(alerte envoyée \d\d:\d\d\)\./);
+    expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "🔔 Réactiver « pas de nouvelles »", callback_data: `ai:${dev}:s:r` });
+    await bot.handleUpdate(bouton(5555, `al:${dev}`));
+    expect(dernierEcran().text).toMatch(/📡 Pas de nouvelles : en pause \(alerte envoyée \d\d:\d\d\)/);
+    // Un conseiller ne réactive pas
+    await bot.handleUpdate(bouton(8888, `rs:${n.id}`));
+    expect((await un(`SELECT enabled FROM app.alert_rules WHERE id = $1`, [regle.id])).enabled).toBe(false);
+    const avant = telegram.length;
+    await bot.handleUpdate(bouton(5555, `rs:${n.id}`));
+    expect(await un(`SELECT enabled, params ? 'en_pause_depuis' AS pause FROM app.alert_rules WHERE id = $1`, [regle.id])).toEqual({ enabled: true, pause: false });
+    const apres = telegram.slice(avant);
+    expect(apres.find(x => x.methode === "answerCallbackQuery")!.corps.text).toBe("🔔 Alerte réactivée");
+    expect(apres.find(x => x.methode === "editMessageText")!.corps).toMatchObject({ text: "…\n🔔 Réactivée par Jean.",
+      reply_markup: { inline_keyboard: [[{ text: "Voir le capteur", callback_data: `dv:${dev}` }]] } });
+  }, 60000);
+
   it("partage : lien j_ d'un collègue, compte Grafana Viewer, le propriétaire est prévenu", async () => {
     const bot = creerBotClient(s);
     fauxTelegram(bot.api);
