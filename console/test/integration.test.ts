@@ -452,7 +452,13 @@ describe.skipIf(!IT)("intégration : ferme, capteur, bots, Grafana réel", () =>
       ["10 min", "20 min", "1 h"], ["6 h", "12 h", "24 h"], ["Autre…"], ["⬅️ Retour"]]);
     await bot.handleUpdate(bouton(5555, `iv:${dev}:3600`));
     expect(dernierEcran().text).toBe("Passer Serre nord à un message toutes les 1 h ?");
-    await bot.handleUpdate(bouton(5555, `iv!:${dev}:3600`));
+    // Message envoyé hier, question affichée il y a 6 min : trop ancien ; affichée à l'instant : accepté
+    const ancien = (edit: number) => { const b = bouton(5555, `iv!:${dev}:3600`); b.callback_query.message.date -= 86400; b.callback_query.message.edit_date = Math.floor(Date.now() / 1000) - edit; return b; };
+    const avantAncien = telegram.length;
+    await bot.handleUpdate(ancien(6 * 60));
+    expect(telegram.slice(avantAncien).some(x => x.methode === "answerCallbackQuery" && x.corps.text === "Trop ancien, recommencez.")).toBe(true);
+    expect(await un(`SELECT 1 FROM app.commands WHERE dev_eui = $1`, [dev])).toBeNull();
+    await bot.handleUpdate(ancien(10));
     expect(dernierEcran().text).toMatch(/C'est demandé : Serre nord enverra un message toutes les 1 h\.\nL'ordre part à son prochain message \(souvent moins de 20 min\)/);
     const retourFiche = [[{ text: "⬅️ Retour", callback_data: `dv:${dev}` }]];
     expect(dernierEcran().reply_markup.inline_keyboard).toEqual(retourFiche);

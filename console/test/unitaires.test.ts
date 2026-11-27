@@ -7,6 +7,7 @@ import { controler, nettoyer, groupes, rangerCodes, lireListe } from "../src/cod
 import { chiffrer, dechiffrer, jeton, empreinte, verificateurScram, motDePasseLisible } from "../src/crypto.js";
 import * as textes from "../src/textes.fr.js";
 import { lireParametre } from "../src/invitations.js";
+import { tropAncien } from "../src/bots/commun.js";
 import { chargerCatalogue, catalogue, definition, pourcentagePile, pileFaible, modele, boutonModele, nomCommercial,
   INTERVALLE, intervalleReglable, ordreIntervalle, secondesOrdre, actionDe } from "../src/catalogue.js";
 import { construireTableau, construireResume, sqlPourcentage } from "../src/tableau.js";
@@ -85,6 +86,17 @@ describe("textes (spec §4.1, §12.1)", () => {
       `iv!:${dev}:${INTERVALLE.max_s}`]) {
       expect(Buffer.byteLength(cb), cb).toBeLessThanOrEqual(64);
     }
+  });
+});
+
+describe("confirmation trop ancienne (spec §4.14)", () => {
+  const maintenant = Math.floor(Date.now() / 1000);
+  const ctx = (message: any) => ({ callbackQuery: { message } }) as any;
+  it("compte depuis l'affichage de la question (dernière modification), pas depuis l'envoi du message", () => {
+    expect(tropAncien(ctx({ date: maintenant - 14 * 3600, edit_date: maintenant - 30 }), 5)).toBe(false);
+    expect(tropAncien(ctx({ date: maintenant - 14 * 3600, edit_date: maintenant - 6 * 60 }), 5)).toBe(true);
+    expect(tropAncien(ctx({ date: maintenant - 6 * 60 }), 5)).toBe(true);
+    expect(tropAncien(ctx({ date: maintenant - 60 }), 5)).toBe(false);
   });
 });
 

@@ -130,9 +130,11 @@ export async function dire(ctx: Ctx, texte: string, extra: Record<string, unknow
   return ctx.reply(texte, { parse_mode: "HTML", link_preview_options: { is_disabled: true }, ...extra });
 }
 
-/** Âge d'un message à boutons de confirmation (spec §4.14 : 2 min actionneur, 5 min les autres). */
+/** Âge d'un écran de confirmation (spec §4.14 : 2 min actionneur, 5 min les autres). Le bot réécrit le même message
+ *  d'écran en écran : on compte depuis sa dernière modification (l'affichage de la question), pas depuis son envoi. */
 export function tropAncien(ctx: Ctx, minutes: number): boolean {
-  const d = ctx.callbackQuery?.message?.date;
+  const m = ctx.callbackQuery?.message;
+  const d = m && "edit_date" in m && m.edit_date ? m.edit_date : m?.date;
   return Boolean(d && Date.now() / 1000 - d > minutes * 60);
 }
 
