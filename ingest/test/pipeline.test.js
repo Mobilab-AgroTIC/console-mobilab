@@ -152,33 +152,49 @@ test("chemin complet d'une trame et alertes", { skip: !actif && "base de test mo
         await q(`UPDATE app.devices SET intervalle_s = NULL WHERE dev_eui = $1`, [DEV]);
     });
 
-    await t.test("pas de nouvelles : une seule alerte, avec « Réactiver cette alerte », puis en pause", async () => {
+    await t.test("pas de nouvelles : alerte, retour, réarmée seule ; désactivée à la main, plus rien", async () => {
         const regle = (await q(`SELECT id FROM app.alert_rules WHERE dev_eui = $1 AND kind = 'silence'`, [DEV])).rows[0].id;
+        const silence = async () => {
+            assert.equal(await ing.chercherMuets(), 1);
+            await q(`UPDATE app.notifications SET envoyer_apres = now() WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
+        };
+        const nouveaux = async () => { const avant = envois.length; await ing.expedier(); return envois.slice(avant).filter(e => e.methode === "sendMessage"); };
+        const reparle = async () => { const r = await ing.recevoirUplink(uplink("04fd03e8059d016afccdf9", new Date().toISOString()), H); await r.suite(); };
+        // 1. Muet : une alerte, avec « Désactiver cette alerte »
         await q(`UPDATE app.devices SET last_seen = now() - interval '3 hours' WHERE dev_eui = $1`, [DEV]);
-        assert.equal(await ing.chercherMuets(), 1);
-        await q(`UPDATE app.notifications SET envoyer_apres = now() WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
-        const avant = envois.length;
-        await ing.expedier();
-        const msg = envois.slice(avant).filter(e => e.methode === "sendMessage");
+        await silence();
+        let msg = await nouveaux();
         assert.ok(msg.length >= 1);
-        assert.match(msg[0].corps.text, /^📡 <b>Serre nord<\/b> : pas de nouvelles depuis 3 h\.\n🔕 Alerte en pause/);
+        assert.equal(msg[0].corps.text, "📡 <b>Serre nord</b> : pas de nouvelles depuis 3 h.");
         const id = (await q(`SELECT id FROM app.notifications WHERE $1 = ANY(rule_ids) AND statut = 'envoye' ORDER BY id DESC LIMIT 1`, [regle])).rows[0].id;
         assert.deepEqual(msg[0].corps.reply_markup.inline_keyboard,
-            [[{ text: "🔔 Réactiver cette alerte", callback_data: `rs:${id}` }], [{ text: "Voir le capteur", callback_data: `dv:${DEV}` }]]);
-        assert.deepEqual((await q(`SELECT enabled, params ? 'en_pause_depuis' AS pause FROM app.alert_rules WHERE id = $1`, [regle])).rows[0],
-            { enabled: false, pause: true });
-        // En pause : l'état suit le capteur, mais ni « de nouveau en ligne » ni nouvelle alerte
-        const r = await ing.recevoirUplink(uplink("04fd03e8059d016afccdf9", new Date().toISOString()), H);
-        await r.suite();
+            [[{ text: "🔕 Désactiver cette alerte", callback_data: `ds:${id}` }], [{ text: "Voir le capteur", callback_data: `dv:${DEV}` }]]);
+        assert.equal((await q(`SELECT enabled FROM app.alert_rules WHERE id = $1`, [regle])).rows[0].enabled, true);
+        // 2. Il reparle : « de nouveau en ligne », lui aussi avec « Désactiver »
+        await reparle();
+        await q(`UPDATE app.notifications SET envoyer_apres = now() WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
+        msg = await nouveaux();
+        assert.equal(msg[0].corps.text, "✅ <b>Serre nord</b> : de nouveau en ligne.");
+        assert.match(msg[0].corps.reply_markup.inline_keyboard[0][0].callback_data, /^ds:\d+$/);
+        // 3. Réarmée toute seule : la coupure suivante sonne de nouveau
+        await q(`UPDATE app.devices SET last_seen = now() - interval '3 hours' WHERE dev_eui = $1`, [DEV]);
+        await silence();
+        assert.equal((await nouveaux()).length >= 1, true);
+        // 4. Désactivée à la main (bouton du bot) : ni « de nouveau en ligne », ni nouvelle alerte ; l'état suit le capteur
+        await q(`UPDATE app.alert_rules SET enabled = false WHERE id = $1`, [regle]);
+        await reparle();
         assert.equal((await q(`SELECT state FROM app.alert_state WHERE rule_id = $1`, [regle])).rows[0].state, "ok");
-        assert.equal((await q(`SELECT count(*)::int AS n FROM app.notifications WHERE $1 = ANY(rule_ids) AND transition = 'retour'`, [regle])).rows[0].n, 0);
+        assert.equal((await q(`SELECT count(*)::int AS n FROM app.notifications WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle])).rows[0].n, 0);
         await q(`UPDATE app.devices SET last_seen = now() - interval '5 hours' WHERE dev_eui = $1`, [DEV]);
         assert.equal(await ing.chercherMuets(), 0);
-        // Réactivée (bouton du bot) : la prochaine absence est de nouveau signalée
-        await q(`UPDATE app.alert_rules SET enabled = true, params = params - 'en_pause_depuis' WHERE id = $1`, [regle]);
-        assert.equal(await ing.chercherMuets(), 1);
+        // 5. Réactivée : elle sonne ; désactivée pendant l'envoi différé : écartée
+        await q(`UPDATE app.alert_rules SET enabled = true WHERE id = $1`, [regle]);
+        await silence();
+        await q(`UPDATE app.alert_rules SET enabled = false WHERE id = $1`, [regle]);
+        assert.equal((await nouveaux()).length, 0);
+        assert.equal((await q(`SELECT erreur FROM app.notifications WHERE $1 = ANY(rule_ids) ORDER BY id DESC LIMIT 1`, [regle])).rows[0].erreur, "désactivée avant l'envoi");
+        await q(`UPDATE app.alert_rules SET enabled = true WHERE id = $1`, [regle]);
         await q(`UPDATE app.alert_state SET state = 'ok' WHERE rule_id = $1`, [regle]);
-        await q(`UPDATE app.notifications SET statut = 'ecarte' WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
     });
 
     await t.test("join : connecté ; downlink : commande suivie", async () => {

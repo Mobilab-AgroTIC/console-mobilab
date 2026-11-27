@@ -518,7 +518,7 @@ function creer(options) {
                          RETURNING (o.last_notified_at IS NOT NULL AND o.last_notified_at >= o.ancien) AS notifie`,
                         [r.id, time, d.valeur]);
                     if (!x.rowCount || !x.rows[0].notifie) continue;
-                    if (r.kind === "silence") { if (r.enabled) retoursSilence.push(item); }   // en pause : pas de message
+                    if (r.kind === "silence") { if (r.enabled) retoursSilence.push(item); }   // désactivée : pas de message
                     else if (r.kind === "battery") pilesRetour.push(item);
                     else retours.push(item);
                 }
@@ -718,14 +718,16 @@ function creer(options) {
         return { ferme, liste };
     }
 
-    /** « Pas de nouvelles » dont le capteur a reparlé pendant l'envoi différé : écartée, et pas de « de nouveau en ligne ». */
+    /** « Pas de nouvelles » à écarter pendant l'envoi différé : désactivée entre-temps, ou capteur revenu avant l'alerte
+     *  (et alors pas de « de nouveau en ligne » non plus, l'alerte n'étant pas partie). */
     async function revenuAvantEnvoi(c, notif) {
-        const items = (notif.details || {}).items || [];
-        if (notif.transition !== "alarme" || !items.length || !items.every(i => i.kind === "silence")) return false;
-        const s = await c.query(`SELECT coalesce(bool_or(state = 'alarm'), false) AS alarme FROM app.alert_state WHERE rule_id = ANY($1::bigint[])`,
-            [notif.rule_ids || []]);
-        if (s.rows[0].alarme) return false;
-        await c.query(`UPDATE app.notifications SET statut = 'ecarte', erreur = 'revenu avant l''envoi' WHERE id = $1`, [notif.id]);
+        if (!A.queSilence(notif)) return false;
+        const s = await c.query(
+            `SELECT coalesce(bool_or(r.enabled), false) AS active, coalesce(bool_or(r.enabled AND s.state = 'alarm'), false) AS alarme
+             FROM app.alert_rules r LEFT JOIN app.alert_state s ON s.rule_id = r.id WHERE r.id = ANY($1::bigint[])`, [notif.rule_ids || []]);
+        const erreur = !s.rows[0].active ? "désactivée avant l'envoi" : notif.transition === "alarme" && !s.rows[0].alarme ? "revenu avant l'envoi" : null;
+        if (!erreur) return false;
+        await c.query(`UPDATE app.notifications SET statut = 'ecarte', erreur = $2 WHERE id = $1`, [notif.id, erreur]);
         return true;
     }
 
@@ -853,12 +855,6 @@ function creer(options) {
             [notif.id, unOk ? "envoye" : "echec", jsonb(resultats), unOk ? null : "aucun envoi réussi", jsonb(d)]);
         if (unOk && notif.rule_ids && notif.rule_ids.length) {
             await c.query(`UPDATE app.alert_state SET last_notified_at = now() WHERE rule_id = ANY($1::bigint[])`, [notif.rule_ids]);
-        }
-        // « Pas de nouvelles » : une seule alerte, puis en pause jusqu'au bouton « Réactiver » (choix du 27/11).
-        const silences = (d.items || []).filter(i => i.kind === "silence").map(i => i.rule_id);
-        if (unOk && notif.transition !== "retour" && silences.length) {
-            await c.query(`UPDATE app.alert_rules SET enabled = false, params = params || jsonb_build_object('en_pause_depuis', now())
-                           WHERE id = ANY($1::bigint[]) AND kind = 'silence' AND enabled`, [silences]);
         }
     }
 

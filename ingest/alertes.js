@@ -8,7 +8,8 @@ const { pourcentagePile } = require("./catalogue");
 const SEUIL_DEBIT = 0.1;          // L/h (spec §8.1)
 const RETOUR_PILE_MV = 200;       // remonte de 200 mV au-dessus du seuil
 /** « Pas de nouvelles » : deux messages manqués d'affilée (2,5 intervalles), jamais avant 10 min, pour qu'une
- *  antenne coupée 2 min ne fasse pas sonner un capteur qui envoie chaque minute. Une seule alerte, puis en pause. */
+ *  antenne coupée 2 min ne fasse pas sonner un capteur qui envoie chaque minute. Une alerte par silence, une au retour,
+ *  et l'alerte se réarme seule ; seul un « Désactiver » à la main la fait taire, jusqu'à « Réactiver » (choix du 27/11). */
 const SILENCE = { intervalles: 2.5, plancher_s: 600 };
 
 /** Délai (s) avant « pas de nouvelles » : celui fixé par un admin, sinon d'après l'intervalle réglé ou mesuré. */
@@ -116,7 +117,7 @@ function rediger(T, cat, notif, contexte) {
     if (d.groupe && d.groupe.length > 1) {
         const liste = d.groupe.map(nomDe).join(", ");
         if (transition === "retour") lignes.push(gabarit(T.silence_retour_groupe, { liste }));
-        else lignes.push(gabarit(T.silence_groupe, { n: d.groupe.length, liste, duree: d.duree || "" }), T.silence_pause_groupe);
+        else lignes.push(gabarit(T.silence_groupe, { n: d.groupe.length, liste, duree: d.duree || "" }));
         return lignes.join("\n");
     }
     const capteur = nomDe(notif.dev_eui);
@@ -157,30 +158,29 @@ function rediger(T, cat, notif, contexte) {
             lignes.push(gabarit(g, { capteur, duree: d.duree || "" }));
         }
     }
-    if (transition !== "retour" && queSilence(notif)) lignes.push(T.silence_pause);
     return lignes.join("\n");
 }
 
 /** Boutons sous une alerte (spec §4.8, §4.15). conseiller : seulement [Voir le capteur]. */
 function boutons(T, notif, { conseiller = false } = {}) {
     const d = notif.details || {};
-    if (notif.transition === "retour") return null;
     const items = d.items || [];
+    const voir = d.groupe && d.groupe.length > 1
+        ? { text: T.bouton_voir_tous, callback_data: `ag:${notif.id}` }
+        : { text: T.bouton_voir, callback_data: `dv:${notif.dev_eui}` };
+    // « Pas de nouvelles » (alerte, relance et retour) : « Désactiver » pour faire taire un capteur instable.
+    if (queSilence(notif)) {
+        if (conseiller) return notif.transition === "retour" ? null : [[voir]];
+        const groupe = d.groupe && d.groupe.length > 1;
+        return [[{ text: groupe ? T.bouton_desactiver_alertes : T.bouton_desactiver_alerte, callback_data: `ds:${notif.id}` }], [voir]];
+    }
+    if (notif.transition === "retour") return null;
     if (items.some(i => i.coupure_auto)) {
         return conseiller ? null : [[{ text: T.bouton_reactiver, callback_data: `rc:${notif.id}` }]];
     }
     // Pile : pas de coupure 24 h, mais « Ne plus le rappeler » (jusqu'à la pile neuve, choix du 19/11).
     if (items.length && items.every(i => i.kind === "battery")) {
         return conseiller ? null : [[{ text: T.bouton_couper_pile, callback_data: `cp:${notif.id}` }]];
-    }
-    const voir = d.groupe && d.groupe.length > 1
-        ? { text: T.bouton_voir_tous, callback_data: `ag:${notif.id}` }
-        : { text: T.bouton_voir, callback_data: `dv:${notif.dev_eui}` };
-    // « Pas de nouvelles » : envoyée une fois, puis en pause jusqu'à ce qu'on la réactive (choix du 27/11).
-    if (queSilence(notif)) {
-        if (conseiller) return [[voir]];
-        const groupe = d.groupe && d.groupe.length > 1;
-        return [[{ text: groupe ? T.bouton_reactiver_alertes : T.bouton_reactiver_alerte, callback_data: `rs:${notif.id}` }], [voir]];
     }
     if (items.some(i => i.relance)) return [[voir]];
     return conseiller ? [[voir]] : [[{ text: T.bouton_couper, callback_data: `ct:${notif.id}` }, voir]];

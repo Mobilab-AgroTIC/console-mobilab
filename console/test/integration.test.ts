@@ -505,43 +505,49 @@ describe.skipIf(!IT)("intégration : ferme, capteur, bots, Grafana réel", () =>
     expect((await q(`SELECT 1 FROM app.commands WHERE dev_eui = $1 AND action = 'intervalle:600'`, [dev])).length).toBe(0);
   }, 60000);
 
-  it("pas de nouvelles : gérée dans les réglages ; « Réactiver cette alerte » depuis le message", async () => {
+  it("pas de nouvelles : désactiver / activer dans Réglages, Alertes et sous le message ; le choix manuel reste", async () => {
     const dev = "a84041f21c5b3d2e";
     const bot = creerBotClient(s);
     fauxTelegram(bot.api);
     const dernierEcran = () => telegram.filter(x => x.methode === "editMessageText").pop()!.corps;
-    const regle = await un(`SELECT id, enabled FROM app.alert_rules WHERE dev_eui = $1 AND kind = 'silence'`, [dev]);
-    expect(regle.enabled).toBe(true);
-    // Réglé sur 1 h (test précédent) : deux messages manqués, soit 2 h 30
+    const actif = async () => (await un(`SELECT enabled FROM app.alert_rules WHERE dev_eui = $1 AND kind = 'silence'`, [dev])).enabled;
+    const regle = await un(`SELECT id FROM app.alert_rules WHERE dev_eui = $1 AND kind = 'silence'`, [dev]);
+    expect(await actif()).toBe(true);
+    // Réglages : réglé sur 1 h (test précédent), deux messages manqués = 2 h 30
     await bot.handleUpdate(bouton(5555, `st:${dev}`));
-    expect(dernierEcran().text).toMatch(/📡 Alerte « pas de nouvelles » : <b>oui<\/b>, après 2 h 30 min sans message \(une seule fois\)\./);
-    expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "🔕 Couper « pas de nouvelles »", callback_data: `ai:${dev}:s:r` });
+    expect(dernierEcran().text).toMatch(/réglages\n\n📡 Alerte « pas de nouvelles » : <b>oui<\/b>, après 2 h 30 min sans message\./);
+    expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "🔕 Désactiver « pas de nouvelles »", callback_data: `ai:${dev}:s:r` });
     await bot.handleUpdate(bouton(5555, `ai:${dev}:s:r`));
-    expect((await un(`SELECT enabled FROM app.alert_rules WHERE id = $1`, [regle.id])).enabled).toBe(false);
-    expect(dernierEcran().text).toMatch(/réglages\n\n📡 Alerte « pas de nouvelles » : non\./);
+    expect(await actif()).toBe(false);
+    expect(dernierEcran().text).toMatch(/📡 Alerte « pas de nouvelles » : <b>désactivée<\/b>\./);
     expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "🔔 Activer « pas de nouvelles »", callback_data: `ai:${dev}:s:r` });
-    await bot.handleUpdate(bouton(5555, `ai:${dev}:s:r`));
-    expect((await un(`SELECT enabled FROM app.alert_rules WHERE id = $1`, [regle.id])).enabled).toBe(true);
-    // Alerte envoyée par Node-RED : la règle est en pause, le message porte « Réactiver cette alerte »
-    await q(`UPDATE app.alert_rules SET enabled = false, params = params || jsonb_build_object('en_pause_depuis', now()) WHERE id = $1`, [regle.id]);
+    // Le même choix dans Alertes
+    await bot.handleUpdate(bouton(5555, `al:${dev}`));
+    expect(dernierEcran().text).toMatch(/📡 Pas de nouvelles : non/);
+    await bot.handleUpdate(bouton(5555, `ai:${dev}:s`));
+    expect(await actif()).toBe(true);
+    expect(dernierEcran().text).toMatch(/📡 Pas de nouvelles : <b>oui<\/b>/);
+    // Sous le message d'alerte (envoyé par Node-RED) : « Désactiver cette alerte », puis « Réactiver cette alerte »
     const n = await un(`INSERT INTO app.notifications (audience, expediteur, kind, tenant_slug, dev_eui, rule_ids, transition, details, statut, destinataires)
                         VALUES ('client', 'nodered', 'alerte', $1, $2, ARRAY[$3]::bigint[], 'alarme', $4, 'envoye', $5) RETURNING id`,
       [slug, dev, regle.id, JSON.stringify({ items: [{ rule_id: regle.id, kind: "silence" }] }), JSON.stringify([{ chat_id: 5555, message_id: 1, resultat: "ok" }])]);
-    await bot.handleUpdate(bouton(5555, `st:${dev}`));
-    expect(dernierEcran().text).toMatch(/📡 Alerte « pas de nouvelles » : <b>en pause<\/b> \(alerte envoyée \d\d:\d\d\)\./);
-    expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "🔔 Réactiver « pas de nouvelles »", callback_data: `ai:${dev}:s:r` });
-    await bot.handleUpdate(bouton(5555, `al:${dev}`));
-    expect(dernierEcran().text).toMatch(/📡 Pas de nouvelles : en pause \(alerte envoyée \d\d:\d\d\)/);
-    // Un conseiller ne réactive pas
-    await bot.handleUpdate(bouton(8888, `rs:${n.id}`));
-    expect((await un(`SELECT enabled FROM app.alert_rules WHERE id = $1`, [regle.id])).enabled).toBe(false);
-    const avant = telegram.length;
+    const voir = [{ text: "Voir le capteur", callback_data: `dv:${dev}` }];
+    await bot.handleUpdate(bouton(8888, `ds:${n.id}`));            // un conseiller ne touche à rien
+    expect(await actif()).toBe(true);
+    let avant = telegram.length;
+    await bot.handleUpdate(bouton(5555, `ds:${n.id}`));
+    expect(await actif()).toBe(false);
+    let apres = telegram.slice(avant);
+    expect(apres.find(x => x.methode === "answerCallbackQuery")!.corps.text).toBe("🔕 Alerte désactivée");
+    expect(apres.find(x => x.methode === "editMessageText")!.corps).toMatchObject({
+      text: "…\n🔕 Désactivée par Jean : plus de message tant qu'elle n'est pas réactivée.",
+      reply_markup: { inline_keyboard: [[{ text: "🔔 Réactiver cette alerte", callback_data: `rs:${n.id}` }], voir] } });
+    avant = telegram.length;
     await bot.handleUpdate(bouton(5555, `rs:${n.id}`));
-    expect(await un(`SELECT enabled, params ? 'en_pause_depuis' AS pause FROM app.alert_rules WHERE id = $1`, [regle.id])).toEqual({ enabled: true, pause: false });
-    const apres = telegram.slice(avant);
-    expect(apres.find(x => x.methode === "answerCallbackQuery")!.corps.text).toBe("🔔 Alerte réactivée");
+    expect(await actif()).toBe(true);
+    apres = telegram.slice(avant);
     expect(apres.find(x => x.methode === "editMessageText")!.corps).toMatchObject({ text: "…\n🔔 Réactivée par Jean.",
-      reply_markup: { inline_keyboard: [[{ text: "Voir le capteur", callback_data: `dv:${dev}` }]] } });
+      reply_markup: { inline_keyboard: [[{ text: "🔕 Désactiver cette alerte", callback_data: `ds:${n.id}` }], voir] } });
   }, 60000);
 
   it("partage : lien j_ d'un collègue, compte Grafana Viewer, le propriétaire est prévenu", async () => {

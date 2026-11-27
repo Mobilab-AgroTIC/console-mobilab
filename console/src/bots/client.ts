@@ -226,15 +226,13 @@ async function ecranReglages(ctx: Ctx, dev: string) {
   const m = modeleDe(d.model_key);
   const branchements = Boolean(m?.modes && Object.keys(m.modes).length > 1) || voiesDe(m, null).length > 0;
   const silence = (await regles(dev)).find(r => r.kind === "silence");
-  const pause = !silence?.enabled && silence?.params?.en_pause_depuis;
   const ligneSilence = silence?.enabled
-    ? f(T.reglage_silence_oui, { delai: texteIntervalle(Math.round(delaiSilence(d, silence) / 60) * 60) })
-    : pause ? f(T.reglage_silence_pause, { quand: quand(silence.params.en_pause_depuis) }) : T.reglage_silence_non;
+    ? f(T.reglage_silence_oui, { delai: texteIntervalle(Math.round(delaiSilence(d, silence) / 60) * 60) }) : T.reglage_silence_non;
   const k = clavier([
     { text: T.bouton_renommer, callback_data: `rn:${dev}` },
     branchements ? { text: T.bouton_branchements, callback_data: `pb:${dev}` } : null,
     intervalleReglable(m) ? { text: T.bouton_intervalle, callback_data: `iv:${dev}` } : null,
-    { text: silence?.enabled ? T.bouton_silence_couper : pause ? T.bouton_silence_reactiver : T.bouton_silence_activer, callback_data: `ai:${dev}:s:r` },
+    { text: silence?.enabled ? T.bouton_silence_desactiver : T.bouton_silence_activer, callback_data: `ai:${dev}:s:r` },
     !d.last_seen ? { text: T.bouton_corriger_codes, callback_data: `ck:${dev}` } : null,
     a.role === "proprietaire" ? { text: T.bouton_supprimer, callback_data: `dl:${dev}` } : null,
     { text: C.retour, callback_data: `dv:${dev}` },
@@ -523,15 +521,11 @@ async function ecranAlertesCapteur(ctx: Ctx, dev: string) {
   const toutes = await regles(dev);
   const l = [f(T.alertes_capteur_titre, { capteur: echapper(d.name) }), "", T.toujours_actives];
   // Alertes intégrées : « pas de nouvelles » active par défaut (27/11), les états non ; un tap les bascule.
-  const silence = toutes.find(r => r.kind === "silence");
-  const integrees: { cle: string; libelle: string; on: boolean; pause?: string }[] = [
-    { cle: "s", libelle: T.alerte_silence, on: Boolean(silence?.enabled), pause: !silence?.enabled ? silence?.params?.en_pause_depuis : undefined },
+  const integrees: { cle: string; libelle: string; on: boolean }[] = [
+    { cle: "s", libelle: T.alerte_silence, on: Boolean(toutes.find(r => r.kind === "silence")?.enabled) },
     ...etats.map(e => ({ cle: `m:${e.nom}`, libelle: e.libelle || e.nom, on: Boolean(toutes.find(r => r.kind === "state" && r.metric === e.nom)?.enabled) })),
   ];
-  for (const x of integrees) {
-    const g = x.on ? T.integree_oui : x.pause ? T.integree_pause : T.integree_non;
-    l.push(`${x.cle === "s" ? "📡" : "🚪"} ${f(g, { alerte: echapper(x.libelle), quand: x.pause ? quand(x.pause) : "" })}`);
-  }
+  for (const x of integrees) l.push(`${x.cle === "s" ? "📡" : "🚪"} ${f(x.on ? T.integree_oui : T.integree_non, { alerte: echapper(x.libelle) })}`);
   l.push("");
   const rs = toutes.filter(r => r.kind === "threshold");
   const mesures = mesuresAlertables(m, d.last_values || {});
@@ -646,14 +640,15 @@ async function modifierCopies(ctx: Ctx, n: any, ligne: string, k: { inline_keybo
   for (const dst of (n.destinataires || []) as any[]) {
     if (!dst.message_id) continue;
     const msg = ctx.callbackQuery?.message;
-    const base = msg && msg.chat.id === dst.chat_id && msg.message_id === dst.message_id ? (msg as any).text?.split("\n🔕")[0] : null;
+    const base = msg && msg.chat.id === dst.chat_id && msg.message_id === dst.message_id ? (msg as any).text?.split(/\n(?:🔕|🔔) /)[0] : null;
     if (base) await ctx.api.editMessageText(dst.chat_id, dst.message_id, echapper(base) + ligne, { parse_mode: "HTML", reply_markup: k }).catch(() => undefined);
     else await ctx.api.editMessageReplyMarkup(dst.chat_id, dst.message_id, { reply_markup: k }).catch(() => undefined);
   }
 }
 
-/** « Réactiver cette alerte » : les « pas de nouvelles » du message repartent (envoyées une fois, puis en pause). */
-async function reactiverSilence(ctx: Ctx, id: number) {
+/** « Désactiver / Réactiver cette alerte » sous un message « pas de nouvelles » : choix manuel, prioritaire sur le
+ *  réarmement automatique (un capteur instable qui bombarde se fait taire jusqu'à ce qu'on le réactive). */
+async function basculerSilence(ctx: Ctx, id: number, actif: boolean) {
   const n = await un(`SELECT * FROM app.notifications WHERE id = $1 AND kind = 'alerte'`, [id]);
   if (!n) { await ctx.answerCallbackQuery(); return; }
   const p = ctx.personne;
@@ -662,12 +657,17 @@ async function reactiverSilence(ctx: Ctx, id: number) {
   if (a.tenant_status === "suspendu") { await ctx.answerCallbackQuery({ text: f(T.ferme_pause, { ferme: a.display_name }) }); return; }
   const ids = ((n.details?.items || []) as any[]).filter(i => i.kind === "silence").map(i => Number(i.rule_id));
   await tx(async c => {
-    await c.query(`UPDATE app.alert_rules SET enabled = true, params = params - 'en_pause_depuis' WHERE id = ANY($1::bigint[]) AND kind = 'silence'`, [ids]);
-    await audit(c, { acteur: p!.id, tenant: n.tenant_slug, dev_eui: n.dev_eui, action: "alerte activée", details: { kind: "silence", depuis: "message" } });
+    await c.query(`UPDATE app.alert_rules SET enabled = $2 WHERE id = ANY($1::bigint[]) AND kind = 'silence'`, [ids, actif]);
+    await audit(c, { acteur: p!.id, tenant: n.tenant_slug, dev_eui: n.dev_eui, action: actif ? "alerte activée" : "alerte désactivée",
+      details: { kind: "silence", depuis: "message" } });
   });
-  await ctx.answerCallbackQuery({ text: T.silence_reactivee_reponse });
-  const voir = n.details?.groupe?.length > 1 ? { text: TA.bouton_voir_tous, callback_data: `ag:${id}` } : { text: TA.bouton_voir, callback_data: `dv:${n.dev_eui}` };
-  await modifierCopies(ctx, n, "\n" + f(TA.reactivee_par, { personne: echapper(prenom(p!.display_name)) }), { inline_keyboard: [[voir]] });
+  await ctx.answerCallbackQuery({ text: actif ? T.silence_reactivee_reponse : T.silence_desactivee_reponse });
+  const groupe = n.details?.groupe?.length > 1;
+  const voir = groupe ? { text: TA.bouton_voir_tous, callback_data: `ag:${id}` } : { text: TA.bouton_voir, callback_data: `dv:${n.dev_eui}` };
+  const bascule = actif ? { text: groupe ? TA.bouton_desactiver_alertes : TA.bouton_desactiver_alerte, callback_data: `ds:${id}` }
+    : { text: groupe ? TA.bouton_reactiver_alertes : TA.bouton_reactiver_alerte, callback_data: `rs:${id}` };
+  const ligne = f(actif ? TA.reactivee_par : TA.desactivee_par, { personne: echapper(prenom(p!.display_name)) });
+  await modifierCopies(ctx, n, "\n" + ligne, { inline_keyboard: [[bascule], [voir]] });
 }
 
 // ===================================================================== partager (§4.9)
@@ -1359,7 +1359,7 @@ export function creerBotClient(s: Services): Bot<Ctx> {
     const conf = verbe0.endsWith("!");
     const verbe = verbe0.replace(/!$/, "");
     const repondre = () => ctx.answerCallbackQuery().catch(() => undefined);
-    if (!ctx.personne && !["rq", "ct", "rc", "rs", "dv", "ag"].includes(verbe)) { await ctx.answerCallbackQuery({ text: T.plus_acces_bouton }); return; }
+    if (!ctx.personne && !["rq", "ct", "rc", "ds", "rs", "dv", "ag"].includes(verbe)) { await ctx.answerCallbackQuery({ text: T.plus_acces_bouton }); return; }
     switch (verbe) {
       case "fm": {
         const [slug, ecr] = a;
@@ -1541,11 +1541,10 @@ export function creerBotClient(s: Services): Bot<Ctx> {
         await tx(async c => {
           const r = await c.query(`INSERT INTO app.alert_rules (dev_eui, kind, metric, enabled, created_by) VALUES ($1, $2, $3, true, $4)
                                    ON CONFLICT (dev_eui, kind, coalesce(metric, '')) WHERE kind <> 'threshold'
-                                   DO UPDATE SET enabled = NOT app.alert_rules.enabled, params = app.alert_rules.params - 'en_pause_depuis'
-                                   RETURNING id, enabled`,
+                                   DO UPDATE SET enabled = NOT app.alert_rules.enabled RETURNING id, enabled`,
             [dev, kind, kind === "state" ? metric : null, ctx.personne!.id]);
-          // Un état qu'on (ré)active repart de « normal », sans message. « Pas de nouvelles » garde son état : réactivée
-          // pendant un silence déjà signalé, elle ne resonne pas ; elle dira « de nouveau en ligne » au retour du capteur.
+          // Un état qu'on (ré)active repart de « normal », sans message. « Pas de nouvelles » garde son état (Node-RED le
+          // tient à jour même désactivée) : réactivée pendant un silence déjà signalé, elle dira « de nouveau en ligne » au retour.
           if (kind === "silence") await c.query(`INSERT INTO app.alert_state (rule_id) VALUES ($1) ON CONFLICT (rule_id) DO NOTHING`, [r.rows[0].id]);
           else await c.query(`INSERT INTO app.alert_state (rule_id) VALUES ($1) ON CONFLICT (rule_id) DO UPDATE SET state = 'ok', since = now(), pending_since = NULL`, [r.rows[0].id]);
           await audit(c, { acteur: ctx.personne!.id, tenant: x.d.tenant_slug, dev_eui: dev, action: r.rows[0].enabled ? "alerte activée" : "alerte désactivée", details: { kind, metric: kind === "state" ? metric : null } });
@@ -1603,7 +1602,8 @@ export function creerBotClient(s: Services): Bot<Ctx> {
         break;
       }
       case "ct": await couper(ctx, Number(a[0]), false); return;
-      case "rs": await reactiverSilence(ctx, Number(a[0])); return;
+      case "ds": await basculerSilence(ctx, Number(a[0]), false); return;
+      case "rs": await basculerSilence(ctx, Number(a[0]), true); return;
       case "rc": await couper(ctx, Number(a[0]), true); return;
       case "ag": {
         const n = await un(`SELECT * FROM app.notifications WHERE id = $1`, [Number(a[0])]);
