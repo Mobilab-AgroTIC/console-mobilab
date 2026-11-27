@@ -148,6 +148,7 @@ export const client = {
   liste_titre: "🏡 <b>{ferme}</b> · {n} capteurs",
   liste_titre_un: "🏡 <b>{ferme}</b> · 1 capteur",
   aucun_capteur: "Aucun capteur. Ajoutez-en un : /ajouter",
+  bouton_ajouter_capteur: "➕ Ajouter un capteur",
   pas_connecte: "pas encore connecté",
   attend_mesure: "connecté, attend sa mesure",
   modele_a_identifier: "modèle à identifier",
@@ -195,7 +196,7 @@ export const client = {
   // §4.6 actionneurs
   action_question: "{action} {capteur} maintenant ?",
   bouton_action_oui: "Oui, {action}",
-  ordre_demande: "⏳ C'est demandé. L'ordre part au prochain message du capteur (souvent moins de {delai} min).",
+  ordre_demande: "⏳ C'est demandé. L'ordre part au prochain message du capteur (souvent moins de {delai}).",
   ordre_classe_c: "⏳ Envoi en cours…",
   ordre_parti: "⏳ Ordre parti vers {capteur}…",
   ordre_confirme: "✅ {capteur} : {action} fait ({heure}).",
@@ -208,6 +209,20 @@ export const client = {
   derniere_commande: "Dernière commande : {action}, {quand}, {qui} {resultat}",
   groupe_ordre_ok: "{qui} : {action} sur {capteur} ({heure}).",
   vous_agissez_pour: "Vous agissez pour {ferme}.",
+
+  // Intervalle d'envoi (downlink « 01 » + secondes, Dragino et montages Mobilab)
+  bouton_intervalle: "⏱️ Intervalle d'envoi",
+  intervalle_titre: "⏱️ <b>{capteur}</b> envoie un message toutes les {actuel} environ.\nÀ quel rythme doit-il envoyer ?",
+  intervalle_titre_regle: "⏱️ <b>{capteur}</b> est réglé sur un message toutes les {actuel}.\nÀ quel rythme doit-il envoyer ?",
+  bouton_intervalle_autre: "Autre…",
+  intervalle_question: "Passer {capteur} à un message toutes les {duree} ?",
+  intervalle_pile: "La pile s'usera bien plus vite.",
+  bouton_intervalle_oui: "Oui, changer",
+  intervalle_saisie: "Combien de temps entre deux messages ? Ex. 90 s, 15 min ou 2 h.",
+  intervalle_pas_compris: "Je n'ai pas compris. Ex. : 90 s, 15 min ou 2 h.",
+  intervalle_hors_bornes: "Entre {min} et {max}, s'il vous plaît.",
+  intervalle_demande: "⏳ C'est demandé : {capteur} enverra un message toutes les {duree}.\nL'ordre part à son prochain message (souvent moins de {delai}).",
+  intervalle_confirme: "✅ {capteur} envoie maintenant un message toutes les {duree} ({heure}).",
 
   // §4.7 alertes
   alertes_titre: "🔔 <b>Alertes · {ferme}</b>",

@@ -3,6 +3,7 @@
 import { createRequire } from "node:module";
 import path from "node:path";
 import fs from "node:fs";
+import { texteIntervalle } from "./format.js";
 
 const require = createRequire(import.meta.url);
 
@@ -17,7 +18,7 @@ export interface Modele { cle: string; prefixe_id?: string; marque: string; mode
   modes?: Record<string, { libelle?: string; mesures?: string[]; voies?: Record<string, string>; demander_sondes?: boolean }>;
   mesures: Record<string, DefMesure>; type_voies?: Record<string, string>;
   grafana: { panneaux: { type: string; mesures?: string[] }[] };
-  actions?: Action[]; variantes?: string[] }
+  actions?: Action[]; variantes?: string[]; trame?: { format?: string } }
 export interface Action { cle: string; bouton: string; f_port: number; payload_hex: string; confirmed?: boolean;
   classe?: string; delai_typique_min?: number; expire_min?: number; etat_attendu?: { metric: string; value: number } }
 export interface Sonde { libelle: string; pour: string[]; mesure?: string; libelle_mesure?: string; unite?: string;
@@ -136,6 +137,33 @@ export function categoriesDeMarque(cle: string): string[] {
   if (typesDeMarque(cle).length <= 8) return [];
   const l = CATEGORIES.filter(c => typesDeMarque(cle, c).length > 0);
   return l.length >= 2 ? l : [];
+}
+
+/** Changement de l'intervalle d'envoi par downlink : « 01 » puis les secondes sur 3 octets, poids fort en premier
+ *  (commande TDC des Dragino, reprise par les montages au format Mobilab), sur le port 1. De 1 min à 7 jours. */
+export const INTERVALLE = { f_port: 1, min_s: 60, max_s: 7 * 86400, proposes_s: [60, 180, 300, 600, 1200, 3600, 21600, 43200, 86400] };
+
+export function intervalleReglable(m: Modele | null): boolean {
+  return Boolean(m && (m.marque === "Dragino" || m.trame?.format === "mobilab"));
+}
+
+export function ordreIntervalle(secondes: number): string {
+  return "01" + Math.round(secondes).toString(16).padStart(6, "0");
+}
+
+/** Secondes d'un ordre d'intervalle (action « intervalle:1200 »), null pour un autre ordre. */
+export function secondesOrdre(action: string): number | null {
+  const m = /^intervalle:(\d+)$/.exec(action || "");
+  return m ? Number(m[1]) : null;
+}
+
+/** Libellé d'un ordre : bouton du catalogue, « Intervalle d'envoi 20 min », sinon sa clé. */
+export function actionDe(d: any, cle: string): string {
+  const s = secondesOrdre(cle);
+  if (s !== null) return `Intervalle d'envoi ${texteIntervalle(s)}`;
+  const m = modele(d?.model_key);
+  const a = [...(m?.actions || []), ...((d?.config?.actions || []) as any[])].find((x: any) => x.cle === cle);
+  return a?.bouton || cle;
 }
 
 export function montagesMobilab(): Modele[] {

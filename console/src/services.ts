@@ -11,6 +11,11 @@ import { heureParis } from "./format.js";
 export type Clavier = InlineKeyboard | { inline_keyboard: { text: string; callback_data?: string; url?: string }[][] } | undefined;
 export type QuelBot = "client" | "admin";
 
+/** [⬅️ Retour] vers la fiche du capteur, dans le bot qui a envoyé le message : jamais de message sans issue. */
+export function retourFiche(bot: QuelBot, dev: string): Clavier {
+  return { inline_keyboard: [[{ text: "⬅️ Retour", callback_data: bot === "admin" ? `a:dev:${dev}` : `dv:${dev}` }]] };
+}
+
 export interface Services {
   cfg: Config;
   ttn: Ttn;

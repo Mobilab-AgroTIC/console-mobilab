@@ -4,17 +4,17 @@ import { Bot, session, InlineKeyboard } from "grammy";
 import type { Update } from "grammy/types";
 import { db, q, un, tx, json, audit, notifier } from "../db.js";
 import { client as T, commun as C, alertes as TA, f } from "../textes.fr.js";
-import { echapper, depuis, duree, quand, heure, jour, avecUnite, reception, prenom, nomTelegram, nombre } from "../format.js";
+import { echapper, depuis, duree, quand, heure, jour, avecUnite, reception, prenom, nomTelegram, nombre, texteIntervalle, lireIntervalle } from "../format.js";
 import { controler, groupes, nettoyer } from "../codes.js";
 import { creerLien, lireParametre, consommer, fermeDuLien } from "../invitations.js";
 import { chiffrer, dechiffrer, codeErreur } from "../crypto.js";
 import { modele as modeleDe, definition, pourcentagePile, pileFaible, mesuresAlertables, modesDe, voiesDe, sondesPour, modelesProposes, montagesMobilab,
   marques, typesDeMarque, libelleMarque, libelleModele,
-  catalogue, boutonModele, nomCommercial, categoriesDeMarque } from "../catalogue.js";
+  catalogue, boutonModele, nomCommercial, categoriesDeMarque, actionDe, INTERVALLE, intervalleReglable, ordreIntervalle, type Modele } from "../catalogue.js";
 import { creerJob, chiffrerSecret } from "../jobs/moteur.js";
 import { appDe, idTtn } from "../jobs/taches.js";
 import { envoyer, avertirAdmins, lienBot, type Services } from "../services.js";
-import { questionSonde, actionDe } from "../notifications.js";
+import { questionSonde } from "../notifications.js";
 import { log } from "../log.js";
 import { type Ctx, type Session, stockage, chargerPersonne, demarrer, finir, conversation, clavier, lignes, clavierAnnuler,
   sansClavier, retirerClavier, ecran, dire, tropAncien, DEVEUI, SLUG } from "./commun.js";
@@ -91,7 +91,10 @@ async function ecranListe(ctx: Ctx, slug: string, page = 0) {
   ctx.session.ferme = slug;
   const t = await lireFerme(slug);
   const l = await capteursDe(slug);
-  if (!l.length) { await ecran(ctx, `🏡 <b>${echapper(t.display_name)}</b>\n\n${T.aucun_capteur}`); return; }
+  if (!l.length) {
+    await ecran(ctx, `🏡 <b>${echapper(t.display_name)}</b>\n\n${T.aucun_capteur}`, clavier([{ text: T.bouton_ajouter_capteur, callback_data: `fm:${slug}:j` }]));
+    return;
+  }
   const tries = l.map(c => ({ c, e: etatCapteur(c) })).sort((a, b) => a.e.rang - b.e.rang || a.c.name.localeCompare(b.c.name, "fr"));
   const pages = Math.ceil(tries.length / PAR_PAGE);
   page = Math.max(0, Math.min(page, pages - 1));
@@ -225,6 +228,7 @@ async function ecranReglages(ctx: Ctx, dev: string) {
   const k = clavier([
     { text: T.bouton_renommer, callback_data: `rn:${dev}` },
     branchements ? { text: T.bouton_branchements, callback_data: `pb:${dev}` } : null,
+    intervalleReglable(m) ? { text: T.bouton_intervalle, callback_data: `iv:${dev}` } : null,
     !d.last_seen ? { text: T.bouton_corriger_codes, callback_data: `ck:${dev}` } : null,
     a.role === "proprietaire" ? { text: T.bouton_supprimer, callback_data: `dl:${dev}` } : null,
     { text: C.retour, callback_data: `dv:${dev}` },
@@ -506,7 +510,7 @@ async function ecranAlertesCapteur(ctx: Ctx, dev: string) {
   const etats = Object.values(m?.mesures || {}).filter(z => z.alerte === "etat");
   const toutes = await regles(dev);
   const l = [f(T.alertes_capteur_titre, { capteur: echapper(d.name) }), "", T.toujours_actives];
-  // Alertes intégrées désactivées par défaut (pas de nouvelles, états) : un tap les active (choix du 19/11).
+  // Alertes intégrées : « pas de nouvelles » active par défaut (27/11), les états non ; un tap les bascule.
   const integrees: { cle: string; libelle: string; on: boolean }[] = [
     { cle: "s", libelle: T.alerte_silence, on: Boolean(toutes.find(r => r.kind === "silence")?.enabled) },
     ...etats.map(e => ({ cle: `m:${e.nom}`, libelle: e.libelle || e.nom, on: Boolean(toutes.find(r => r.kind === "state" && r.metric === e.nom)?.enabled) })),
@@ -765,13 +769,14 @@ async function reponseConseiller(ctx: Ctx, slug: string, accepte: boolean, perso
       proprietaire: ctx.personne!.display_name, admin_id: m.granted_by } });
   });
   if (accepte) {
-    await ecran(ctx, f(T.nouvel_acces, { nom: echapper(m.display_name), role: T.role_conseiller }), clavier([{ text: T.bouton_retirer, callback_data: `sh!:${slug}:r:${personId}` }]));
+    await ecran(ctx, f(T.nouvel_acces, { nom: echapper(m.display_name), role: T.role_conseiller }), clavier([{ text: T.bouton_retirer, callback_data: `sh!:${slug}:r:${personId}` },
+      { text: C.retour, callback_data: `fm:${slug}:p` }]));
     if (m.telegram_user_id) {
       const t = await lireFerme(slug);
       await envoyer(ctx.s, "client", Number(m.telegram_user_id), f(T.bienvenue_conseiller, { prenom: echapper(prenom(m.display_name)), ferme: echapper(t.display_name),
         proprietaire: echapper(ctx.personne!.display_name) }), { inline_keyboard: [[{ text: C.oui, callback_data: `cv:${slug}:1` }, { text: C.non, callback_data: `cv:${slug}:0` }]] });
     }
-  } else await ecran(ctx, T.refuse_ok);
+  } else await ecran(ctx, T.refuse_ok, clavier([{ text: C.retour, callback_data: `fm:${slug}:p` }]));
 }
 
 // ===================================================================== premier contact (§4.3)
@@ -997,8 +1002,23 @@ async function actionneur(ctx: Ctx, conf: boolean, dev: string, i: number) {
   }
   if (tropAncien(ctx, 2)) { await ctx.answerCallbackQuery({ text: C.trop_ancien }); return; }
   const classeC = (ac.classe || "A") === "C";
-  const texte = classeC ? T.ordre_classe_c : f(T.ordre_demande, { delai: ac.delai_typique_min || 10 });
-  const msg = await dire(ctx, texte);
+  const texte = classeC ? T.ordre_classe_c : f(T.ordre_demande, { delai: `${ac.delai_typique_min || 10} min` });
+  await passerOrdre(ctx, d, { cle: ac.cle, f_port: ac.f_port, payload_hex: String(ac.payload_hex).toLowerCase(), confirmed: ac.confirmed !== false,
+    expire_min: Number(ac.expire_min || 60), texte });
+}
+
+/** Enregistre l'ordre, son envoi et son expiration ; le message « ⏳ » est mis à jour au fil de l'ordre (§6.8).
+ *  `remplacer` : ce message prend la place de l'écran de confirmation au lieu de s'y ajouter. */
+async function passerOrdre(ctx: Ctx, d: any, o: { cle: string; f_port: number; payload_hex: string; confirmed: boolean; expire_min: number; texte: string;
+  remplacer?: boolean }) {
+  const dev = d.dev_eui;
+  const retour = clavier([{ text: C.retour, callback_data: `dv:${dev}` }]);
+  const msg = { message_id: 0 };
+  const ecranConf = o.remplacer ? ctx.callbackQuery?.message : undefined;
+  if (ecranConf) {
+    try { await ctx.editMessageText(o.texte, { parse_mode: "HTML", reply_markup: retour }); msg.message_id = ecranConf.message_id; } catch { /* nouveau message ci-dessous */ }
+  }
+  if (!msg.message_id) msg.message_id = (await dire(ctx, o.texte, { reply_markup: retour })).message_id;
   try {
     await tx(async c => {
       const r = await c.query(
@@ -1007,28 +1027,98 @@ async function actionneur(ctx: Ctx, conf: boolean, dev: string, i: number) {
          OVERRIDING SYSTEM VALUE
          SELECT n.id, $1, $2, $3, $4, 'mobilab:cmd:' || n.id, $5, $6, 'demandee', now(), now() + make_interval(mins => $7), $8, $9 FROM n
          RETURNING id, expires_at`,
-        [dev, ac.cle, ac.f_port, String(ac.payload_hex).toLowerCase(), ctx.personne!.id, ctx.session.support ? "support" : "bot",
-         Number(ac.expire_min || 60), ctx.chat!.id, msg.message_id]);
+        [dev, o.cle, o.f_port, o.payload_hex, ctx.personne!.id, ctx.session.support ? "support" : "bot",
+         o.expire_min, ctx.chat!.id, msg.message_id]);
       const id = Number(r.rows[0].id);
-      await creerJob(c, { kind: "commande", tenant: d.tenant_slug, dev_eui: dev, params: { command_id: id, confirmed: ac.confirmed !== false }, requested_by: ctx.personne!.id });
+      await creerJob(c, { kind: "commande", tenant: d.tenant_slug, dev_eui: dev, params: { command_id: id, confirmed: o.confirmed }, requested_by: ctx.personne!.id });
       await creerJob(c, { kind: "commande_expiree", tenant: d.tenant_slug, dev_eui: dev, params: { command_id: id }, run_after: new Date(r.rows[0].expires_at) });
-      await audit(c, { acteur: ctx.personne!.id, via: ctx.session.support ? "support" : "bot", tenant: d.tenant_slug, dev_eui: dev, action: `ordre ${ac.cle}` });
+      await audit(c, { acteur: ctx.personne!.id, via: ctx.session.support ? "support" : "bot", tenant: d.tenant_slug, dev_eui: dev, action: `ordre ${o.cle}` });
     });
   } catch (e: any) {
-    if (e?.code === "23505") await ctx.api.editMessageText(ctx.chat!.id, msg.message_id, f(T.ordre_deja, { heure: heure(new Date()) }));
+    if (e?.code === "23505") await ctx.api.editMessageText(ctx.chat!.id, msg.message_id, f(T.ordre_deja, { heure: heure(new Date()) }), { reply_markup: retour });
     else throw e;
   }
+}
+
+/** Après « Annuler » au milieu d'une saisie : on rouvre l'écran d'où elle est partie, pour ne jamais finir sans issue. */
+async function revenirApresAnnulation(ctx: Ctx, conv: Session["conv"]) {
+  const dn = conv?.donnees || {};
+  if (conv?.nom === "intervalle" && dn.dev) await ecranIntervalle(ctx, dn.dev);
+  else if (conv?.nom === "renommer" && dn.dev) await ecranReglages(ctx, dn.dev);
+  else if (conv?.nom === "seuil" && dn.dev) await ecranAlertesCapteur(ctx, dn.dev);
+  else if (conv?.nom === "corriger" && dn.dev_eui_origine) await ecranReglages(ctx, String(dn.dev_eui_origine).toLowerCase());
+  else if (conv?.nom === "ajouter" && dn.ferme) await ecranListe(ctx, dn.ferme);
+}
+
+// ===================================================================== intervalle d'envoi (downlink « 01 » + secondes)
+
+/** Intervalle actuel : mesuré sur les dernières trames, sinon celui réglé (app.devices.intervalle_s), sinon le catalogue. */
+function intervalleActuel(d: any, m: Modele | null): number {
+  return Number(d.config?.detected?.intervalle_s || d.intervalle_s || m?.intervalle_defaut_s || 1200);
+}
+
+/** Arrondi à la minute au-delà de 2 min : la médiane mesurée vaut souvent 1203 s pour 20 min. */
+function texteEnviron(s: number): string {
+  return texteIntervalle(s >= 120 ? Math.round(s / 60) * 60 : s);
+}
+
+async function ecranIntervalle(ctx: Ctx, dev: string) {
+  const x = await droitCapteur(ctx, dev, "regler");
+  if (!x) return;
+  const { d } = x;
+  const m = modeleDe(d.model_key);
+  if (!intervalleReglable(m)) return;
+  const enCours = await un(`SELECT id, requested_at FROM app.commands WHERE dev_eui = $1 AND status IN ('demandee', 'envoyee')`, [dev]);
+  if (enCours) {
+    await ecran(ctx, f(T.ordre_deja, { heure: heure(enCours.requested_at) }), clavier([{ text: T.bouton_annuler_ordre, callback_data: `ax:${enCours.id}` }, { text: C.retour, callback_data: `st:${dev}` }]));
+    return;
+  }
+  const texte = d.intervalle_s ? f(T.intervalle_titre_regle, { capteur: echapper(d.name), actuel: texteIntervalle(d.intervalle_s) })
+    : f(T.intervalle_titre, { capteur: echapper(d.name), actuel: texteEnviron(intervalleActuel(d, m)) });
+  const k = clavier([...INTERVALLE.proposes_s.map(s => ({ text: texteIntervalle(s), callback_data: `iv:${dev}:${s}` })),
+    { text: T.bouton_intervalle_autre, callback_data: `iv:${dev}:a` }], 3);
+  k.row().text(C.retour, `st:${dev}`);
+  await ecran(ctx, texte, k);
+}
+
+/** Question de confirmation ; `nouveau` : réponse à une saisie (nouveau message), sinon on remplace l'écran. */
+async function questionIntervalle(ctx: Ctx, d: any, s: number, nouveau = false) {
+  const l = [f(T.intervalle_question, { capteur: echapper(d.name), duree: texteIntervalle(s) })];
+  if (s < 300) l.push(T.intervalle_pile);
+  if (ctx.session.support) l.push(f(T.vous_agissez_pour, { ferme: echapper(d.ferme) }));
+  const k = clavier([{ text: T.bouton_intervalle_oui, callback_data: `iv!:${d.dev_eui}:${s}` }, { text: C.non, callback_data: `iv:${d.dev_eui}` }]);
+  if (nouveau) await dire(ctx, l.join("\n"), { reply_markup: k }); else await ecran(ctx, l.join("\n"), k);
+}
+
+async function envoyerIntervalle(ctx: Ctx, dev: string, s: number) {
+  const x = await droitCapteur(ctx, dev, "regler");
+  if (!x) return;
+  const { d } = x;
+  const m = modeleDe(d.model_key);
+  if (!intervalleReglable(m) || !Number.isInteger(s) || s < INTERVALLE.min_s || s > INTERVALLE.max_s) return;
+  if (tropAncien(ctx, 5)) { await ctx.answerCallbackQuery({ text: C.trop_ancien }); return; }
+  const enCours = await un(`SELECT id, requested_at FROM app.commands WHERE dev_eui = $1 AND status IN ('demandee', 'envoyee')`, [dev]);
+  if (enCours) {
+    await ecran(ctx, f(T.ordre_deja, { heure: heure(enCours.requested_at) }), clavier([{ text: T.bouton_annuler_ordre, callback_data: `ax:${enCours.id}` }, { text: C.retour, callback_data: `st:${dev}` }]));
+    return;
+  }
+  // L'ordre part au prochain message (ancien intervalle) ; l'accusé arrive au message suivant (nouvel intervalle).
+  const actuel = intervalleActuel(d, m);
+  const expire_min = Math.max(60, Math.ceil(1.5 * (actuel + Math.max(actuel, s)) / 60));
+  await passerOrdre(ctx, d, { cle: `intervalle:${s}`, f_port: INTERVALLE.f_port, payload_hex: ordreIntervalle(s), confirmed: true, expire_min,
+    texte: f(T.intervalle_demande, { capteur: echapper(d.name), duree: texteIntervalle(s), delai: texteEnviron(actuel) }), remplacer: true });
 }
 
 async function annulerOrdre(ctx: Ctx, id: number) {
   const cmd = await un(`SELECT c.*, d.tenant_slug, d.name, d.config AS dconfig FROM app.commands c JOIN app.devices d ON d.dev_eui = c.dev_eui WHERE c.id = $1`, [id]);
   if (!cmd) return;
   if (!(await droit(ctx, cmd.tenant_slug, "regler"))) return;
-  if (!["demandee", "envoyee"].includes(cmd.status)) { await ecran(ctx, T.ordre_annule); return; }
+  const retour = clavier([{ text: C.retour, callback_data: `dv:${cmd.dev_eui}` }]);
+  if (!["demandee", "envoyee"].includes(cmd.status)) { await ecran(ctx, T.ordre_annule, retour); return; }
   await ctx.s.ttn.viderFile(await appDe(db(), cmd.tenant_slug), idTtn({ dev_eui: cmd.dev_eui, config: cmd.dconfig })).catch(() => undefined);
   await q(`UPDATE app.commands SET status = 'annulee' WHERE id = $1 AND status IN ('demandee', 'envoyee')`, [id]);
-  await ecran(ctx, T.ordre_annule);
-  if (cmd.chat_id && cmd.message_id) await ctx.api.editMessageText(cmd.chat_id, cmd.message_id, T.ordre_annule).catch(() => undefined);
+  await ecran(ctx, T.ordre_annule, retour);
+  if (cmd.chat_id && cmd.message_id) await ctx.api.editMessageText(cmd.chat_id, cmd.message_id, T.ordre_annule, { reply_markup: retour }).catch(() => undefined);
 }
 
 // ===================================================================== modèle choisi (§4.4, §7.6)
@@ -1048,7 +1138,7 @@ async function modeleChoisi(ctx: Ctx, dev: string, choix: string, montage = fals
                      ON CONFLICT (raison, coalesce(tenant_slug, ''), coalesce(dev_eui, ''), coalesce(gateway_id, '')) WHERE resolved_at IS NULL
                      DO UPDATE SET details = app.anomalies.details || '{"client":"autre"}'`, [d.tenant_slug, dev]);
     });
-    await ecran(ctx, T.modele_autre);
+    await ecran(ctx, T.modele_autre, clavier([{ text: C.retour, callback_data: `dv:${dev}` }]));
     return;
   }
   const l = montage ? montagesMobilab() : modelesProposes(dev);
@@ -1137,7 +1227,13 @@ export function creerBotClient(s: Services): Bot<Ctx> {
   // Conversations en cours
   bot.on("message:text", async ctx => {
     const texte = ctx.message.text;
-    if (/^(annuler|stop)$/i.test(texte.trim()) || texte === C.annuler) { finir(ctx); await dire(ctx, C.annule, { reply_markup: sansClavier }); return; }
+    if (/^(annuler|stop)$/i.test(texte.trim()) || texte === C.annuler) {
+      const avant = ctx.session.conv;
+      finir(ctx);
+      await dire(ctx, C.annule, { reply_markup: sansClavier });
+      await revenirApresAnnulation(ctx, avant);
+      return;
+    }
     const conv = conversation(ctx);
     if (!conv) {
       const o = ctx.session.oubliee;
@@ -1165,6 +1261,21 @@ export function creerBotClient(s: Services): Bot<Ctx> {
       });
       await dire(ctx, f(T.renomme, { capteur: echapper(nom) }), { reply_markup: sansClavier });
       await ecranFiche(ctx, dev, true);
+      return;
+    }
+    if (conv.nom === "intervalle") {
+      const dev = conv.donnees.dev;
+      const x = await droitCapteur(ctx, dev, "regler");
+      if (!x) { finir(ctx); return; }
+      const sec = lireIntervalle(texte);
+      if (sec === null) { await dire(ctx, T.intervalle_pas_compris); return; }
+      if (sec < INTERVALLE.min_s || sec > INTERVALLE.max_s) {
+        await dire(ctx, f(T.intervalle_hors_bornes, { min: texteIntervalle(INTERVALLE.min_s), max: texteIntervalle(INTERVALLE.max_s) }));
+        return;
+      }
+      finir(ctx);
+      await retirerClavier(ctx);
+      await questionIntervalle(ctx, x.d, sec, true);
       return;
     }
     if (conv.nom === "seuil") {
@@ -1239,6 +1350,22 @@ export function creerBotClient(s: Services): Bot<Ctx> {
         break;
       }
       case "st": await ecranReglages(ctx, a[0]); break;
+      case "iv": {
+        const [dev, choix] = a;
+        if (conf) { await envoyerIntervalle(ctx, dev, Number(choix)); break; }
+        if (!choix) { await ecranIntervalle(ctx, dev); break; }
+        const x = await droitCapteur(ctx, dev, "regler");
+        if (!x || !intervalleReglable(modeleDe(x.d.model_key))) break;
+        if (choix === "a") {
+          demarrer(ctx, "intervalle", "duree", "/capteurs", { dev });
+          await repondre();
+          await dire(ctx, T.intervalle_saisie, { reply_markup: clavierAnnuler(C.annuler, "15 min") });
+          return;
+        }
+        if (!INTERVALLE.proposes_s.includes(Number(choix))) break;
+        await questionIntervalle(ctx, x.d, Number(choix));
+        break;
+      }
       case "rn": {
         const x = await droitCapteur(ctx, a[0], "regler");
         if (!x) break;
@@ -1473,7 +1600,7 @@ export function creerBotClient(s: Services): Bot<Ctx> {
         const t = await lireFerme(slug);
         await q(`UPDATE app.tenants SET alert_chat_id = NULL, alert_chat_unreachable_since = NULL WHERE slug = $1`, [slug]);
         if (t.alert_chat_id && ctx.chat?.id !== Number(t.alert_chat_id)) await envoyer(s, "client", Number(t.alert_chat_id), T.groupe_delie);
-        await ecran(ctx, T.groupe_delie);
+        await ecran(ctx, T.groupe_delie, clavier([{ text: C.retour, callback_data: `fm:${slug}:a` }]));
         break;
       }
       case "ad": {

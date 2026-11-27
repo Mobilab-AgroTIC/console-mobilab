@@ -5,10 +5,10 @@ import type pg from "pg";
 import { db, q, un, json } from "./db.js";
 import { log } from "./log.js";
 import { client as TC, admin as TA, f } from "./textes.fr.js";
-import { echapper, heure } from "./format.js";
+import { echapper, heure, texteIntervalle } from "./format.js";
 import { court } from "./codes.js";
-import { modelesProposes, montagesMobilab, modele as modeleDe, voiesDe, sondesPour, boutonModele } from "./catalogue.js";
-import { envoyer, modifier, avertirAdmins, nomFerme, type Services, type QuelBot } from "./services.js";
+import { modelesProposes, montagesMobilab, modele as modeleDe, voiesDe, sondesPour, boutonModele, actionDe, secondesOrdre } from "./catalogue.js";
+import { envoyer, modifier, avertirAdmins, nomFerme, retourFiche, type Services, type QuelBot } from "./services.js";
 import { creerJob } from "./jobs/moteur.js";
 import { annoncerPremiereMesure } from "./jobs/taches.js";
 
@@ -118,16 +118,20 @@ export class Distributeur {
       case "commande": {
         const cmd = await un(`SELECT c.*, p.display_name AS auteur FROM app.commands c LEFT JOIN app.people p ON p.id = c.requested_by WHERE c.id = $1`, [det.command_id]);
         if (!cmd || !d) return "ecarte";
-        const bot: QuelBot = cmd.via === "bot" ? "client" : "admin";
+        // « support » : un admin agit dans le bot client ; seul « admin » vient du bot admin.
+        const bot: QuelBot = cmd.via === "admin" ? "admin" : "client";
+        const retour = retourFiche(bot, d.dev_eui);
         const action = actionDe(d, cmd.action);
-        if (cmd.status === "envoyee") await modifier(s, bot, cmd.chat_id, cmd.message_id, f(TC.ordre_parti, { capteur: nom }));
+        if (cmd.status === "envoyee") await modifier(s, bot, cmd.chat_id, cmd.message_id, f(TC.ordre_parti, { capteur: nom }), retour);
         else if (cmd.status === "confirmee") {
           const h = heure(cmd.confirmed_at || new Date());
-          await modifier(s, bot, cmd.chat_id, cmd.message_id, f(TC.ordre_confirme, { capteur: nom, action: echapper(action), heure: h }));
+          const sec = secondesOrdre(cmd.action);
+          await modifier(s, bot, cmd.chat_id, cmd.message_id, sec !== null ? f(TC.intervalle_confirme, { capteur: nom, duree: texteIntervalle(sec), heure: h })
+            : f(TC.ordre_confirme, { capteur: nom, action: echapper(action), heure: h }), retour);
           const t = await un(`SELECT alert_chat_id FROM app.tenants WHERE slug = $1`, [d.tenant_slug]);
           if (t?.alert_chat_id) await envoyer(s, "client", Number(t.alert_chat_id), f(TC.groupe_ordre_ok, { qui: echapper(cmd.auteur || "Mobilab"), action: echapper(action), capteur: nom, heure: h }));
         } else if (cmd.status === "echec") {
-          await modifier(s, bot, cmd.chat_id, cmd.message_id, f(TC.ordre_echec, { capteur: nom }));
+          await modifier(s, bot, cmd.chat_id, cmd.message_id, f(TC.ordre_echec, { capteur: nom }), retour);
           await avertirAdmins(s, f(TA.notif_commande_echec, { action: echapper(action), capteur: nom, ferme, raison: "échec" }), { urgent: true });
         }
         return "envoye";
@@ -229,12 +233,6 @@ export class Distributeur {
         return "ecarte";
     }
   }
-}
-
-export function actionDe(d: any, cle: string): string {
-  const m = modeleDe(d?.model_key);
-  const a = [...(m?.actions || []), ...((d?.config?.actions || []) as any[])].find((x: any) => x.cle === cle);
-  return a?.bouton || cle;
 }
 
 /** Question « Qu'est-ce qui est branché sur l'entrée n ? » (spec §4.4). Envoie la première voie sans sonde à partir de `depuis`. */

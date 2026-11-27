@@ -381,8 +381,8 @@ describe.skipIf(!IT)("intégration : ferme, capteur, bots, Grafana réel", () =>
     const rs = await q(`SELECT kind, metric, min FROM app.alert_rules WHERE dev_eui = 'a84041f21c5b3d2e' ORDER BY kind`);
     expect(rs.map(r => r.kind)).toEqual(["battery", "silence"]);
     expect(Number(rs[0].min)).toBe(2462);   // 20 % sur la courbe de 2 alcalines (piles.yaml)
-    // Par défaut seule la pile alerte ; « pas de nouvelles » s'active d'un tap
-    expect((await q(`SELECT kind, enabled FROM app.alert_rules WHERE dev_eui = 'a84041f21c5b3d2e' ORDER BY kind`)).map(r => r.enabled)).toEqual([true, false]);
+    // Par défaut : la pile et « pas de nouvelles » ; chacune se désactive d'un tap
+    expect((await q(`SELECT kind, enabled FROM app.alert_rules WHERE dev_eui = 'a84041f21c5b3d2e' ORDER BY kind`)).map(r => r.enabled)).toEqual([true, true]);
     expect(ttnAppels.some(a => a.chemin.startsWith("/redecode"))).toBe(true);
     const bot = creerBotClient(s);
     fauxTelegram(bot.api);
@@ -400,7 +400,9 @@ describe.skipIf(!IT)("intégration : ferme, capteur, bots, Grafana réel", () =>
     await bot.handleUpdate(update(5555, "> 30"));
     expect(derniers(1)).toMatch(/Alerte si &gt; 30,0 °C/);
     expect((await q(`SELECT 1 FROM app.alert_rules WHERE dev_eui = 'a84041f21c5b3d2e' AND kind = 'threshold'`)).length).toBe(2);
-    // Activer « pas de nouvelles » d'un tap
+    // Désactiver puis réactiver « pas de nouvelles » d'un tap
+    await bot.handleUpdate(bouton(5555, "ai:a84041f21c5b3d2e:s"));
+    expect((await un(`SELECT enabled FROM app.alert_rules WHERE dev_eui = 'a84041f21c5b3d2e' AND kind = 'silence'`)).enabled).toBe(false);
     await bot.handleUpdate(bouton(5555, "ai:a84041f21c5b3d2e:s"));
     expect((await un(`SELECT enabled FROM app.alert_rules WHERE dev_eui = 'a84041f21c5b3d2e' AND kind = 'silence'`)).enabled).toBe(true);
     expect(await un(`SELECT state FROM app.alert_state s JOIN app.alert_rules r ON r.id = s.rule_id WHERE r.kind = 'threshold'`)).toEqual({ state: "ok" });
@@ -436,6 +438,72 @@ describe.skipIf(!IT)("intégration : ferme, capteur, bots, Grafana réel", () =>
     expect(fiche).toMatch(/Température : <b>14,2 °C<\/b>\n/);
     expect(fiche).toMatch(/<i>Dragino LHT52<\/i>/);
   });
+
+  it("intervalle d'envoi : choix, confirmation, downlink 01 + secondes ; durée tapée ; accusé", async () => {
+    const dev = "a84041f21c5b3d2e";
+    const bot = creerBotClient(s);
+    fauxTelegram(bot.api);
+    const dernierEcran = () => telegram.filter(x => x.methode === "editMessageText").pop()!.corps;
+    await bot.handleUpdate(bouton(5555, `st:${dev}`));
+    expect(dernierEcran().reply_markup.inline_keyboard.flat()).toContainEqual({ text: "⏱️ Intervalle d'envoi", callback_data: `iv:${dev}` });
+    await bot.handleUpdate(bouton(5555, `iv:${dev}`));
+    expect(dernierEcran().text).toMatch(/<b>Serre nord<\/b> envoie un message toutes les 20 min environ\./);
+    expect(dernierEcran().reply_markup.inline_keyboard.map((r: any[]) => r.map(b => b.text))).toEqual([["1 min", "3 min", "5 min"],
+      ["10 min", "20 min", "1 h"], ["6 h", "12 h", "24 h"], ["Autre…"], ["⬅️ Retour"]]);
+    await bot.handleUpdate(bouton(5555, `iv:${dev}:3600`));
+    expect(dernierEcran().text).toBe("Passer Serre nord à un message toutes les 1 h ?");
+    await bot.handleUpdate(bouton(5555, `iv!:${dev}:3600`));
+    expect(dernierEcran().text).toMatch(/C'est demandé : Serre nord enverra un message toutes les 1 h\.\nL'ordre part à son prochain message \(souvent moins de 20 min\)/);
+    const retourFiche = [[{ text: "⬅️ Retour", callback_data: `dv:${dev}` }]];
+    expect(dernierEcran().reply_markup.inline_keyboard).toEqual(retourFiche);
+    const cmd = await un(`SELECT id, action, f_port, payload_hex, status, round(extract(epoch FROM expires_at - requested_at) / 60) AS min FROM app.commands WHERE dev_eui = $1`, [dev]);
+    expect(cmd).toMatchObject({ action: "intervalle:3600", f_port: 1, payload_hex: "01000e10", status: "demandee", min: "120" });
+    const n = ttnAppels.length;
+    await executerTout();
+    const push = ttnAppels.slice(n).find(a => a.chemin.endsWith("/devices/lht52-3d2e/down/push"));
+    expect(push!.corps.downlinks[0]).toMatchObject({ f_port: 1, frm_payload: Buffer.from("01000e10", "hex").toString("base64"), confirmed: true,
+      correlation_ids: [`mobilab:cmd:${cmd.id}`] });
+    // Un ordre en cours : pas de second ordre, on peut l'annuler
+    await bot.handleUpdate(bouton(5555, `iv:${dev}`));
+    expect(dernierEcran().text).toMatch(/^Déjà demandé à /);
+    // Accusé du capteur (Node-RED) : le message « ⏳ » devient « ✅ »
+    await q(`UPDATE app.commands SET status = 'confirmee', confirmed_at = now() WHERE id = $1`, [cmd.id]);
+    await q(`INSERT INTO app.notifications (audience, expediteur, kind, tenant_slug, dev_eui, transition, details) VALUES ('client', 'service', 'commande', $1, $2, 'info', $3)`,
+      [slug, dev, JSON.stringify({ command_id: Number(cmd.id), statut: "confirmee" })]);
+    await new Distributeur(s).traiter();
+    expect(dernierEcran().text).toMatch(/^✅ Serre nord envoie maintenant un message toutes les 1 h \(\d\d:\d\d\)\.$/);
+    expect(dernierEcran().reply_markup.inline_keyboard).toEqual(retourFiche);
+    // Intervalle gardé en base (posé par Node-RED à l'accusé) : affiché tel quel
+    await q(`UPDATE app.devices SET intervalle_s = 3600 WHERE dev_eui = $1`, [dev]);
+    await bot.handleUpdate(bouton(5555, `iv:${dev}`));
+    expect(dernierEcran().text).toMatch(/<b>Serre nord<\/b> est réglé sur un message toutes les 1 h\./);
+    // « Autre… » puis « Annuler » : retour à l'écran de l'intervalle, pas de cul-de-sac
+    await bot.handleUpdate(bouton(5555, `iv:${dev}:a`));
+    await bot.handleUpdate(update(5555, "Annuler"));
+    expect(telegram.slice(-3).map(x => x.corps?.text || "").join("\n")).toMatch(/Annulé\.[\s\S]*est réglé sur un message toutes les 1 h/);
+    // « Autre… » : une durée tapée, avec son unité
+    await bot.handleUpdate(bouton(5555, `iv:${dev}:a`));
+    expect(derniers(1)).toMatch(/Combien de temps entre deux messages \?/);
+    await bot.handleUpdate(update(5555, "15"));
+    expect(derniers(1)).toMatch(/Je n'ai pas compris/);
+    await bot.handleUpdate(update(5555, "30 s"));
+    expect(derniers(1)).toBe("Entre 1 min et 168 h, s'il vous plaît.");
+    await bot.handleUpdate(update(5555, "90 s"));
+    const q90 = telegram.filter(x => x.methode === "sendMessage").pop()!.corps;
+    expect(q90.text).toBe("Passer Serre nord à un message toutes les 1 min 30 s ?\nLa pile s'usera bien plus vite.");
+    expect(q90.reply_markup.inline_keyboard[0][0]).toEqual({ text: "Oui, changer", callback_data: `iv!:${dev}:90` });
+    await bot.handleUpdate(bouton(5555, `iv!:${dev}:90`));
+    const c2 = await un(`SELECT id, payload_hex, status FROM app.commands WHERE dev_eui = $1 AND action = 'intervalle:90'`, [dev]);
+    expect(c2).toMatchObject({ payload_hex: "0100005a", status: "demandee" });
+    await bot.handleUpdate(bouton(5555, `ax:${c2.id}`));
+    expect((await un(`SELECT status FROM app.commands WHERE id = $1`, [c2.id])).status).toBe("annulee");
+    expect(dernierEcran()).toMatchObject({ text: "Ordre annulé.", reply_markup: { inline_keyboard: retourFiche } });
+    // Un conseiller n'a pas le bouton et ne peut pas forcer l'ordre
+    const avant = telegram.length;
+    await bot.handleUpdate(bouton(8888, `iv!:${dev}:600`));
+    expect(telegram.slice(avant).some(x => x.methode === "answerCallbackQuery" && x.corps.text === "Réservé à la ferme.")).toBe(true);
+    expect((await q(`SELECT 1 FROM app.commands WHERE dev_eui = $1 AND action = 'intervalle:600'`, [dev])).length).toBe(0);
+  }, 60000);
 
   it("partage : lien j_ d'un collègue, compte Grafana Viewer, le propriétaire est prévenu", async () => {
     const bot = creerBotClient(s);

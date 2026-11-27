@@ -7,10 +7,11 @@ import { controler, nettoyer, groupes, rangerCodes, lireListe } from "../src/cod
 import { chiffrer, dechiffrer, jeton, empreinte, verificateurScram, motDePasseLisible } from "../src/crypto.js";
 import * as textes from "../src/textes.fr.js";
 import { lireParametre } from "../src/invitations.js";
-import { chargerCatalogue, catalogue, definition, pourcentagePile, pileFaible, modele, boutonModele, nomCommercial } from "../src/catalogue.js";
+import { chargerCatalogue, catalogue, definition, pourcentagePile, pileFaible, modele, boutonModele, nomCommercial,
+  INTERVALLE, intervalleReglable, ordreIntervalle, secondesOrdre, actionDe } from "../src/catalogue.js";
 import { construireTableau, construireResume, sqlPourcentage } from "../src/tableau.js";
 import { racineDepot } from "../src/config.js";
-import { duree, nombre, reception, loginDepuisNom } from "../src/format.js";
+import { duree, nombre, reception, loginDepuisNom, texteIntervalle, lireIntervalle } from "../src/format.js";
 import { idDepuisNom, idCapteur, idsApplication, ID_TTS } from "../src/identifiants.js";
 
 const racine = racineDepot();
@@ -80,7 +81,8 @@ describe("textes (spec §4.1, §12.1)", () => {
   });
   it("callback_data le plus long sous 64 octets", () => {
     const slug = "f" + "9".repeat(27), id = "9".repeat(19), dev = "a84041f21c5b3d2e";
-    for (const cb of [`sh!:${slug}:r:${id}`, `th:${dev}:temperature_probe2:lo:2`, `a:per:${slug}:${"9".repeat(16)}`, `a:ps:${dev}:3:12p`, `du:${dev}:soil_moisture_adc1:hi:24`]) {
+    for (const cb of [`sh!:${slug}:r:${id}`, `th:${dev}:temperature_probe2:lo:2`, `a:per:${slug}:${"9".repeat(16)}`, `a:ps:${dev}:3:12p`, `du:${dev}:soil_moisture_adc1:hi:24`,
+      `iv!:${dev}:${INTERVALLE.max_s}`]) {
       expect(Buffer.byteLength(cb), cb).toBeLessThanOrEqual(64);
     }
   });
@@ -109,6 +111,38 @@ describe("format", () => {
     expect(reception(-97, 7.5)).toBe("bonne");
     expect(reception(-120, -3)).toBe("faible");
     expect(loginDepuisNom("Jérôme Dupré")).toBe("jerome.dupre");
+  });
+  it("intervalle d'envoi : affichage exact et saisie en s, min ou h", () => {
+    expect(INTERVALLE.proposes_s.map(texteIntervalle)).toEqual(["1 min", "3 min", "5 min", "10 min", "20 min", "1 h", "6 h", "12 h", "24 h"]);
+    expect(texteIntervalle(90)).toBe("1 min 30 s");
+    expect(texteIntervalle(5400)).toBe("1 h 30 min");
+    expect(lireIntervalle("90 s")).toBe(90);
+    expect(lireIntervalle("45sec")).toBe(45);
+    expect(lireIntervalle("15 min")).toBe(900);
+    expect(lireIntervalle("15 Minutes")).toBe(900);
+    expect(lireIntervalle("2h")).toBe(7200);
+    expect(lireIntervalle("1,5 h")).toBe(5400);
+    expect(lireIntervalle("1h30")).toBe(5400);
+    expect(lireIntervalle("15")).toBeNull();
+    expect(lireIntervalle("demain")).toBeNull();
+  });
+});
+
+describe("ordre d'intervalle d'envoi (downlink 01 + secondes sur 3 octets)", () => {
+  beforeAll(() => { chargerCatalogue(path.join(racine, "catalogue"), path.join(racine, "ingest")); });
+  it("octets envoyés, libellé et modèles concernés", () => {
+    expect(ordreIntervalle(2)).toBe("01000002");
+    expect(ordreIntervalle(1200)).toBe("010004b0");
+    expect(ordreIntervalle(86400)).toBe("01015180");
+    expect(ordreIntervalle(INTERVALLE.max_s)).toHaveLength(8);
+    expect(secondesOrdre("intervalle:1200")).toBe(1200);
+    expect(secondesOrdre("ouvrir")).toBeNull();
+    expect(actionDe({ model_key: "dragino-lht65n" }, "intervalle:3600")).toBe("Intervalle d'envoi 1 h");
+    expect(intervalleReglable(modele("dragino-lht65n"))).toBe(true);
+    expect(intervalleReglable(modele("makerfabs-agrosense-sol"))).toBe(false);
+    expect(intervalleReglable({ marque: "Mobilab", trame: { format: "mobilab" } } as any)).toBe(true);
+    expect(intervalleReglable({ marque: "Mobilab", trame: { format: "libre" } } as any)).toBe(false);
+    expect(intervalleReglable(null)).toBe(false);
   });
 });
 

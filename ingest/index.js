@@ -78,6 +78,9 @@ function choisirDecodeur(modele, firmware) {
 
 function jsonb(v) { return JSON.stringify(v === undefined ? null : v); }
 
+/** Alerte « pas de nouvelles » : au-delà de 2,5 intervalles d'envoi, et au moins 10 min (voir chercherMuets). */
+const SILENCE = { intervalles: 2.5, plancher_s: 600 };
+
 // ------------------------------------------------------------------ module
 
 /**
@@ -216,7 +219,7 @@ function creer(options) {
     async function chercherCapteur(c, devEui) {
         const r = await c.query(
             `SELECT d.dev_eui, d.tenant_slug, d.name, d.model_key, d.probes, d.mode_override, d.config, d.last_values,
-                    d.ttn_status, d.last_seen, d.created_by, t.status AS tenant_status, t.ttn_app_id, t.migration
+                    d.ttn_status, d.last_seen, d.created_by, d.intervalle_s, t.status AS tenant_status, t.ttn_app_id, t.migration
              FROM app.devices d JOIN app.tenants t ON t.slug = d.tenant_slug WHERE d.dev_eui = $1`, [devEui]);
         return r.rows[0] || null;
     }
@@ -380,7 +383,7 @@ function creer(options) {
         const estMesure = norm.role === "mesures" && noms.length > 0;
         let lastValues = null;
         if (estMesure) {
-            Object.assign(patch, N.intervalle(det, modele, u.time));
+            Object.assign(patch, N.intervalle(det, modele, u.time, dev.intervalle_s));
             lastValues = {};
             for (const k of noms) lastValues[k] = { v: norm.mesures[k], t: u.time };
             const fusion = { ...(dev.last_values || {}), ...lastValues };
@@ -541,7 +544,9 @@ function creer(options) {
         });
     }
 
-    /** Toutes les 5 min : capteurs devenus muets (spec §8.8), panne réseau probable (§8.11). */
+    /** Toutes les 5 min : capteurs devenus muets (spec §8.8), panne réseau probable (§8.11).
+     *  Muet = deux messages manqués d'affilée (2,5 intervalles : un message perdu ne compte pas), et jamais avant
+     *  10 min, pour qu'une antenne coupée 2 min ne fasse pas sonner un capteur qui envoie chaque minute. */
     async function chercherMuets() {
         return tx(async c => {
             const r = await c.query(
@@ -553,7 +558,8 @@ function creer(options) {
                  WHERE d.last_seen IS NOT NULL AND d.ttn_status <> 'supprime'
                    AND t.status IN ('en_attente_activation', 'actif')
                    AND d.last_seen < now() - make_interval(secs => coalesce((r.params->>'delai_min')::int * 60,
-                         greatest(3 * (d.config->'detected'->>'intervalle_s')::int, 10800)))`);
+                         greatest($1::float8 * greatest(coalesce(d.intervalle_s, 0), coalesce((d.config->'detected'->>'intervalle_s')::int, 1200)), $2::int)))`,
+                [SILENCE.intervalles, SILENCE.plancher_s]);
             const muets = [];
             for (const x of r.rows) {
                 const u = await c.query(`UPDATE app.alert_state SET state = 'alarm', since = now(), pending_since = NULL, reminded_at = NULL
@@ -715,6 +721,17 @@ function creer(options) {
         return { ferme, liste };
     }
 
+    /** « Pas de nouvelles » dont le capteur a reparlé pendant l'envoi différé : écartée, et pas de « de nouveau en ligne ». */
+    async function revenuAvantEnvoi(c, notif) {
+        const items = (notif.details || {}).items || [];
+        if (notif.transition !== "alarme" || !items.length || !items.every(i => i.kind === "silence")) return false;
+        const s = await c.query(`SELECT coalesce(bool_or(state = 'alarm'), false) AS alarme FROM app.alert_state WHERE rule_id = ANY($1::bigint[])`,
+            [notif.rule_ids || []]);
+        if (s.rows[0].alarme) return false;
+        await c.query(`UPDATE app.notifications SET statut = 'ecarte', erreur = 'revenu avant l''envoi' WHERE id = $1`, [notif.id]);
+        return true;
+    }
+
     async function rassemblerSilences(c, lignes) {
         const garder = [];
         const groupes = new Map();
@@ -757,7 +774,9 @@ function creer(options) {
         const c = await pool.connect();
         let n = 0;
         try {
-            const lignes = await rassemblerSilences(c, r.rows);
+            const aEnvoyer = [];
+            for (const notif of r.rows) if (!(await revenuAvantEnvoi(c, notif))) aEnvoyer.push(notif);
+            const lignes = await rassemblerSilences(c, aEnvoyer);
             for (const notif of lignes) { await envoyerUne(c, notif); n++; }
         } finally {
             c.release();
@@ -912,7 +931,16 @@ function creer(options) {
                     sent_at = CASE WHEN $2 = 'envoyee' THEN now() ELSE sent_at END,
                     confirmed_at = CASE WHEN $2 = 'confirmee' THEN now() ELSE confirmed_at END,
                     error = coalesce($3, error)
-                 WHERE id = $1 AND status IN ('demandee', 'envoyee') RETURNING id, dev_eui`, [cmd.id, statut, erreur]);
+                 WHERE id = $1 AND status IN ('demandee', 'envoyee') RETURNING id, dev_eui, action`, [cmd.id, statut, erreur]);
+            // Intervalle d'envoi confirmé par le capteur : on le garde (app.devices.intervalle_s) et les écarts
+            // mesurés repartent de zéro, pour que l'alerte « pas de nouvelles » suive le nouveau rythme tout de suite.
+            const iv = u.rowCount && statut === "confirmee" ? /^intervalle:(\d+)$/.exec(u.rows[0].action) : null;
+            if (iv) {
+                await c.query(
+                    `UPDATE app.devices SET intervalle_s = $2,
+                        config = jsonb_set(config, '{detected}', coalesce(config->'detected', '{}'::jsonb) || $3::jsonb)
+                     WHERE dev_eui = $1`, [m.devEui, Number(iv[1]), jsonb({ intervalle_s: Number(iv[1]), ecarts_s: [] })]);
+            }
             if (u.rowCount) {
                 const d = await c.query(`SELECT tenant_slug FROM app.devices WHERE dev_eui = $1`, [m.devEui]);
                 await signaler(c, "client", "commande", d.rows[0] && d.rows[0].tenant_slug, m.devEui, { command_id: Number(cmd.id), evenement: evt, statut });

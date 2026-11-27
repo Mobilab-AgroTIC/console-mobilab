@@ -223,13 +223,14 @@ function resume(cat, modele, valeurs) {
     return morceaux.join(" · ");
 }
 
-/** Intervalle d'envoi : médiane des 10 derniers écarts, ou celui du catalogue avant 3 écarts (§7.5). */
-function intervalle(detected, modele, t) {
+/** Intervalle d'envoi : médiane des 10 derniers écarts ; avant 3 écarts, celui réglé par downlink
+ *  (app.devices.intervalle_s), sinon celui du catalogue (§7.5). */
+function intervalle(detected, modele, t, regle_s = null) {
     const ecarts = Array.isArray(detected.ecarts_s) ? detected.ecarts_s.slice(-9) : [];
     const prec = detected.derniere_mesure ? new Date(detected.derniere_mesure).getTime() : null;
     const tt = new Date(t).getTime();
     if (prec && tt > prec) ecarts.push(Math.round((tt - prec) / 1000));
-    let intervalle_s = Number(modele && modele.intervalle_defaut_s) || 1200;
+    let intervalle_s = Number(regle_s) || Number(modele && modele.intervalle_defaut_s) || 1200;
     if (ecarts.length >= 3) {
         const tri = ecarts.slice().sort((a, b) => a - b);
         intervalle_s = tri[Math.floor(tri.length / 2)];

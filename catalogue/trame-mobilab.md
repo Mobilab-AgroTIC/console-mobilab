@@ -122,6 +122,23 @@ batterie: {cle: pile, facteur_mv: 50, pile: lithium}   # 74 × 50 = 3700 mV
 Une commande est décrite dans la fiche du montage (`actions` : bouton, port, octets envoyés), comme pour
 les actionneurs du commerce. Pour Lancelot, par exemple : port 15, octet `01` = fermer.
 
+### Changer l'intervalle d'envoi
+
+Le bouton « Intervalle d'envoi » (réglages du capteur, bot client) envoie la commande des Dragino, que tout
+montage au format `mobilab` doit comprendre :
+
+| Octet | Contenu | Exemple |
+|---|---|---|
+| 0 | `01` : « intervalle d'envoi » | `01` |
+| 1-3 | l'intervalle en **secondes**, poids fort en premier | `00 04 B0` = 1200 s (20 min) |
+
+`01 00 04 B0` : une mesure toutes les 20 min. La console l'envoie en downlink **confirmé** sur le **port 1** ;
+la carte doit appliquer le nouvel intervalle tout de suite et le garder après un redémarrage. Choix proposés :
+1, 3, 5, 10 et 20 min, 1, 6, 12 et 24 h, ou une durée tapée (de 1 min à 168 h).
+
+Quand la carte confirme, la console garde l'intervalle (`app.devices.intervalle_s`). L'alerte « pas de
+nouvelles » part après **deux messages manqués d'affilée** (2,5 intervalles), jamais avant 10 min.
+
 ## Types attribués
 
 | Type | Montage |

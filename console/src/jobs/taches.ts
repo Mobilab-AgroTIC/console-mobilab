@@ -7,11 +7,11 @@ import { ErreurApi, type VersionIds } from "../ttn.js";
 import { verificateurScram, motDePasseTechnique, motDePasseLisible } from "../crypto.js";
 import { creerLien } from "../invitations.js";
 import { construireTableau, construireResume, sqlEmpreinte } from "../tableau.js";
-import { catalogue, modele as modeleDe, definition } from "../catalogue.js";
+import { catalogue, modele as modeleDe, definition, actionDe } from "../catalogue.js";
 import { client as TC, admin as TA, f } from "../textes.fr.js";
-import { echapper, jour, loginDepuisNom, heure } from "../format.js";
+import { echapper, jour, loginDepuisNom, heure, duree } from "../format.js";
 import { groupes } from "../codes.js";
-import { envoyer, modifier, avertirAdmins, envoyerAuxMembres, lienBot, nomFerme, effacerPlusTard, envoyerDocument,
+import { envoyer, modifier, avertirAdmins, envoyerAuxMembres, lienBot, nomFerme, effacerPlusTard, envoyerDocument, retourFiche,
   type Services, type QuelBot } from "../services.js";
 import { fichePdf, type PageFiche } from "../fiche.js";
 import { log } from "../log.js";
@@ -530,10 +530,10 @@ definir("mise_en_service", {
       for (const def of Object.values(m.mesures)) if (def.alerte === "etat") lignes.push(["state", def.nom, null]);
       for (const [kind, metric, min] of lignes) {
         const r = await c.query(
-          // Par défaut, seule la pile alerte ; « pas de nouvelles » et les états s'activent depuis le bot (choix du 19/11).
+          // Par défaut : la pile et « pas de nouvelles » (deux messages manqués, 27/11) ; les états s'activent depuis le bot.
           `INSERT INTO app.alert_rules (dev_eui, kind, metric, min, enabled) VALUES ($1, $2, $3, $4, $5)
            ON CONFLICT (dev_eui, kind, coalesce(metric, '')) WHERE kind <> 'threshold' DO NOTHING RETURNING id`,
-          [d.dev_eui, kind, metric, min, kind === "battery"]);
+          [d.dev_eui, kind, metric, min, kind === "battery" || kind === "silence"]);
         if (r.rowCount) await c.query(`INSERT INTO app.alert_state (rule_id) VALUES ($1) ON CONFLICT DO NOTHING`, [r.rows[0].id]);
       }
     });
@@ -711,7 +711,8 @@ definir("commande", {
   async echec(ctx) {
     const { job, s } = ctx;
     const cmd = await un(`SELECT c.*, d.name FROM app.commands c JOIN app.devices d ON d.dev_eui = c.dev_eui WHERE c.id = $1`, [job.params.command_id]);
-    if (cmd) await modifier(s, cmd.via === "bot" ? "client" : "admin", cmd.chat_id, cmd.message_id, f(TC.ordre_echec, { capteur: echapper(cmd.name) }));
+    const bot: QuelBot = cmd?.via === "admin" ? "admin" : "client";
+    if (cmd) await modifier(s, bot, cmd.chat_id, cmd.message_id, f(TC.ordre_echec, { capteur: echapper(cmd.name) }), retourFiche(bot, cmd.dev_eui));
   },
 });
 
@@ -720,16 +721,18 @@ definir("commande_expiree", {
   verrou: false,
   async executer(ctx) {
     const { job, s, c } = ctx;
-    const cmd = await un(`SELECT c.*, d.name, d.tenant_slug, d.config AS dconfig, t.display_name AS ferme FROM app.commands c JOIN app.devices d ON d.dev_eui = c.dev_eui
+    const cmd = await un(`SELECT c.*, d.name, d.tenant_slug, d.model_key, d.config AS dconfig, t.display_name AS ferme FROM app.commands c JOIN app.devices d ON d.dev_eui = c.dev_eui
                           JOIN app.tenants t ON t.slug = d.tenant_slug WHERE c.id = $1`, [job.params.command_id], c);
     if (!cmd || !["demandee", "envoyee"].includes(cmd.status)) return;
     if (cmd.status === "demandee") await s.ttn.viderFile(await appDe(c, cmd.tenant_slug), idTtn({ dev_eui: cmd.dev_eui, config: cmd.dconfig })).catch(() => undefined);
     const r = await c.query(`UPDATE app.commands SET status = 'echec', error = 'expirée' WHERE id = $1 AND status IN ('demandee', 'envoyee') RETURNING id`, [cmd.id]);
     if (!r.rowCount) return;
     const texte = cmd.status === "demandee" ? f(TC.ordre_expire, { capteur: echapper(cmd.name) }) : f(TC.ordre_echec, { capteur: echapper(cmd.name) });
-    await modifier(s, cmd.via === "bot" ? "client" : "admin", cmd.chat_id, cmd.message_id, texte);
-    await avertirAdmins(s, f(TA.notif_commande_echec, { action: echapper(cmd.action), capteur: echapper(cmd.name), ferme: echapper(cmd.ferme),
-      raison: cmd.status === "demandee" ? "pas parti en 1 h, annulé" : "pas confirmé" }), { urgent: true });
+    const bot: QuelBot = cmd.via === "admin" ? "admin" : "client";
+    await modifier(s, bot, cmd.chat_id, cmd.message_id, texte, retourFiche(bot, cmd.dev_eui));
+    const delai = duree(new Date(cmd.expires_at).getTime() - new Date(cmd.requested_at).getTime());
+    await avertirAdmins(s, f(TA.notif_commande_echec, { action: echapper(actionDe({ model_key: cmd.model_key, config: cmd.dconfig }, cmd.action)),
+      capteur: echapper(cmd.name), ferme: echapper(cmd.ferme), raison: cmd.status === "demandee" ? `pas parti en ${delai}, annulé` : "pas confirmé" }), { urgent: true });
   },
 });
 

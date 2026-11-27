@@ -124,6 +124,34 @@ test("chemin complet d'une trame et alertes", { skip: !actif && "base de test mo
         assert.equal(n.rows[0].differe, true);
     });
 
+    await t.test("capteur d'une minute : muet après 10 min seulement ; revenu avant l'envoi, rien n'est envoyé", async () => {
+        const regle = (await q(`SELECT id FROM app.alert_rules WHERE dev_eui = $1 AND kind = 'silence'`, [DEV])).rows[0].id;
+        await q(`UPDATE app.alert_state SET state = 'ok' WHERE rule_id = $1`, [regle]);
+        await q(`UPDATE app.devices SET intervalle_s = 60, config = jsonb_set(config, '{detected,intervalle_s}', '60'),
+                 last_seen = now() - interval '5 minutes' WHERE dev_eui = $1`, [DEV]);
+        assert.equal(await ing.chercherMuets(), 0);      // 5 messages manqués, mais antenne coupée peut-être un instant
+        await q(`UPDATE app.devices SET last_seen = now() - interval '12 minutes' WHERE dev_eui = $1`, [DEV]);
+        assert.equal(await ing.chercherMuets(), 1);
+        // Le capteur reparle pendant l'envoi différé : l'alarme est écartée, et pas de « de nouveau en ligne »
+        const r = await ing.recevoirUplink(uplink("04fd03e8059d016afccdf9", new Date().toISOString()), H);
+        await r.suite();
+        assert.equal((await q(`SELECT state FROM app.alert_state WHERE rule_id = $1`, [regle])).rows[0].state, "ok");
+        await q(`UPDATE app.notifications SET envoyer_apres = now() WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
+        const avant = envois.length;
+        await ing.expedier();
+        assert.equal(envois.slice(avant).filter(e => e.methode === "sendMessage").length, 0);
+        const l = await q(`SELECT transition, statut, erreur FROM app.notifications WHERE $1 = ANY(rule_ids) ORDER BY id`, [regle]);
+        assert.deepEqual(l.rows.map(x => [x.transition, x.statut, x.erreur]), [["alarme", "ecarte", "revenu avant l'envoi"], ["alarme", "ecarte", "revenu avant l'envoi"]]);
+        // Deux messages manqués d'affilée pour un capteur réglé sur 24 h : 60 h
+        await q(`UPDATE app.devices SET intervalle_s = 86400, last_seen = now() - interval '59 hours' WHERE dev_eui = $1`, [DEV]);
+        assert.equal(await ing.chercherMuets(), 0);
+        await q(`UPDATE app.devices SET last_seen = now() - interval '61 hours' WHERE dev_eui = $1`, [DEV]);
+        assert.equal(await ing.chercherMuets(), 1);
+        await q(`UPDATE app.alert_state SET state = 'ok' WHERE rule_id = $1`, [regle]);
+        await q(`UPDATE app.notifications SET statut = 'ecarte' WHERE $1 = ANY(rule_ids) AND statut = 'a_envoyer'`, [regle]);
+        await q(`UPDATE app.devices SET intervalle_s = NULL WHERE dev_eui = $1`, [DEV]);
+    });
+
     await t.test("join : connecté ; downlink : commande suivie", async () => {
         await q(`UPDATE app.devices SET ttn_status = 'enregistre' WHERE dev_eui = $1`, [DEV]);
         const j = await ing.recevoirJoin({ end_device_ids: { dev_eui: DEV, application_ids: { application_id: APP } }, join_accept: { received_at: "2026-11-17T12:00:00Z" } }, H);
@@ -133,6 +161,15 @@ test("chemin complet d'une trame et alertes", { skip: !actif && "base de test mo
         await ing.recevoirDownlink({ end_device_ids: { dev_eui: DEV, application_ids: { application_id: APP } },
             correlation_ids: [`mobilab:cmd:${c.rows[0].id}`], downlink_ack: { f_port: 15 } }, H);
         assert.equal((await q(`SELECT status FROM app.commands WHERE id = $1`, [c.rows[0].id])).rows[0].status, "confirmee");
+        // Intervalle d'envoi confirmé : il devient la référence du silence (3 × 24 h, pas 3 h).
+        const iv = await q(`INSERT INTO app.commands (dev_eui, action, f_port, payload_hex, expires_at, correlation_id)
+                            VALUES ($1, 'intervalle:86400', 1, '01015180', now() + interval '3 days', 'iv') RETURNING id`, [DEV]);
+        await ing.recevoirDownlink({ end_device_ids: { dev_eui: DEV, application_ids: { application_id: APP } },
+            correlation_ids: [`mobilab:cmd:${iv.rows[0].id}`], downlink_ack: { f_port: 1 } }, H);
+        const dv = (await q(`SELECT intervalle_s, config->'detected' AS d FROM app.devices WHERE dev_eui = $1`, [DEV])).rows[0];
+        assert.equal(dv.intervalle_s, 86400);
+        assert.equal(dv.d.intervalle_s, 86400);
+        assert.deepEqual(dv.d.ecarts_s, []);
     });
 
     await t.test("modèle inconnu puis identifié par les version_ids", async () => {

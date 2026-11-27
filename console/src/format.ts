@@ -42,6 +42,25 @@ export function duree(ms: number): string {
   return `${Math.round(h / 24)} j`;
 }
 
+/** Intervalle d'envoi exact : « 30 s », « 1 min 30 s », « 20 min », « 1 h 30 min », « 24 h ». */
+export function texteIntervalle(secondes: number): string {
+  const s = Math.max(0, Math.round(secondes));
+  const h = Math.floor(s / 3600), min = Math.floor((s % 3600) / 60), sec = s % 60;
+  const l = [h && `${h} h`, min && `${min} min`, sec && `${sec} s`].filter(Boolean);
+  return l.length ? l.join(" ") : "0 s";
+}
+
+/** Durée tapée : « 90 s », « 15 min », « 2 h », « 1,5 h », « 1h30 » → secondes ; null sans unité ou illisible. */
+export function lireIntervalle(texte: string): number | null {
+  const t = texte.trim().toLowerCase().replace(",", ".");
+  const hm = /^(\d+)\s*h\s*(\d{1,2})$/.exec(t);
+  if (hm) return Number(hm[1]) * 3600 + Number(hm[2]) * 60;
+  const m = /^(\d+(?:\.\d+)?)\s*(s|sec|secs|secondes?|m|mn|min|mins|minutes?|h|hr|heures?)$/.exec(t);
+  if (!m) return null;
+  const facteur = m[2].startsWith("s") ? 1 : m[2].startsWith("h") ? 3600 : 60;
+  return Math.round(Number(m[1]) * facteur);
+}
+
 export function depuis(d: Date | string | null | undefined, maintenant = Date.now()): string {
   return d ? duree(maintenant - new Date(d).getTime()) : "?";
 }

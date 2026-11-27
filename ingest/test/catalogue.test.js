@@ -63,6 +63,18 @@ test("les version_ids identifient le modèle, avec ou sans -lb/-ls", () => {
     assert.equal(catalogue.modeleParVersionIds(cat, { brand_id: "acme", model_id: "x" }), null);
 });
 
+test("intervalle d'envoi : catalogue, puis celui réglé par downlink, puis la médiane mesurée", () => {
+    const m = cat.modeles.get("dragino-lht52");
+    assert.equal(N.intervalle({}, m, "2026-11-17T12:00:00Z").intervalle_s, 1200);
+    let det = { ecarts_s: [], derniere_mesure: "2026-11-17T12:00:00Z" };
+    det = { ...det, ...N.intervalle(det, m, "2026-11-18T12:00:00Z", 86400) };
+    assert.equal(det.intervalle_s, 86400);
+    det = { ...det, ...N.intervalle(det, m, "2026-11-19T12:00:00Z", 86400) };
+    det = { ...det, ...N.intervalle(det, m, "2026-11-20T12:30:00Z", 86400) };
+    assert.deepEqual(det.ecarts_s, [86400, 86400, 88200]);
+    assert.equal(det.intervalle_s, 86400);
+});
+
 test("résumé à la française des mesures principales", () => {
     const m = cat.modeles.get("dragino-lht52");
     assert.equal(N.resume(cat, m, { temperature: { v: 14.78 }, humidity: { v: 60.4 } }), "14,8 °C · 60 %");
