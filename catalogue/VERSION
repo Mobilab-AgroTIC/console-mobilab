@@ -1,1 +1,15 @@
-3.1.3
+3.1.4
+# Journal des versions de la console Mobilab, la plus récente en haut.
+# La première ligne est la version en service : la console et Node-RED la lisent et rechargent le
+# catalogue dans la minute quand elle change. Les lignes « # » sont des commentaires.
+#
+# 3.1.4  28/11/2026  passage à Grafana 13.0.2 (correctifs de sécurité ; console et tableaux inchangés)
+# 3.1.3  27/11/2026  confirmations Telegram : « Trop ancien » compté depuis l'affichage de la question
+# 3.1.2  27/11/2026  alerte « pas de nouvelles » : se réarme seule au retour du capteur ;
+#                    bouton « Désactiver cette alerte », choix manuel prioritaire
+# 3.1.1  27/11/2026  pause automatique de « pas de nouvelles » après l'alerte (jamais en service, remplacée par 3.1.2)
+# 3.1.0  27/11/2026  intervalle d'envoi réglable depuis Telegram (Dragino, montages Mobilab) ;
+#                    « pas de nouvelles » après deux messages manqués ; bouton Retour partout dans le bot
+# 3.0.0  20/11/2026  V3 : console Mobilab (bots client et admin), réception des trames, catalogue des capteurs
+#
+# Avant la 3.1.0, ce fichier ne comptait que les versions du catalogue (1 à 10).

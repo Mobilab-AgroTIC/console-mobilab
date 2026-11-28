@@ -95,9 +95,8 @@ function creer(options) {
     let cat = catalogueLib.charger(options.catalogueDir);
 
     function rechargerCatalogue() {
-        let version = null;
-        try { version = fs.readFileSync(path.join(options.catalogueDir, "VERSION"), "utf8").trim(); } catch { return false; }
-        if (version === cat.version) return false;
+        const version = catalogueLib.lireVersion(options.catalogueDir);
+        if (!version || version === cat.version) return false;
         try {
             cat = catalogueLib.charger(options.catalogueDir);
             etat.catalogueErreur = null;

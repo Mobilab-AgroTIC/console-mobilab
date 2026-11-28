@@ -2,7 +2,6 @@
 // libellés, unités, seuils proposés, panneaux Grafana, actions, sondes.
 import { createRequire } from "node:module";
 import path from "node:path";
-import fs from "node:fs";
 import { texteIntervalle } from "./format.js";
 
 const require = createRequire(import.meta.url);
@@ -29,7 +28,8 @@ export interface Catalogue { dir: string; version: string; modeles: Map<string, 
   piles: { a_changer_pct: number; piles: Record<string, { libelle?: string; aide?: string; courbe: [number, number][] }> } }
 
 type Ingest = {
-  catalogue: { charger(dir: string): Catalogue; pourcentagePile(m: Modele | null, mv: number | null): number | null;
+  catalogue: { charger(dir: string): Catalogue; lireVersion(dir: string): string | null;
+               pourcentagePile(m: Modele | null, mv: number | null): number | null;
                pourcentageBrut(m: Modele | null, mv: number | null): number | null };
   normaliser: { definitionMesure(cat: Catalogue, m: Modele | null, nom: string): DefMesure | null;
                 resume(cat: Catalogue, m: Modele | null, v: Record<string, { v: number }>): string };
@@ -61,7 +61,7 @@ export function catalogue(): Catalogue {
 }
 
 export function versionSurDisque(dir: string): string | null {
-  try { return fs.readFileSync(path.join(dir, "VERSION"), "utf8").trim(); } catch { return null; }
+  return moduleIngest().catalogue.lireVersion(dir);
 }
 
 export function modele(cle: string | null | undefined): Modele | null {

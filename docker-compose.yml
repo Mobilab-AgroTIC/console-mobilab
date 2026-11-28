@@ -61,7 +61,7 @@ services:
         condition: service_healthy
 
   mobilab-grafana:
-    image: grafana/grafana-oss:12.1.1
+    image: grafana/grafana-oss:13.0.2
     container_name: mobilab-grafana
     restart: unless-stopped
     user: "1001:1001"

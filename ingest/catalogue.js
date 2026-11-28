@@ -224,9 +224,16 @@ function charger(dir) {
     const fichierSondes = path.join(dir, "sondes.yaml");
     const sondes = fs.existsSync(fichierSondes) ? lireYaml(fichierSondes) || {} : {};
     for (const [cle, s] of Object.entries(sondes)) verifierSonde(cle, s, fichierSondes);
-    let version = "0";
-    try { version = fs.readFileSync(path.join(dir, "VERSION"), "utf8").trim(); } catch { /* absent */ }
+    const version = lireVersion(dir) || "0";
     return { dir, version, modeles, parDr, parPort5, parMobilab, sondes, ordreSondes: Object.keys(sondes), piles };
+}
+
+/** Version du catalogue : première ligne de VERSION qui n'est ni vide ni un commentaire « # » (le reste du fichier
+ *  est le journal des versions). Quand elle change, la console et Node-RED rechargent le catalogue. null si absent. */
+function lireVersion(dir) {
+    let texte;
+    try { texte = fs.readFileSync(path.join(dir, "VERSION"), "utf8"); } catch { return null; }
+    return texte.split("\n").map(l => l.trim()).find(l => l && !l.startsWith("#")) || null;
 }
 
 /** Modèle identifié par les version_ids d'un uplink (spec §7.6, cas 3). */
@@ -264,4 +271,4 @@ function identifierModele(cat, dev, u) {
     return { modele, source, lu };
 }
 
-module.exports = { charger, modeleParVersionIds, identifierModele, ErreurCatalogue, NOM_MESURE, pourcentagePile, pourcentageBrut };
+module.exports = { charger, lireVersion, modeleParVersionIds, identifierModele, ErreurCatalogue, NOM_MESURE, pourcentagePile, pourcentageBrut };

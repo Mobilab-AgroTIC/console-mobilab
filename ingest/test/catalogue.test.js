@@ -95,6 +95,18 @@ test("« pas de nouvelles » : deux messages manqués, jamais avant 10 min ; « 
     assert.equal(A.rediger(T, cat, { ...n, transition: "retour" }, ctx), "✅ <b>Serre</b> : de nouveau en ligne.");
 });
 
+test("VERSION : la première ligne est la version, le journal « # » est ignoré", () => {
+    const os = require("os");
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "version-"));
+    fs.writeFileSync(path.join(dir, "VERSION"), "\n3.1.4\n# Journal\n# 3.1.4  passage à Grafana 13\n");
+    assert.equal(catalogue.lireVersion(dir), "3.1.4");
+    fs.writeFileSync(path.join(dir, "VERSION"), "# rien que des commentaires\n");
+    assert.equal(catalogue.lireVersion(dir), null);
+    fs.rmSync(dir, { recursive: true });
+    assert.equal(catalogue.lireVersion(dir), null);
+    assert.match(cat.version, /^\d+\.\d+\.\d+$/);    // le vrai fichier du dépôt
+});
+
 test("résumé à la française des mesures principales", () => {
     const m = cat.modeles.get("dragino-lht52");
     assert.equal(N.resume(cat, m, { temperature: { v: 14.78 }, humidity: { v: 60.4 } }), "14,8 °C · 60 %");
